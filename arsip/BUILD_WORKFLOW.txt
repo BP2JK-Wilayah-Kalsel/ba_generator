@@ -1,0 +1,266 @@
+
+╔════════════════════════════════════════════════════════════════════════╗
+║                                                                        ║
+║          BA GENERATOR - DEVELOPMENT BUILD WORKFLOW                    ║
+║          Version 0.1.0-dev (BETA)                                     ║
+║                                                                        ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PHASE 1: PREPARATION                                                    │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    1. Install PyInstaller
+       │
+       ├─> pip install pyinstaller
+       │
+       └─> Verify: python -c "import PyInstaller"
+       
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PHASE 2: BUILD                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    2. Run Build Script
+       │
+       ├─> Double-click: build_dev.bat
+       │   OR
+       └─> PowerShell: .\build_dev.bat
+
+    Build Process:
+    ┌──────────────────────────────────────────┐
+    │ [1/5] Check dependencies                 │
+    │       ✓ Flask, python-docx, lxml        │
+    ├──────────────────────────────────────────┤
+    │ [2/5] Clean previous build               │
+    │       Delete: build/, dist/              │
+    ├──────────────────────────────────────────┤
+    │ [3/5] Build executable                   │
+    │       PyInstaller: baapp_dev.spec        │
+    │       Time: 2-5 minutes ⏱️               │
+    ├──────────────────────────────────────────┤
+    │ [4/5] Verify build                       │
+    │       Check: BA Generator (BETA).exe     │
+    ├──────────────────────────────────────────┤
+    │ [5/5] Create README.txt                  │
+    │       User guide for tester              │
+    └──────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PHASE 3: OUTPUT STRUCTURE                                               │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    dist/
+    └── BA Generator (BETA)/
+        ├── BA Generator (BETA).exe  ← Main executable
+        ├── README.txt
+        ├── _internal/               ← Python runtime & libs
+        │   ├── python310.dll
+        │   ├── flask/
+        │   ├── docx/
+        │   └── ... (dependencies)
+        ├── Master BA Pokja Konsultan/
+        │   ├── format_01.docx
+        │   └── ... (23 files)
+        ├── Master BA Timlak Konsultan/
+        │   ├── timlak_01.docx
+        │   └── ... (9 files)
+        ├── Master Pembuktian/
+        ├── templates/
+        │   ├── ba_pokja_konsultan.html
+        │   ├── ba_timlak_konsultan.html
+        │   └── home.html
+        └── static/
+            ├── pokja_members.csv
+            └── ...
+
+    Total Size: ~80-120 MB
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PHASE 4: TESTING                                                        │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    3. Local Testing
+       │
+       ├─> Navigate: cd dist\BA Generator (BETA)\
+       │
+       ├─> Run: .\BA Generator (BETA).exe
+       │
+       └─> Browser opens: http://127.0.0.1:5000
+
+    Console Output:
+    ┌──────────────────────────────────────────┐
+    │ BA Generator - DEVELOPMENT BUILD v0.1    │
+    │ ⚠️  PERINGATAN: BETA/TESTING             │
+    │ Starting Flask server...                 │
+    │ Browser akan terbuka otomatis...         │
+    │ Tekan CTRL+C untuk stop                  │
+    └──────────────────────────────────────────┘
+
+    Test Checklist:
+    ☐ Menu BA Pokja Konsultan
+    ☐ Menu BA Timlak Konsultan
+    ☐ Load members from CSV
+    ☐ Export/Import JSON
+    ☐ Generate documents
+    ☐ Preview keywords
+    ☐ Browse master folders
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PHASE 5: DISTRIBUTION                                                   │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    4. Package for Distribution
+       │
+       ├─> Create ZIP:
+       │   Compress-Archive -Path "dist\BA Generator (BETA)" 
+       │                    -Dest "BA-Generator-v0.1-beta.zip"
+       │
+       ├─> Upload to Cloud:
+       │   • Google Drive
+       │   • OneDrive
+       │   • Dropbox
+       │
+       └─> Share Link with Testers
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ EXECUTION FLOW (When User Runs .exe)                                   │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    User Double-clicks .exe
+           │
+           ├─> run_app.py executed
+           │   │
+           │   ├─> Import baapp.py
+           │   ├─> Show banner & warnings
+           │   ├─> Start Flask server (port 5000)
+           │   └─> Schedule browser open (2 sec delay)
+           │
+           ├─> Console window shows logs
+           │   │
+           │   └─> ⚠️  VISIBLE (for debugging)
+           │
+           ├─> Browser auto-opens
+           │   │
+           │   └─> http://127.0.0.1:5000
+           │
+           └─> User interacts with web app
+               │
+               └─> Generate documents → Saved locally
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ FILE RELATIONSHIPS                                                       │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    baapp.py ──────────────────┐
+         │                     │
+         │                     ▼
+    templates/            Master BA/
+         │                     │
+         ├─> ba_pokja_konsultan.html
+         ├─> ba_timlak_konsultan.html
+         └─> home.html
+                                │
+    static/                     │
+         │                      │
+         └─> pokja_members.csv  │
+                                │
+                                ▼
+                          run_app.py ←── Used by .exe
+                                │
+                                ▼
+                          baapp_dev.spec ←── PyInstaller config
+                                │
+                                ▼
+                          build_dev.bat ←── Build automation
+                                │
+                                ▼
+                          BA Generator (BETA).exe
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ DEVELOPMENT vs PRODUCTION COMPARISON                                    │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────────────┬──────────────────┬──────────────────┐
+    │ Feature              │ Development      │ Production       │
+    ├──────────────────────┼──────────────────┼──────────────────┤
+    │ Console Window       │ ✅ VISIBLE       │ ❌ HIDDEN        │
+    │ Logging Level        │ 🔍 DETAILED      │ 📝 MINIMAL       │
+    │ Version Label        │ v0.1.0-dev       │ v1.0.0           │
+    │ Beta Warning         │ ✅ YES           │ ❌ NO            │
+    │ File Name            │ (BETA).exe       │ .exe             │
+    │ Testing Ready        │ ✅ YES           │ ✅ YES           │
+    │ User-Friendly        │ ⚠️  MODERATE     │ ✅ HIGH          │
+    │ Size                 │ ~100 MB          │ ~90 MB           │
+    │ Debug Easy           │ ✅ EASY          │ ⚠️  HARDER       │
+    └──────────────────────┴──────────────────┴──────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ TROUBLESHOOTING FLOWCHART                                               │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    Build Failed?
+         │
+         ├─ NO ──> Test .exe
+         │
+         └─ YES ──> Check:
+                    │
+                    ├─> PyInstaller installed?
+                    │   └─> pip install pyinstaller
+                    │
+                    ├─> Dependencies OK?
+                    │   └─> pip install flask python-docx lxml
+                    │
+                    └─> Clean build?
+                        └─> pyinstaller --clean baapp_dev.spec
+
+    .exe Won't Run?
+         │
+         ├─> Antivirus blocking?
+         │   └─> Add to whitelist
+         │
+         ├─> Missing DLLs?
+         │   └─> Rebuild with --onefile
+         │
+         └─> Port 5000 used?
+             └─> Kill process or restart
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ QUICK REFERENCE COMMANDS                                                │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    # Build
+    .\build_dev.bat
+
+    # Test
+    .\dist\BA Generator (BETA)\BA Generator (BETA).exe
+
+    # Clean
+    Remove-Item -Recurse -Force build, dist
+
+    # Zip
+    Compress-Archive -Path "dist\BA Generator (BETA)" -Dest "release.zip"
+
+    # Verify dependencies
+    python -c "import flask, docx, lxml, PyInstaller; print('OK')"
+
+
+╔════════════════════════════════════════════════════════════════════════╗
+║                                                                        ║
+║  🎯 READY TO BUILD!                                                   ║
+║                                                                        ║
+║  Next Step: .\build_dev.bat                                          ║
+║                                                                        ║
+║  Estimated Time: 2-5 minutes                                          ║
+║  Output: dist\BA Generator (BETA)\                                   ║
+║                                                                        ║
+╚════════════════════════════════════════════════════════════════════════╝
+

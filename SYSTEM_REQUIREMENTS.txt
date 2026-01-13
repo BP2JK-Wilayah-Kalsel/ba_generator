@@ -1,0 +1,181 @@
+============================================================================
+BA GENERATOR - SPESIFIKASI SISTEM & PERSYARATAN
+============================================================================
+
+INFORMASI PROGRAM
+Version: 1.0.0
+Pengembang: Muhammad Rayhan Kurniawan, S.Kom.
+Program Aktualisasi Latsar 2025
+Kementerian Pekerjaan Umum
+
+============================================================================
+SPESIFIKASI MINIMUM SISTEM
+============================================================================
+
+SISTEM OPERASI
+--------------
+✓ Windows 10 (64-bit) - Build 1809 atau lebih baru
+✓ Windows 11 (64-bit) - Semua versi
+✗ Windows 7/8/8.1 - TIDAK DIDUKUNG
+✗ Windows 32-bit - TIDAK DIDUKUNG
+✗ macOS/Linux - TIDAK DIDUKUNG
+
+HARDWARE MINIMUM
+----------------
+Processor    : Intel Core i3 (Generasi ke-6 atau lebih baru)
+               atau AMD Ryzen 3 (atau setara)
+RAM          : 4 GB (minimum)
+Storage      : 500 MB ruang kosong untuk aplikasi
+               + 100 MB untuk file temporary
+Display      : Resolusi 1366x768 pixels (minimum)
+Mouse/Input  : Mouse atau Touchpad
+Keyboard     : Keyboard standar (untuk input data)
+
+HARDWARE DIREKOMENDASIKAN
+-------------------------
+Processor    : Intel Core i5 (Generasi ke-8 atau lebih baru)
+               atau AMD Ryzen 5 (atau setara)
+RAM          : 8 GB atau lebih
+Storage      : 1 GB ruang kosong (SSD direkomendasikan)
+Display      : Resolusi 1920x1080 pixels atau lebih tinggi
+Internet     : Koneksi broadband untuk fitur SPSE
+
+SOFTWARE YANG DIPERLUKAN
+------------------------
+✓ Microsoft Word 2016 atau lebih baru
+  (Untuk membuka dan mengedit dokumen hasil generate)
+  
+✓ Web Browser (salah satu):
+  - Microsoft Edge (Versi 90 atau lebih baru)
+  - Google Chrome (Versi 90 atau lebih baru)
+  - Mozilla Firefox (Versi 88 atau lebih baru)
+
+✓ Internet Connection
+  (Diperlukan HANYA untuk fitur Auto-fill SPSE)
+  (Aplikasi tetap bisa berjalan tanpa internet)
+
+SOFTWARE YANG TIDAK DIPERLUKAN
+------------------------------
+✗ Python - Tidak perlu install (sudah embedded dalam .exe)
+✗ Dependencies Python - Tidak perlu install
+✗ .NET Framework - Tidak diperlukan
+✗ Java Runtime - Tidak diperlukan
+
+============================================================================
+PERSYARATAN IZIN & AKSES
+============================================================================
+
+IZIN FILE SYSTEM
+----------------
+✓ Read Access   : Folder Master Template
+✓ Write Access  : Folder processed_results (untuk output)
+✓ Create Access : Folder processed_results (auto-create jika belum ada)
+
+IZIN JARINGAN
+-------------
+✓ Localhost     : Port 5000 (untuk web server internal)
+✓ Internet      : HTTPS access ke spse.inaproc.id (untuk SPSE crawler)
+
+IZIN WINDOWS
+------------
+✓ Execution     : Permission untuk menjalankan .exe
+✓ Firewall      : Allow access untuk localhost port 5000
+
+============================================================================
+KOMPATIBILITAS
+============================================================================
+
+DOKUMEN TEMPLATE (INPUT)
+------------------------
+Format         : Microsoft Word (.docx)
+Versi Word     : 2007 atau lebih baru
+Kompatibilitas : Office 365, Office 2016, 2019, 2021
+
+DOKUMEN HASIL (OUTPUT)
+----------------------
+Format         : Microsoft Word (.docx)
+Kompatibilitas : Bisa dibuka di Word 2016, 2019, 2021, Office 365
+                 LibreOffice Writer, WPS Office, Google Docs
+
+FILE DATA
+---------
+CSV Format     : UTF-8 encoding
+JSON Format    : UTF-8 encoding untuk saved data
+
+============================================================================
+CATATAN PENTING
+============================================================================
+
+PORTABLE APPLICATION
+--------------------
+✓ Tidak memerlukan instalasi
+✓ Bisa dijalankan langsung setelah extract
+✓ Bisa dipindah ke folder lain tanpa masalah
+✓ Bisa dicopy ke komputer lain (dengan struktur folder lengkap)
+
+NO ADMIN RIGHTS REQUIRED
+------------------------
+✓ Tidak memerlukan hak akses Administrator
+✓ Bisa dijalankan sebagai user biasa
+  (Kecuali jika antivirus memblokir)
+
+ANTIVIRUS & SECURITY
+--------------------
+⚠ Beberapa antivirus mungkin menandai file .exe sebagai suspicious
+  (False positive - karena executable dibuat dengan PyInstaller)
+  
+Solusi:
+- Add exception untuk BA Generator.exe di antivirus Anda
+- Atau: Disable antivirus sementara saat pertama kali menjalankan
+- File ini AMAN - dibuat dengan tools resmi Microsoft/Python
+
+FIREWALL
+--------
+⚠ Windows Firewall mungkin menanyakan izin saat pertama kali
+  
+Solusi:
+- Klik "Allow access" atau "Izinkan akses"
+- Aplikasi hanya menggunakan localhost (tidak ada koneksi keluar
+  kecuali untuk SPSE crawler)
+
+============================================================================
+TROUBLESHOOTING UMUM
+============================================================================
+
+MASALAH: "Windows protected your PC"
+SOLUSI: Klik "More info" → "Run anyway"
+        (File ini aman, hanya tidak ada digital signature)
+
+MASALAH: Aplikasi tidak bisa dibuka
+SOLUSI: 1. Pastikan Windows 10/11 (64-bit)
+        2. Right-click → Properties → Unblock (jika ada)
+        3. Extract ulang dari ZIP
+        4. Disable antivirus sementara
+
+MASALAH: Port 5000 already in use
+SOLUSI: 1. Tutup aplikasi lain yang menggunakan port 5000
+        2. Restart komputer
+        3. Atau: Ganti port di source code (untuk developer)
+
+MASALAH: Browser tidak terbuka otomatis
+SOLUSI: Buka manual browser, ketik: http://127.0.0.1:5000
+
+MASALAH: Error saat generate dokumen
+SOLUSI: 1. Pastikan Microsoft Word terinstall
+        2. Cek folder Master Template lengkap
+        3. Pastikan tidak ada file Word yang terbuka
+        4. Pastikan ada izin write di folder processed_results
+
+============================================================================
+KONTAK & DUKUNGAN
+============================================================================
+
+Untuk pertanyaan teknis atau bug report:
+Email: [muhammad.rayhan.kurniawan@pu.go.id]
+
+Untuk dokumentasi lengkap:
+Baca: README.md dan CARA_PENGGUNAAN.txt
+
+============================================================================
+Terakhir diperbarui: November 2025
+============================================================================

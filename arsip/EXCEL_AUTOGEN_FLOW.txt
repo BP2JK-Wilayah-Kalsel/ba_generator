@@ -1,0 +1,228 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    EXCEL AUTO-GENERATE ROWS - FLOW DIAGRAM                   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          1. USER INPUT (HTML FORM)                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      │ User fills form:
+                                      │ - Pengalaman Sejenis: 7
+                                      │ - Tahun Sejenis: 10
+                                      │ - Pengalaman Beda Jenis: 6
+                                      │ - Tahun Beda Jenis: 10
+                                      │ - Note: "Lead firm sesuai..."
+                                      │ - Companies: [PT. A, PT. B, ...]
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     2. FORM SUBMISSION (JavaScript)                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      │ POST /api/generate_pembuktian_folders
+                                      │ JSON:
+                                      │ {
+                                      │   "companies": [...],
+                                      │   "pengalaman": {
+                                      │     "sejenis": 7,
+                                      │     "tahun_sejenis": 10,
+                                      │     "beda_jenis": 6,
+                                      │     "tahun_beda_jenis": 10
+                                      │   },
+                                      │   "note_pengalaman": "...",
+                                      │   "master_folder": "C:\\...\\Master"
+                                      │ }
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                  3. PYTHON BACKEND (generate_pembuktian_folders)            │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      │ For each company:
+                                      │   1. Create folder: "1- PT. Company"
+                                      │   2. Copy 3 master files
+                                      │   3. Process each file
+                                      ▼
+         ┌────────────────────────────┴────────────────────────────┐
+         │                                                          │
+    ┌────▼────┐                                              ┌─────▼──────┐
+    │ BA.docx │                                              │ DH.docx    │
+    └────┬────┘                                              └─────┬──────┘
+         │                                                          │
+         │ Replace:                                                │ Replace:
+         │ - {leadfirm}                                            │ - Company name
+         │ - {kso}                                                 │ - Date
+         │ (TODO)                                                  │ (TODO)
+         │                                                          │
+         └─────────────────┬────────────────────────────────────────┘
+                           │
+                           │
+                     ┌─────▼──────┐
+                     │ Excel File │
+                     │ (Sejenis)  │
+                     └─────┬──────┘
+                           │
+                           │ Call: fill_excel_pengalaman()
+                           ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              4. EXCEL PROCESSING (fill_excel_pengalaman)                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+        Step 1: Load Workbook         │ wb = load_workbook(excel_path)
+        ────────────────────────────────────────────────────────────
+                                      │
+        Step 2: Calculate Positions   │ sejenis_start_row = 7
+                                      │ beda_jenis_marker_row = 7 + 7 = 14
+                                      │ beda_jenis_start_row = 15
+                                      │ npt_marker_row = 15 + 6 = 21
+                                      │ npt_data_row = 22
+                                      │ note_row = 24
+        ────────────────────────────────────────────────────────────
+                                      │
+        Step 3: Update Row 6          │ Replace: {10 tahun_sejenis}
+                                      │          Tahun Terakhir (Sejenis)
+        ────────────────────────────────────────────────────────────
+                                      │
+        Step 4: Generate Sejenis      │ For i in range(7):
+                Rows (7 rows)         │   row = 7 + i  # 7, 8, 9, ..., 13
+                                      │   Set cell(row, 1) = i + 1  # 1, 2, ..., 7
+                                      │   Copy formatting from row 7
+        ────────────────────────────────────────────────────────────
+                                      │
+        Step 5: Add Beda Jenis        │ Row 14: "10 TAHUN TERAKHIR"
+                Marker                │ (Bold, centered)
+        ────────────────────────────────────────────────────────────
+                                      │
+        Step 6: Generate Beda Jenis   │ For i in range(6):
+                Rows (6 rows)         │   row = 15 + i  # 15, 16, ..., 20
+                                      │   Set cell(row, 1) = i + 1  # 1, 2, ..., 6
+                                      │   Copy formatting from row 7
+        ────────────────────────────────────────────────────────────
+                                      │
+        Step 7: Add NPT Section       │ Row 21: "NPT" marker (bold, centered)
+                                      │ Row 22: Data row (1 row)
+        ────────────────────────────────────────────────────────────
+                                      │
+        Step 8: Add Note Section      │ Row 24: "*Hapus note ini..."
+                                      │         "NOTE: {note_pengalaman}"
+                                      │ Fill: Yellow background (FFFF00)
+        ────────────────────────────────────────────────────────────
+                                      │
+        Step 9: Replace Placeholders  │ For all cells in worksheet:
+                                      │   Replace {note_pengalaman}
+                                      │   Replace {kso}
+                                      │   Replace {leadfirm}
+                                      │   Replace {anggota2}
+                                      │   Replace {anggota3}
+        ────────────────────────────────────────────────────────────
+                                      │
+        Step 10: Save Workbook        │ wb.save(excel_path)
+                                      │ wb.close()
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         5. FINAL EXCEL STRUCTURE                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Row 2:   Lampiran Pembuktian Pengalaman
+    Row 4:   (empty)
+    Row 5:   ┌──────────────────────────────────────────────────────┐
+    Row 6:   │ 10 Tahun Terakhir (Sejenis)                         │
+             └──────────────────────────────────────────────────────┘
+    Row 7:   │ 1  │ [data entry cells]                             │ ┐
+    Row 8:   │ 2  │ [data entry cells]                             │ │
+    Row 9:   │ 3  │ [data entry cells]                             │ │
+    Row 10:  │ 4  │ [data entry cells]                             │ │ 7 rows
+    Row 11:  │ 5  │ [data entry cells]                             │ │ SEJENIS
+    Row 12:  │ 6  │ [data entry cells]                             │ │
+    Row 13:  │ 7  │ [data entry cells]                             │ ┘
+             ┌──────────────────────────────────────────────────────┐
+    Row 14:  │          10 TAHUN TERAKHIR (Bold, Center)           │
+             └──────────────────────────────────────────────────────┘
+    Row 15:  │ 1  │ [data entry cells]                             │ ┐
+    Row 16:  │ 2  │ [data entry cells]                             │ │
+    Row 17:  │ 3  │ [data entry cells]                             │ │ 6 rows
+    Row 18:  │ 4  │ [data entry cells]                             │ │ BEDA JENIS
+    Row 19:  │ 5  │ [data entry cells]                             │ │
+    Row 20:  │ 6  │ [data entry cells]                             │ ┘
+             ┌──────────────────────────────────────────────────────┐
+    Row 21:  │       NPT (Bold, Center)                            │
+             └──────────────────────────────────────────────────────┘
+    Row 22:  │ 1  │ [data entry cells for NPT]                     │
+    Row 23:  (empty)
+             ┌──────────────────────────────────────────────────────┐
+    Row 24:  │🟡 *Hapus note ini sebelum ditunjukkan ke penyedia   │
+    Row 25:  │🟡 NOTE: Lead firm sesuai hasil klarifikasi...       │
+             └──────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         6. CREATE ZIP & DOWNLOAD                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      │ Package structure:
+                                      │ Pembuktian_20251019_103045.zip
+                                      │ ├── 1- PT. Company A/
+                                      │ │   ├── 09.no-1-BA Pembuktian.docx
+                                      │ │   ├── 09.no-3-Lamp Kerja Sejenis.xlsx ✨
+                                      │ │   └── 09.no-4-Daftar Hadir.docx
+                                      │ ├── 2- PT. Company B/
+                                      │ │   ├── 09.no-1-BA Pembuktian.docx
+                                      │ │   ├── 09.no-3-Lamp Kerja Sejenis.xlsx ✨
+                                      │ │   └── 09.no-4-Daftar Hadir.docx
+                                      │ └── ...
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            7. USER DOWNLOADS                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                              KEY VARIABLES MAPPING
+
+User Input (Form)                 Python Variable               Excel Output
+─────────────────────────────────────────────────────────────────────────────
+pengalaman_sejenis: 7        →    sejenis_count = 7        →   7 rows (7-13)
+tahun_sejenis: 10            →    tahun_sejenis = 10       →   "10 Tahun..."
+pengalaman_beda_jenis: 6     →    beda_jenis_count = 6     →   6 rows (15-20)
+tahun_beda_jenis: 10         →    tahun_beda_jenis = 10    →   "10 TAHUN..."
+note_pengalaman: "..."       →    note_pengalaman = "..."  →   Yellow note cell
+company.name: "PT. ABC"      →    leadfirm = "PT. ABC"     →   Replaces {leadfirm}
+company.kso: [PT. X, PT. Y]  →    kso_text = "PT. X, ..."  →   Replaces {kso}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                           CELL FORMATTING COPY
+
+Template Row (Row 7)                    Generated Rows
+─────────────────────────────────────────────────────────────────────────────
+Font: Arial, 11pt                  →    Same font for all generated rows
+Border: All sides, thin            →    Same borders
+Alignment: Center (No), Left       →    Same alignment
+Number Format: General             →    Same format
+Fill: White                        →    Same fill (except note = yellow)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                              PLACEHOLDER SYSTEM
+
+Template Excel Cell               Replaced With                  Source
+─────────────────────────────────────────────────────────────────────────────
+{X_tahun_sejenis}            →    "10"                      →    form_data
+{X_tahun_beda_jenis}         →    "10"                      →    form_data
+{note_pengalaman}            →    "Lead firm sesuai..."     →    form_data
+{leadfirm}                   →    "PT. Company Name"        →    company_data
+{kso}                        →    "PT. KSO1, PT. KSO2"      →    company_data
+{anggota2}                   →    "PT. KSO1"                →    company_data
+{anggota3}                   →    "PT. KSO2"                →    company_data
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                                ERROR HANDLING
+
+Error Scenario                    Handling                      Result
+─────────────────────────────────────────────────────────────────────────────
+Template row missing         →    raise Exception()        →    Error message
+Excel file locked            →    Permission error         →    Error message
+openpyxl not installed       →    ModuleNotFoundError      →    Install guide
+Invalid count (negative)     →    HTML validation min=0    →    Prevented
+Non-numeric input            →    HTML type="number"       →    Prevented
+Empty note                   →    Default to ""            →    Empty note cell
+
+═══════════════════════════════════════════════════════════════════════════════

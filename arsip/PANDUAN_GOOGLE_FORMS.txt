@@ -1,0 +1,346 @@
+==========================================================================
+PANDUAN MEMBUAT GOOGLE FORMS UNTUK EVALUASI BA GENERATOR
+==========================================================================
+
+ADA 2 CARA MEMBUAT FORM:
+1. IMPORT dari CSV (OTOMATIS - REKOMENDASI!) ⚡
+2. Copy-paste manual (lebih lambat)
+
+==========================================================================
+CARA 1: IMPORT DARI CSV (PALING MUDAH!) ⚡⚡⚡
+==========================================================================
+
+LANGKAH-LANGKAH:
+
+1. Buka Google Forms: https://forms.google.com
+
+2. Klik "+ Blank" untuk membuat form baru
+
+3. Klik ikon "More" (3 titik vertikal) di pojok kanan atas
+
+4. **PILIH "Import questions"**
+
+5. Klik "Upload" atau "Select a file from your device"
+
+6. Upload file: **GOOGLE_FORMS_IMPORT.csv**
+   (File ini sudah ada di folder aplikasi BA Generator)
+
+7. Klik "Import questions"
+
+8. ✅ SELESAI! Semua 38 pertanyaan otomatis masuk ke form Anda!
+
+9. Edit judul form:
+   - Title: "Evaluasi & Feedback Aplikasi BA Generator"
+   - Description: (copy dari bawah)
+
+DESCRIPTION FORM:
+---
+Terima kasih telah menggunakan Aplikasi BA Generator. Feedback Anda sangat berharga untuk pengembangan aplikasi ini. Mohon luangkan waktu 5-10 menit untuk mengisi formulir evaluasi ini.
+
+Program Aktualisasi Latsar 2025
+Pengembang: Muhammad Rayhan Kurniawan, CPNS Kementerian Pekerjaan Umum
+---
+
+10. Atur SECTIONS (optional tapi direkomendasikan):
+    - Buat sections untuk grouping pertanyaan:
+      * Section 1: Identitas Responden
+      * Section 2: Pengalaman Penggunaan
+      * Section 3: Kemudahan Penggunaan
+      * Section 4: Kualitas Output
+      * Section 5: Efisiensi & Manfaat
+      * Section 6: Kepuasan Pengguna
+      * Section 7: Pertanyaan Terbuka
+      * Section 8: Dampak Terhadap Pekerjaan
+      * Section 9: Testimoni
+
+11. Settings (klik ikon gear):
+    ✓ Collect email addresses
+    ✓ Limit to 1 response
+    ✓ Edit after submit
+    ✓ See summary charts
+
+12. Theme (klik ikon palette):
+    - Pilih warna: Biru (branding pemerintah)
+    - Upload header image (optional)
+
+13. Klik "Send" untuk dapatkan link sharing!
+
+KEUNGGULAN CARA INI:
+✅ Hanya butuh 5 menit (vs 30 menit manual)
+✅ Tidak ada typo
+✅ Format sudah benar semua
+✅ Tinggal customize theme & settings
+
+==========================================================================
+CARA 2: COPY-PASTE MANUAL (Jika Import Tidak Bisa)
+==========================================================================
+
+Copy-paste pertanyaan berikut ke Google Forms:
+(https://forms.google.com)
+
+==========================================================================
+JUDUL FORM
+==========================================================================
+Evaluasi & Feedback Aplikasi BA Generator
+
+==========================================================================
+DESKRIPSI FORM
+==========================================================================
+Terima kasih telah menggunakan Aplikasi BA Generator. Feedback Anda sangat berharga untuk pengembangan aplikasi ini. Mohon luangkan waktu 5-10 menit untuk mengisi formulir evaluasi ini.
+
+Program Aktualisasi Latsar 2025
+Pengembang: Muhammad Rayhan Kurniawan, CPNS Kementerian Pekerjaan Umum
+
+==========================================================================
+SECTION 1: IDENTITAS RESPONDEN
+==========================================================================
+
+1. Nama Lengkap *
+   [Short answer]
+
+2. NIP *
+   [Short answer]
+
+3. Jabatan/Posisi *
+   [Short answer]
+
+4. Unit Kerja *
+   [Short answer]
+
+5. Anda adalah: *
+   [Multiple choice]
+   - Pokja Pemilihan
+   - Tim Penilai (Timlak)
+
+6. Tanggal Pengisian *
+   [Date]
+
+==========================================================================
+SECTION 2: PENGALAMAN PENGGUNAAN APLIKASI
+==========================================================================
+
+7. Sudah berapa kali Anda menggunakan aplikasi BA Generator? *
+   [Multiple choice]
+   - Baru pertama kali (1x)
+   - 2-3 kali
+   - 4-5 kali
+   - Lebih dari 5 kali
+
+8. Fitur apa saja yang Anda gunakan? *
+   [Checkboxes]
+   - BA Pokja Konsultan
+   - BA Timlak Konsultan
+   - Persiapan Pembuktian Kualifikasi
+   - Auto-fill data SPSE
+   - Save/Load data
+   - Preview keywords
+
+9. Berapa lama waktu yang Anda butuhkan untuk generate 1 set dokumen BA? *
+   [Multiple choice]
+   - Kurang dari 5 menit
+   - 5-10 menit
+   - 10-15 menit
+   - 15-30 menit
+   - Lebih dari 30 menit
+
+==========================================================================
+SECTION 3: KEMUDAHAN PENGGUNAAN (USABILITY)
+==========================================================================
+
+Berikan penilaian untuk aspek-aspek berikut:
+(1 = Sangat Tidak Setuju, 5 = Sangat Setuju)
+
+10. Aplikasi mudah dijalankan/dibuka *
+    [Linear scale: 1-5]
+
+11. Antarmuka (tampilan) aplikasi mudah dipahami *
+    [Linear scale: 1-5]
+
+12. Petunjuk penggunaan dalam aplikasi jelas dan membantu *
+    [Linear scale: 1-5]
+
+13. Form input data mudah diisi *
+    [Linear scale: 1-5]
+
+14. Fitur Save/Load data memudahkan pekerjaan saya *
+    [Linear scale: 1-5]
+
+15. Fitur auto-fill SPSE menghemat waktu saya *
+    [Linear scale: 1-5]
+
+==========================================================================
+SECTION 4: KUALITAS OUTPUT
+==========================================================================
+
+16. Dokumen yang dihasilkan sesuai dengan kebutuhan *
+    [Linear scale: 1-5]
+
+17. Format dokumen hasil generate sudah rapi dan profesional *
+    [Linear scale: 1-5]
+
+18. Replacement keywords (placeholder) bekerja dengan baik *
+    [Linear scale: 1-5]
+
+19. Dokumen hasil generate tidak perlu banyak edit manual *
+    [Linear scale: 1-5]
+
+==========================================================================
+SECTION 5: EFISIENSI & MANFAAT
+==========================================================================
+
+20. Sebelum menggunakan BA Generator, berapa lama waktu yang Anda butuhkan untuk membuat 1 set dokumen BA secara manual? *
+    [Multiple choice]
+    - 30 menit - 1 jam
+    - 1-2 jam
+    - 2-3 jam
+    - Lebih dari 3 jam
+
+21. Aplikasi ini menghemat waktu pembuatan dokumen BA *
+    [Linear scale: 1-5]
+
+22. Aplikasi ini mengurangi risiko kesalahan dalam dokumen *
+    [Linear scale: 1-5]
+
+23. Aplikasi ini meningkatkan produktivitas kerja saya *
+    [Linear scale: 1-5]
+
+24. Saya akan merekomendasikan aplikasi ini kepada rekan kerja *
+    [Linear scale: 1-5]
+
+==========================================================================
+SECTION 6: KEPUASAN PENGGUNA
+==========================================================================
+
+25. Secara keseluruhan, seberapa puas Anda dengan aplikasi BA Generator? *
+    [Multiple choice]
+    - Sangat Tidak Puas
+    - Tidak Puas
+    - Cukup Puas
+    - Puas
+    - Sangat Puas
+
+26. Apakah Anda mengalami masalah/error saat menggunakan aplikasi? *
+    [Multiple choice]
+    - Ya (jelaskan di pertanyaan berikutnya)
+    - Tidak
+
+27. Performa aplikasi (kecepatan/responsif): *
+    [Multiple choice]
+    - Sangat Lambat
+    - Lambat
+    - Cukup
+    - Cepat
+    - Sangat Cepat
+
+==========================================================================
+SECTION 7: PERTANYAAN TERBUKA
+==========================================================================
+
+28. Apa yang Anda SUKAI dari aplikasi ini? *
+    [Paragraph]
+
+29. Apa yang PERLU DIPERBAIKI dari aplikasi ini?
+    [Paragraph]
+
+30. Fitur apa yang Anda INGINKAN untuk ditambahkan di versi berikutnya?
+    [Paragraph]
+
+31. Apakah ada kendala/masalah yang Anda alami saat menggunakan aplikasi?
+    (Jelaskan detail: jenis error, kapan terjadi, dll)
+    [Paragraph]
+
+32. Saran dan masukan lain untuk pengembangan aplikasi:
+    [Paragraph]
+
+==========================================================================
+SECTION 8: DAMPAK TERHADAP PEKERJAAN
+==========================================================================
+
+33. Setelah menggunakan aplikasi ini, pekerjaan pembuatan BA saya menjadi: *
+    [Multiple choice]
+    - Jauh lebih mudah
+    - Lebih mudah
+    - Sama saja
+    - Lebih sulit
+    - Jauh lebih sulit
+
+34. Estimasi penghematan waktu dengan aplikasi ini (per set dokumen): *
+    [Multiple choice]
+    - Tidak ada penghematan
+    - 10-30 menit
+    - 30 menit - 1 jam
+    - 1-2 jam
+    - Lebih dari 2 jam
+
+35. Apakah aplikasi ini membantu meningkatkan kualitas dokumen BA Anda? *
+    [Multiple choice]
+    - Ya, sangat membantu
+    - Ya, cukup membantu
+    - Tidak ada perbedaan
+    - Tidak membantu
+
+36. Apakah Anda berencana terus menggunakan aplikasi ini? *
+    [Multiple choice]
+    - Ya, pasti
+    - Ya, kemungkinan besar
+    - Mungkin
+    - Kemungkinan kecil
+    - Tidak
+
+==========================================================================
+SECTION 9: TESTIMONI (OPSIONAL)
+==========================================================================
+
+37. Jika Anda bersedia memberikan testimoni untuk dokumentasi program aktualisasi, silakan tulis di bawah ini:
+    [Paragraph]
+
+38. Saya mengizinkan testimoni ini digunakan untuk dokumentasi program
+    [Checkboxes]
+    - Ya, saya mengizinkan
+
+==========================================================================
+PESAN KONFIRMASI (Confirmation Message)
+==========================================================================
+
+Terima kasih atas partisipasi Anda dalam mengisi formulir evaluasi ini!
+
+Feedback Anda sangat berarti untuk perbaikan dan pengembangan aplikasi BA Generator.
+
+Jika ada pertanyaan lebih lanjut, hubungi:
+Muhammad Rayhan Kurniawan, CPNS
+Email: [rayhan.kurniawan@pu.go.id]
+
+Program Aktualisasi Latsar 2025
+Kementerian Pekerjaan Umum
+
+==========================================================================
+TIPS GOOGLE FORMS:
+==========================================================================
+
+1. SETTINGS yang direkomendasikan:
+   ✓ Collect email addresses
+   ✓ Limit to 1 response per user
+   ✓ Edit after submit (optional)
+   ✓ See summary charts and text responses
+
+2. THEME:
+   - Pilih warna tema: Biru (sesuai branding pemerintah)
+   - Upload header image (optional): Logo Kementerian PU
+
+3. SHARING:
+   - Get link to share
+   - Atau: Embed di website
+   - Atau: Kirim via email langsung dari Google Forms
+
+4. RESPONSES:
+   - Lihat Summary untuk statistik otomatis
+   - Export ke Excel untuk analisis lebih detail
+   - Set up notification untuk setiap response baru
+
+5. ANALYSIS OTOMATIS:
+   Google Forms akan otomatis membuat:
+   - Chart untuk multiple choice
+   - Persentase untuk linear scale
+   - Word cloud untuk paragraph answers (eksternal tools)
+
+==========================================================================

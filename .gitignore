@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# PyInstaller
+*.spec.bak
+*.manifest
+*.spec~
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+~$*.docx
+~$*.doc
+
+# Build artifacts (exclude from repo)
+dist/
+build/
+*.exe
+*.dll
+
+# Processed results
+processed_results/*.docx
+processed_results/*.zip
+
+# Arsip (optional - might want to keep)
+arsip/*.py
+
+# User data (keep template but not actual data)
+*.json
+!isian*.json
+
+# Backup files
+*.bak
+*.backup

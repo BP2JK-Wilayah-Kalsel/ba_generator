@@ -1,0 +1,235 @@
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    UNIFIED SAVE/LOAD SYSTEM - BA GENERATOR                    │
+│                                  Architecture                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              USER INTERACTIONS                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+        Menu: BA POKJA          Menu: BA TIMLAK        Menu: Pembuktian
+             ┌─────┐                 ┌─────┐                ┌─────┐
+             │ 💾  │                 │ 💾  │                │ 💾  │
+             │Save │                 │Save │                │Save │
+             └──┬──┘                 └──┬──┘                └──┬──┘
+                │                       │                       │
+                └───────────────────────┼───────────────────────┘
+                                        ▼
+                        ┌──────────────────────────────┐
+                        │   UNIFIED DATA STRUCTURE     │
+                        │                              │
+                        │  {                           │
+                        │    "ba_pokja_konsultan": {}, │
+                        │    "ba_timlak_konsultan": {},│
+                        │    "persiapan_pembuktian": {}│
+                        │  }                           │
+                        └─────────────┬────────────────┘
+                                      │
+                    ┌─────────────────┴─────────────────┐
+                    ▼                                   ▼
+        ┌────────────────────┐              ┌──────────────────────┐
+        │   localStorage      │              │   JSON File Export   │
+        │                    │              │                      │
+        │ Key:               │              │ Filename:            │
+        │ ba_generator_      │              │ BA_Data_POKJA-01_    │
+        │ unified_POKJA-01_  │              │ 2025-10-19.json      │
+        │ 1729335000000      │              │                      │
+        └────────────────────┘              └──────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            DATA FLOW - SAVE                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+User fills form in          User clicks               System collects
+any menu (POKJA/            "Save to Browser"         form data
+TIMLAK/Pembuktian)          button                    
+       │                           │                          │
+       ▼                           ▼                          ▼
+┌──────────────┐          ┌──────────────┐          ┌──────────────┐
+│ Form Inputs  │          │ saveToLocal()│          │collectAll    │
+│              │          │              │          │Keywords()    │
+│ kode_pokja   │          │ MENU_KEY =   │          │              │
+│ paket        │   ───►   │ 'persiapan_  │   ───►   │ Returns:     │
+│ pokja_ketua  │          │ pembuktian'  │          │ {data}       │
+│ ...          │          │              │          │              │
+└──────────────┘          └──────────────┘          └──────┬───────┘
+                                                            │
+                                                            ▼
+                                            ┌────────────────────────────┐
+                                            │ Add metadata:              │
+                                            │ _menuType, _savedAt,       │
+                                            │ _companies, _masterFolder  │
+                                            └──────────┬─────────────────┘
+                                                       │
+                                                       ▼
+                                    ┌─────────────────────────────────────┐
+                                    │ Check if unified data exists        │
+                                    │ Load: ba_generator_unified_...      │
+                                    └──────────┬──────────────────────────┘
+                                               │
+                                ┌──────────────┴──────────────┐
+                                │                             │
+                           EXISTS                        NOT EXISTS
+                                │                             │
+                                ▼                             ▼
+                    ┌──────────────────────┐      ┌─────────────────────┐
+                    │ Merge new data:      │      │ Create new unified: │
+                    │ unifiedData[         │      │ unifiedData = {     │
+                    │   MENU_KEY           │      │   [MENU_KEY]: data  │
+                    │ ] = data             │      │ }                   │
+                    │                      │      │                     │
+                    │ Keep other menus!    │      │                     │
+                    └──────────┬───────────┘      └──────────┬──────────┘
+                               │                             │
+                               └──────────────┬──────────────┘
+                                              ▼
+                                    ┌──────────────────────┐
+                                    │ Save to localStorage │
+                                    │ Update dropdown list │
+                                    └──────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            DATA FLOW - LOAD                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+User selects from           System retrieves          System extracts
+dropdown or imports         unified data              menu-specific data
+JSON file                   from storage              
+       │                           │                          │
+       ▼                           ▼                          ▼
+┌──────────────┐          ┌──────────────┐          ┌──────────────┐
+│ Dropdown:    │          │ Parse JSON:  │          │ Check key:   │
+│              │          │              │          │              │
+│ POKJA-01 -   │          │ unifiedData  │          │ if (unified  │
+│ Pengadaan... │          │ = JSON.      │          │ Data[        │
+│ 19 Oct 2025  │   ───►   │ parse(...)   │   ───►   │ MENU_KEY])   │
+│              │          │              │          │              │
+└──────────────┘          └──────────────┘          └──────┬───────┘
+                                                            │
+                                                            ▼
+                                            ┌────────────────────────────┐
+                                            │ Extract:                   │
+                                            │ menuData =                 │
+                                            │   unifiedData[MENU_KEY]    │
+                                            └──────────┬─────────────────┘
+                                                       │
+                                                       ▼
+                                            ┌────────────────────────────┐
+                                            │ setAllFormData(menuData)   │
+                                            │                            │
+                                            │ Restore:                   │
+                                            │ - Form inputs              │
+                                            │ - Companies (_companies)   │
+                                            │ - Master folder path       │
+                                            │ - Update UI                │
+                                            └────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          MULTI-MENU SCENARIO                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Day 1: User works on Pembuktian menu
+────────────────────────────────────────
+┌──────────────────────────────────────────────────┐
+│ FILE: BA_Data_POKJA-01_2025-10-19.json          │
+│                                                  │
+│ {                                                │
+│   "persiapan_pembuktian": {                     │
+│     "kode_pokja": "POKJA-01",                   │
+│     "_companies": [...]                         │
+│   }                                              │
+│ }                                                │
+└──────────────────────────────────────────────────┘
+
+Day 2: User works on BA POKJA menu (same file!)
+────────────────────────────────────────────────
+┌──────────────────────────────────────────────────┐
+│ FILE: BA_Data_POKJA-01_2025-10-19.json          │
+│                                                  │
+│ {                                                │
+│   "persiapan_pembuktian": {                     │ ◄─ TIDAK TERTIMPA!
+│     "kode_pokja": "POKJA-01",                   │
+│     "_companies": [...]                         │
+│   },                                             │
+│   "ba_pokja_konsultan": {                       │ ◄─ BARU DITAMBAH!
+│     "kode_pokja": "POKJA-01",                   │
+│     "tanggal_ba": "2025-10-20"                  │
+│   }                                              │
+│ }                                                │
+└──────────────────────────────────────────────────┘
+
+Day 3: User works on BA TIMLAK menu (same file!)
+────────────────────────────────────────────────
+┌──────────────────────────────────────────────────┐
+│ FILE: BA_Data_POKJA-01_2025-10-19.json          │
+│                                                  │
+│ {                                                │
+│   "persiapan_pembuktian": {                     │ ◄─ TETAP ADA!
+│     "kode_pokja": "POKJA-01",                   │
+│     "_companies": [...]                         │
+│   },                                             │
+│   "ba_pokja_konsultan": {                       │ ◄─ TETAP ADA!
+│     "kode_pokja": "POKJA-01",                   │
+│     "tanggal_ba": "2025-10-20"                  │
+│   },                                             │
+│   "ba_timlak_konsultan": {                      │ ◄─ BARU DITAMBAH!
+│     "kode_pokja": "POKJA-01",                   │
+│     "email_timlak": "ketua@example.com"         │
+│   }                                              │
+│ }                                                │
+└──────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          KEY BENEFITS                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ✅ ONE FILE FOR ALL MENUS           ✅ NO DATA OVERWRITE
+       ┌─────────────────┐                 ┌──────────────┐
+       │ JSON File       │                 │ Menu POKJA   │
+       │ ┌─────────────┐ │                 │ data won't   │
+       │ │ POKJA  ✓    │ │                 │ overwrite    │
+       │ │ TIMLAK ✓    │ │                 │ TIMLAK data  │
+       │ │ Pembuktian ✓│ │                 └──────────────┘
+       │ └─────────────┘ │
+       └─────────────────┘
+
+    ✅ SHARED COMMON DATA               ✅ BACKWARD COMPATIBLE
+       ┌─────────────────┐                 ┌──────────────┐
+       │ kode_pokja      │                 │ Old format   │
+       │ pokja_ketua     │                 │ files can    │
+       │ Only stored     │                 │ still be     │
+       │ once, used by   │                 │ imported     │
+       │ all menus       │                 └──────────────┘
+       └─────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          IMPLEMENTATION STATUS                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ✅ Persiapan Pembuktian (DONE)
+       - Unified save/load implemented
+       - Export/Import with unified format
+       - Backward compatible
+       - Smart dropdown with POKJA code
+
+    ⏳ BA POKJA Konsultan (TODO)
+       - Copy functions from Pembuktian
+       - Change MENU_KEY = 'ba_pokja_konsultan'
+       - Test save/load
+       - Test import from other menus
+
+    ⏳ BA TIMLAK Konsultan (TODO)
+       - Copy functions from Pembuktian
+       - Change MENU_KEY = 'ba_timlak_konsultan'
+       - Test save/load
+       - Test import from other menus
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                               END OF DIAGRAM                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
