@@ -2,42 +2,16 @@
 
 ## 📋 Informasi Program
 
-**Program Aktualisasi Latsar 2025**  
-**Pengembang:** Muhammad Rayhan Kurniawan, S.Kom.
+**Pengembang:** Muhammad Rayhan Kurniawan, S.Kom. | Yusup Hidayat, S.T.
 **Instansi:** Kementerian Pekerjaan Umum  
-**Tahun:** 2025  
-**Versi:** 1.0.0
-
----
-
-## 💻 Spesifikasi Minimum Sistem
-
-### Sistem Operasi
-- **Windows 10** (64-bit) atau lebih baru
-- Windows 11 (64-bit) - Direkomendasikan
-
-### Hardware
-- **Processor:** Intel Core i3 atau AMD Ryzen 3 (atau setara)
-- **RAM:** Minimal 4 GB (8 GB direkomendasikan)
-- **Storage:** 500 MB ruang kosong
-- **Display:** Resolusi minimal 1366x768 pixels
-
-### Software
-- **Microsoft Word:** 2016 atau lebih baru (untuk membuka dokumen hasil generate)
-- **Web Browser:** Microsoft Edge, Google Chrome, atau Mozilla Firefox (versi terbaru)
-- **Internet Connection:** Diperlukan untuk fitur auto-fill SPSE
-
-### Catatan Penting
-- Tidak memerlukan instalasi Python (sudah embedded dalam .exe)
-- Tidak memerlukan instalasi library tambahan
-- Aplikasi portable - bisa dijalankan langsung tanpa instalasi
-- File .exe sudah mencakup semua dependencies yang diperlukan
+**Tahun:** 2025-2026
+**Versi:** 1.0.1
 
 ---
 
 ## 📖 Deskripsi
 
-BA Generator adalah aplikasi desktop berbasis web untuk mengotomatisasi pembuatan Berita Acara (BA) dalam proses pengadaan barang dan jasa. Aplikasi ini dikembangkan sebagai bagian dari Program Aktualisasi Latsar CPNS 2025.
+BA Generator adalah aplikasi berbasis web untuk mengotomatisasi pembuatan Berita Acara (BA) dalam proses pengadaan barang dan jasa. Aplikasi ini dikembangkan sebagai bagian dari Program Aktualisasi Latsar CPNS 2025 dan dimasukkan kedalam SIKANTAN.
 
 ### ✨ Fitur Utama
 
@@ -67,34 +41,9 @@ BA Generator adalah aplikasi desktop berbasis web untuk mengotomatisasi pembuata
 
 ---
 
-## 📁 Struktur Folder
-
-```
-BA Generator/
-│
-├── BA Generator.exe          # Aplikasi utama (double-click untuk menjalankan)
-│
-├── Master Folder/            # Template dokumen Word
-│   ├── Master BA Pokja Konsultan/
-│   ├── Master BA Timlak Konsultan/
-│   └── Master Pembuktian/
-│
-├── processed_results/        # Folder hasil generate dokumen
-│   └── (file hasil akan tersimpan di sini)
-│
-├── templates/                # Template HTML (internal)
-├── static/                   # File CSS/JS (internal)
-├── _internal/                # File sistem (internal)
-│
-├── README.md                 # Dokumentasi ini
-└── CARA_PENGGUNAAN.txt       # Panduan penggunaan singkat
-```
-
----
-
 ## 🚀 Cara Menggunakan
 
-### Menjalankan Aplikasi
+### Akses URL
 
 1. **Double-click** file `BA Generator.exe`
 2. Browser akan terbuka otomatis di `http://127.0.0.1:5000`
@@ -177,11 +126,6 @@ Untuk setiap tanggal, tersedia format:
 
 ## 🔧 Troubleshooting
 
-### Aplikasi tidak mau jalan
-- Pastikan tidak ada aplikasi lain yang menggunakan port 5000
-- Coba close semua browser, lalu jalankan ulang `BA Generator.exe`
-- Check antivirus, pastikan tidak memblock aplikasi
-
 ### Tombol "Ambil data SPSE" error
 - Pastikan ada koneksi internet
 - Cek Kode Tender sudah benar (contoh: 10094973000)
@@ -204,15 +148,6 @@ Untuk setiap tanggal, tersedia format:
 
 ---
 
-## 📝 Catatan Penting
-
-1. **Master Folder:** Jangan hapus atau rename folder `Master Folder/`
-2. **Template:** Jangan ubah nama file template di Master Folder
-3. **Keyword:** Gunakan format `{nama_keyword}` (huruf kecil, underscore)
-4. **Backup:** Selalu backup data penting sebelum generate ulang
-
----
-
 ## 🔄 Auto-Clean Processed Results
 
 Aplikasi akan otomatis **menghapus file lama** di folder `processed_results/` setiap kali generate dokumen baru, untuk menghindari penumpukan file.
@@ -230,12 +165,8 @@ Jika ada pertanyaan atau kendala:
 
 ## 📜 Lisensi & Copyright
 
-**Program Aktualisasi Latsar CPNS 2025**
-
-© 2025 Muhammad Rayhan Kurniawan
+© 2026 SIKANTAN - BP2JK Wilayah Kalimantan Selatan
 Kementerian Pekerjaan Umum
-
-Program ini dikembangkan sebagai bagian dari Program Aktualisasi Latsar CPNS 2025 dan diperuntukkan untuk keperluan internal instansi.
 
 ---
 
@@ -262,9 +193,3 @@ Program ini merupakan hasil implementasi dari Program Aktualisasi Latsar CPNS 20
 **Terima kasih telah menggunakan BA Generator!**
 
 *Semoga bermanfaat untuk kemajuan pelayanan publik.*
-
----
-
-**Muhammad Rayhan Kurniawan, CPNS**  
-Program Aktualisasi Latsar 2025  
-Kementerian Pekerjaan Umum
