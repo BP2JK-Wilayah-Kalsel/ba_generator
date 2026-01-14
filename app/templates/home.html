@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard BP2JK - Automatisasi{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+        <!-- Header -->
+        <div class="header-section">
+            <h1>Sistem Automatisasi Dokumen</h1>
+            <p class="subtitle">BP2JK Wilayah Kalimantan Selatan</p>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="menu-container">
+            <div class="row g-4">
+                
+                <!-- ============================================
+                     🎯 TEMPLATE MENU BARU - CONTOH 2
+                     ============================================ -->
+                
+                <div class="col-md-6 col-lg-4">
+                    <a href="/ba-timlak-konsultan" class="menu-card success">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>BA Tim Pelaksana (Konsultan)</h3>
+                        <p>Automatisasi pembuatan berita acara untuk tim pelaksana konsultan.</p>
+                        <span class="badge bg-primary">Aktif</span>
+                    </a>
+                </div>
+
+                <!-- ============================================
+                     🎯 MENU 1: BA GENERATOR (SUDAH ADA)
+                     ============================================ -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="/ba-pokja-konsultan" class="menu-card primary">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>BA Kelompok Kerja (Konsultan)</h3>
+                        <p>Automatisasi pembuatan berita acara untuk pokja konsultan.</p>
+                        <span class="badge bg-primary">Aktif</span>
+                    </a>
+                </div>
+
+                <!-- ============================================
+                     🎯 TEMPLATE MENU BARU - CONTOH 1
+                     ============================================
+                     
+                     CARA MENAMBAHKAN MENU BARU:
+                     
+                     1. Copy block ini (dari <div class="col-md-6"> sampai </div>)
+                     2. Paste di bawah menu terakhir
+                     3. Ubah:
+                        - href="/ba-pokja-konsultan" -> href="/url-menu-baru-anda"
+                        - class="menu-card primary" -> pilih warna: primary, success, warning, info, danger, purple
+                        - icon: <i class="fas fa-file-alt"></i> -> ganti dengan icon dari FontAwesome
+                        - <h3>: Ubah judul menu
+                        - <p>: Ubah deskripsi menu
+                        - <span class="badge">: Ubah status badge
+                     
+                     Icon FontAwesome: https://fontawesome.com/icons
+                     Contoh icon populer:
+                     - fa-chart-line (grafik)
+                     - fa-users (tim/pokja)
+                     - fa-folder-open (dokumen)
+                     - fa-cog (pengaturan)
+                     - fa-calendar (jadwal)
+                     - fa-envelope (email)
+                     - fa-database (data)
+                     - fa-shield-alt (monitoring)
+                     
+                     ============================================ -->
+                
+                <!--div class="col-md-6 col-lg-4">
+                    <a href="/persiapan-pembuktian" class="menu-card warning">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <h3>Folder Perusahaan</h3>
+                        <p>Automatisasi folder per perusahaan untuk persiapan evaluasi.</p>
+                        <span class="badge bg-secondary">Coming Soon</span>
+                    </a>
+                </div-->
+
+                <div class="col-md-6 col-lg-4">
+                    <a href="/persiapan-pembuktian" class="menu-card warning">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <h3>Persiapan Pembuktian</h3>
+                        <p>Automatisasi folder dan dokumen per perusahaan untuk persiapan pembuktian.</p>
+                        <span class="badge bg-primary">Aktif</span>
+                    </a>
+                </div>
+
+                <!-- ============================================
+                     🎯 TEMPLATE MENU BARU - CONTOH 3
+                     ============================================ -->
+                
+                <!--div class="col-md-6 col-lg-4">
+                    <a href="/menu-baru-3" class="menu-card info">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <h3>Menu Baru 3</h3>
+                        <p>Deskripsi singkat untuk menu baru Anda. Jelaskan fungsi utama dari menu ini.</p>
+                        <span class="badge bg-secondary">Coming Soon</span>
+                    </a>
+                </div-->
+
+                <!-- ============================================
+                     🎯 TAMBAHKAN MENU BARU DI BAWAH INI
+                     ============================================
+                     
+                     Copy salah satu template di atas dan paste di sini
+                     
+                     ============================================ -->
+
+            </div>
+        </div>
+
+        <!-- Help Links Section -->
+        <div class="help-links-section">
+            <a href="https://drive.google.com/file/d/1Npf48VQWDx7oVIALTO6E7W0jDcT-D_2V/view?usp=sharing" target="_blank" class="help-link">
+                <i class="fas fa-book"></i>
+                <span>User Manual</span>
+            </a>
+            <a href="https://youtu.be/j-BE-F5tAl0" target="_blank" class="help-link video">
+                <i class="fas fa-video"></i>
+                <span>Video Panduan</span>
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-section">
+            <p><strong>Balai Pelaksana Pengadaan Jasa Konstruksi Wilayah Kalimantan Selatan</strong></p>
+            <p class="mt-2 text-muted">© <span id="currentYear"></span></p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}

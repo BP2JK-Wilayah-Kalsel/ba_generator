@@ -379,73 +379,9 @@ def parse_pengumuman_page(soup):
         return None
 
 
-# Flask endpoint (untuk diintegrasikan ke baapp.py)
-def create_spse_endpoint(app):
-    """
-    Tambahkan endpoint /api/crawl_spse_jadwal dan /api/crawl_spse_pengumuman ke Flask app
-    
-    Usage:
-        from spse_crawler import create_spse_endpoint
-        create_spse_endpoint(app)
-    """
-    
-    @app.route('/api/crawl_spse_jadwal', methods=['POST'])
-    def crawl_spse_jadwal_endpoint():
-        from flask import request, jsonify
-        
-        data = request.json
-        kode_tender = data.get('kode_tender', '')
-        
-        if not kode_tender:
-            return jsonify({
-                'success': False,
-                'error': 'Parameter kode_tender diperlukan'
-            }), 400
-        
-        # Clean kode tender (remove non-digits)
-        kode_tender = ''.join(filter(str.isdigit, kode_tender))
-        
-        if not kode_tender:
-            return jsonify({
-                'success': False,
-                'error': 'Kode tender tidak valid (harus berisi angka)'
-            }), 400
-        
-        # Crawl
-        result = crawl_spse_jadwal(kode_tender)
-        
-        # Add formatted text for easy paste
-        if result.get('success') and result.get('jadwal'):
-            result['formatted_text'] = format_jadwal_for_paste(result['jadwal'])
-        
-        return jsonify(result)
-    
-    @app.route('/api/crawl_spse_pengumuman', methods=['POST'])
-    def crawl_spse_pengumuman_endpoint():
-        from flask import request, jsonify
-        
-        data = request.json
-        kode_tender = data.get('kode_tender', '')
-        
-        if not kode_tender:
-            return jsonify({
-                'success': False,
-                'error': 'Parameter kode_tender diperlukan'
-            }), 400
-        
-        # Clean kode tender (remove non-digits)
-        kode_tender = ''.join(filter(str.isdigit, kode_tender))
-        
-        if not kode_tender:
-            return jsonify({
-                'success': False,
-                'error': 'Kode tender tidak valid (harus berisi angka)'
-            }), 400
-        
-        # Crawl
-        result = crawl_spse_pengumuman(kode_tender)
-        
-        return jsonify(result)
+# Legacy Flask endpoint wrapper removed in favor of `app/spse_blueprint.py`.
+# Routes `/api/crawl_spse_jadwal` and `/api/crawl_spse_pengumuman` are
+# implemented and registered by the `spse` blueprint (see app/spse_blueprint.py).
 
 
 # Testing/standalone mode

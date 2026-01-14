@@ -3,10 +3,10 @@ BA Generator - Application Launcher
 ====================================
 Sistem Generator Berita Acara Terintegrasi
 
-Author: Muhammad Rayhan Kurniawan, S.Kom.
-Program: Aktualisasi Latsar 2025
+Author: Muhammad Rayhan Kurniawan, S.Kom. | Yusup Hidayat, S.T.
+Unit Kerja: BP2JK Wilayah Kalimantan Selatan
 Instansi: Kementerian Pekerjaan Umum
-Version: 1.0.0
+Version: 1.0.1
 """
 
 import sys
@@ -37,15 +37,9 @@ def main():
         from baapp import app
         
         logger.info("="*70)
-        logger.info("  BA GENERATOR v1.0.0 - Sistem Generator Berita Acara Terintegrasi")
-        logger.info("="*70)
-        logger.info("  Program Aktualisasi Latsar 2025")
-        logger.info("  Pengembang: Muhammad Rayhan Kurniawan, S.Kom.")
-        logger.info("  Kementerian Pekerjaan Umum")
-        logger.info("="*70)
-        logger.info("")
+        logger.info("  🚀 SELAMAT DATANG DI APLIKASI BA GENERATOR")
         logger.info("🌐 Server running on: http://127.0.0.1:5000")
-        logger.info("� Template folder: Master Folder/")
+        logger.info("📁 Template folder: Master Folder/")
         logger.info("💾 Output folder: processed_results/")
         logger.info("")
         logger.info("🚀 Browser akan terbuka otomatis dalam 2 detik...")
@@ -78,7 +72,6 @@ def main():
         logger.info("     processed_results/")
         logger.info("")
         logger.info("  Terima kasih telah menggunakan BA Generator!")
-        logger.info("  Program Aktualisasi Latsar 2025")
         logger.info("="*70)
         input("\nTekan Enter untuk menutup window ini...")
         sys.exit(0)

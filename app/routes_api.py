@@ -1,0 +1,195 @@
+from flask import Blueprint, request, jsonify, send_file
+import os
+import json
+from datetime import datetime
+from typing import Any
+
+from .utils import generate_keywords_from_form, DOCUMENT_TYPES
+
+bp = Blueprint('api', __name__)
+
+
+@bp.route('/api/document_types')
+def document_types() -> Any:
+    return jsonify({'success': True, 'document_types': DOCUMENT_TYPES})
+
+
+@bp.route('/api/save_defaults', methods=['POST'])
+def save_defaults() -> Any:
+    data = request.get_json() or {}
+    # TODO: implement saving defaults (migrate from legacy baapp)
+    return jsonify({'success': True, 'message': 'Not implemented yet'})
+
+
+@bp.route('/api/load_defaults/<filename>')
+def load_defaults(filename: str) -> Any:
+    # TODO: implement loading defaults
+    return jsonify({'success': False, 'message': 'Not implemented yet'})
+
+
+@bp.route('/api/list_saved_defaults')
+def list_saved_defaults() -> Any:
+    return jsonify({'success': True, 'files': []})
+
+
+@bp.route('/api/list_folder_files', methods=['POST'])
+def list_folder_files() -> Any:
+    data = request.get_json() or {}
+    folder_path = data.get('folder_path', '')
+    if not folder_path or not os.path.exists(folder_path) or not os.path.isdir(folder_path):
+        return jsonify({'success': False, 'message': 'Path folder tidak valid'})
+    available_files = []
+    import re
+    try:
+        for file in os.listdir(folder_path):
+            if file.lower().endswith('.docx') and not file.startswith('~'):
+                match = re.match(r'^(\d{2})(?:[-\.]|$)', file)
+                code = None
+                format_id = None
+                if match:
+                    code = match.group(1)
+                    suffix_match = re.match(r'^\d{2}[-\.]([A-Za-z0-9]+)', file)
+                    if suffix_match:
+                        suffix = suffix_match.group(1).lower()
+                        code = f"{code}_{suffix}"
+                    format_id = f"format_{code}"
+                if code and format_id:
+                    available_files.append({'code': code, 'format_id': format_id, 'filename': file, 'exists': True})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error membaca folder: {str(e)}'})
+    return jsonify({'success': True, 'folder_path': folder_path, 'files': available_files, 'total_files': len(available_files)})
+
+
+@bp.route('/api/list_folder_files_timlak', methods=['POST'])
+def list_folder_files_timlak() -> Any:
+    data = request.get_json() or {}
+    folder_path = data.get('folder_path', '')
+    if not folder_path or not os.path.exists(folder_path) or not os.path.isdir(folder_path):
+        return jsonify({'success': False, 'message': 'Path folder tidak valid'})
+    available_files = []
+    import re
+    try:
+        for file in os.listdir(folder_path):
+            if file.lower().endswith('.docx') and not file.startswith('~'):
+                code = None
+                format_id = None
+                if file.startswith('!Daftar Hadir'):
+                    code = 'DH'
+                    format_id = 'format_DH'
+                else:
+                    match = re.match(r'^(\d{2})', file)
+                    if match:
+                        code = match.group(1)
+                        format_id = f'format_{code}'
+                if code and format_id:
+                    available_files.append({'code': code, 'format_id': format_id, 'filename': file, 'exists': True})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error membaca folder: {str(e)}'})
+    return jsonify({'success': True, 'folder_path': folder_path, 'files': available_files, 'total_files': len(available_files)})
+
+
+@bp.route('/api/validate_master_pokja_konsultan', methods=['POST'])
+def validate_master_pokja_konsultan() -> Any:
+    data = request.get_json() or {}
+    folder_path = data.get('folder_path', '')
+    if not folder_path or not os.path.exists(folder_path):
+        return jsonify({'success': False, 'message': 'Folder tidak ditemukan'})
+    expected_documents = [
+        {'id': 'format_00', 'name': '00-Format-Cover.docx', 'type': 'Cover'},
+        {'id': 'format_06', 'name': '06-Format-BA Pemberian Penjelasan Kualifikasi.docx', 'type': 'BA Pemberian Penjelasan Kualifikasi'},
+        {'id': 'format_10', 'name': '10-Format-BA Hasil Evaluasi Kualifikasi.docx', 'type': 'BA Hasil Evaluasi Kualifikasi'},
+        {'id': 'format_11', 'name': '11-Format-BA Penetapan Daftar Pendek.docx', 'type': 'BA Penetapan Daftar Pendek'},
+        {'id': 'format_12', 'name': '12-Format-Pengumuman Daftar Pendek.docx', 'type': 'Pengumuman Daftar Pendek'},
+        {'id': 'format_13', 'name': '13-Format-BA Jawab Sanggah PQ.docx', 'type': 'BA Jawab Sanggah PQ'},
+        {'id': 'format_14', 'name': '14-Format-BA Pemberian Penjelasan Seleksi.docx', 'type': 'BA Pemberian Penjelasan Seleksi'},
+        {'id': 'format_17', 'name': '17-Format-BA Admin Teknis File I.docx', 'type': 'BA Admin Teknis File I'},
+        {'id': 'format_19', 'name': '19-Format-BA Evaluasi Biaya.docx', 'type': 'BA Evaluasi Biaya'},
+        {'id': 'format_20', 'name': '20-Format-BA Kombinasi Teknis dan Biaya.docx', 'type': 'BA Kombinasi Teknis dan Biaya'},
+        {'id': 'format_21', 'name': '21-Format-Surat Klarifikasi Personel.docx', 'type': 'Surat Klarifikasi Personel'},
+        {'id': 'format_22', 'name': '22-Format-BA KLARIFIKASI PENETAPAN PEMENANG.docx', 'type': 'BA Klarifikasi Penetapan Pemenang'},
+        {'id': 'format_22_lhp', 'name': '22-Format----------LHP.docx', 'type': 'LHP'},
+        {'id': 'format_24', 'name': '24-Format-BA Penetapan Pemenang.docx', 'type': 'BA Penetapan Pemenang'},
+        {'id': 'format_25', 'name': '25-Format-BA Pengumuman Pemenang.docx', 'type': 'BA Pengumuman Pemenang'},
+        {'id': 'format_26', 'name': '26-Format-BA Jawab Sanggah Seleksi.docx', 'type': 'BA Jawab Sanggah Seleksi'},
+        {'id': 'format_27_1', 'name': '27-1-Format-BA Klarifikasi Negosiasi.docx', 'type': 'BA Klarifikasi Negosiasi'},
+        {'id': 'format_27_2', 'name': '27-2-Format-Daftar Hadir Klarneg.docx', 'type': 'Daftar Hadir Klarneg'},
+        {'id': 'format_28', 'name': '28-Format-BAHP.docx', 'type': 'BAHP'},
+        {'id': 'format_29', 'name': '29-Format-Surat Penyampaian BAHP.docx', 'type': 'Surat Penyampaian BAHP'},
+        {'id': 'format_96', 'name': '96-Format-Surat pernyataan Klarifikasi personil dan paket 1 dan 2.docx', 'type': 'Surat Pernyataan Klarifikasi'},
+        {'id': 'format_97', 'name': '97-Format-BA Seleksi Ulang.docx', 'type': 'BA Seleksi Ulang'},
+        {'id': 'format_99', 'name': '99-Format-TTD Pokja.docx', 'type': 'TTD Pokja'}
+    ]
+    available_files = []
+    if os.path.isdir(folder_path):
+        for file in os.listdir(folder_path):
+            if file.lower().endswith('.docx') and not file.startswith('~'):
+                available_files.append(file)
+    validated_documents = []
+    for doc in expected_documents:
+        is_available = doc['name'] in available_files
+        validated_documents.append({'id': doc['id'], 'name': doc['name'], 'type': doc['type'], 'available': is_available, 'path': os.path.join(folder_path, doc['name']) if is_available else None})
+    return jsonify({'success': True, 'folder_path': folder_path, 'documents': validated_documents, 'total_expected': len(expected_documents), 'total_available': sum(1 for d in validated_documents if d['available'])})
+
+
+@bp.route('/api/get_folder_documents', methods=['POST'])
+def get_folder_documents() -> Any:
+    data = request.get_json() or {}
+    folder_path = data.get('folder_path', '')
+    if not folder_path or not os.path.exists(folder_path):
+        return jsonify({'success': False, 'message': 'Folder tidak ditemukan'})
+    documents = []
+    if os.path.isdir(folder_path):
+        for file in os.listdir(folder_path):
+            if file.lower().endswith('.docx') and not file.startswith('~'):
+                file_path = os.path.join(folder_path, file)
+                documents.append({'name': file, 'path': file_path, 'size': os.path.getsize(file_path)})
+    return jsonify({'success': True, 'documents': documents, 'count': len(documents)})
+
+
+@bp.route('/api/validate_master_timlak_konsultan', methods=['POST'])
+def validate_master_timlak_konsultan() -> Any:
+    data = request.get_json() or {}
+    folder_path = data.get('folder_path', '')
+    if not folder_path or not os.path.exists(folder_path):
+        return jsonify({'success': False, 'message': 'Folder tidak ditemukan'})
+    expected_timlak_documents = [
+        {'id': 'timlak_DH', 'name': '!Daftar Hadir.docx', 'type': 'Daftar Hadir', 'doc_num': 'DH'},
+        {'id': 'timlak_01', 'name': '01. BA Reviu Persiapan Pengadaan.docx', 'type': 'BA Reviu Persiapan Pengadaan', 'doc_num': '01'},
+        {'id': 'timlak_02', 'name': '02. Memo Dinas BA Reviu Persiapan Pengadaan.docx', 'type': 'Memo Dinas BA Reviu Persiapan Pengadaan', 'doc_num': '02'},
+        {'id': 'timlak_03', 'name': '03. Surat Penetapan BA Persiapan Pengadaan PPK.docx', 'type': 'Surat Penetapan BA Persiapan Pengadaan PPK', 'doc_num': '03'},
+        {'id': 'timlak_04', 'name': '04. BA Reviu Dokumen Kualifikasi.docx', 'type': 'BA Reviu Dokumen Kualifikasi', 'doc_num': '04'},
+        {'id': 'timlak_05', 'name': '05. BA Reviu Dokumen Seleksi.docx', 'type': 'BA Reviu Dokumen Seleksi', 'doc_num': '05'},
+        {'id': 'timlak_06', 'name': '06. Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan.docx', 'type': 'Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan', 'doc_num': '06'},
+        {'id': 'timlak_07', 'name': '07. Nota Dinas Penetapan Dokumen Pemilihan.docx', 'type': 'Nota Dinas Penetapan Dokumen Pemilihan', 'doc_num': '07'},
+        {'id': 'timlak_08', 'name': '08. BA Penetapan Dokumen Pemilihan.docx', 'type': 'BA Penetapan Dokumen Pemilihan', 'doc_num': '08'}
+    ]
+    available_files = {}
+    if os.path.isdir(folder_path):
+        for file in os.listdir(folder_path):
+            if file.lower().endswith('.docx') and not file.startswith('~'):
+                available_files[file] = True
+    validated_documents = []
+    for doc in expected_timlak_documents:
+        is_available = doc['name'] in available_files
+        validated_documents.append({'id': doc['id'], 'name': doc['name'], 'type': doc['type'], 'doc_num': doc['doc_num'], 'available': is_available, 'path': os.path.join(folder_path, doc['name']) if is_available else None})
+    return jsonify({'success': True, 'folder_path': folder_path, 'documents': validated_documents, 'total_expected': len(expected_timlak_documents), 'total_available': sum(1 for d in validated_documents if d['available'])})
+
+
+@bp.route('/api/load_pokja_members')
+def load_pokja_members() -> Any:
+    csv_path = os.path.join(os.getcwd(), 'pokja_members.csv')
+    if not os.path.exists(csv_path):
+        return jsonify({'success': False, 'error': 'File pokja_members.csv tidak ditemukan'}), 404
+    group_filter = request.args.get('group', 'konsultan')
+    members = []
+    import csv
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if 'group' in row and row['group'].strip() != group_filter:
+                    continue
+                members.append({'nama': row.get('nama','').strip(), 'nip': row.get('nip','').strip(), 'email': row.get('email','').strip()})
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Error membaca CSV: {str(e)}'}), 500
+    return jsonify({'success': True, 'members': members, 'group': group_filter})
