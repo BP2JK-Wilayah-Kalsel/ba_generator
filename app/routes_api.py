@@ -152,17 +152,14 @@ def validate_master_timlak_konsultan() -> Any:
     folder_path = data.get('folder_path', '')
     if not folder_path or not os.path.exists(folder_path):
         return jsonify({'success': False, 'message': 'Folder tidak ditemukan'})
-    expected_timlak_documents = [
-        {'id': 'timlak_DH', 'name': '!Daftar Hadir.docx', 'type': 'Daftar Hadir', 'doc_num': 'DH'},
-        {'id': 'timlak_01', 'name': '01. BA Reviu Persiapan Pengadaan.docx', 'type': 'BA Reviu Persiapan Pengadaan', 'doc_num': '01'},
-        {'id': 'timlak_02', 'name': '02. Memo Dinas BA Reviu Persiapan Pengadaan.docx', 'type': 'Memo Dinas BA Reviu Persiapan Pengadaan', 'doc_num': '02'},
-        {'id': 'timlak_03', 'name': '03. Surat Penetapan BA Persiapan Pengadaan PPK.docx', 'type': 'Surat Penetapan BA Persiapan Pengadaan PPK', 'doc_num': '03'},
-        {'id': 'timlak_04', 'name': '04. BA Reviu Dokumen Kualifikasi.docx', 'type': 'BA Reviu Dokumen Kualifikasi', 'doc_num': '04'},
-        {'id': 'timlak_05', 'name': '05. BA Reviu Dokumen Seleksi.docx', 'type': 'BA Reviu Dokumen Seleksi', 'doc_num': '05'},
-        {'id': 'timlak_06', 'name': '06. Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan.docx', 'type': 'Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan', 'doc_num': '06'},
-        {'id': 'timlak_07', 'name': '07. Nota Dinas Penetapan Dokumen Pemilihan.docx', 'type': 'Nota Dinas Penetapan Dokumen Pemilihan', 'doc_num': '07'},
-        {'id': 'timlak_08', 'name': '08. BA Penetapan Dokumen Pemilihan.docx', 'type': 'BA Penetapan Dokumen Pemilihan', 'doc_num': '08'}
-    ]
+    
+    # Load expected timlak documents from JSON file
+    json_file_path = os.path.join(os.path.dirname(__file__), '..', 'static', 'timlak_konsultan.json')
+    try:
+        with open(json_file_path, 'r', encoding='utf-8') as f:
+            expected_timlak_documents = json.load(f)
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error memuat file konfigurasi: {str(e)}'})
     available_files = {}
     if os.path.isdir(folder_path):
         for file in os.listdir(folder_path):

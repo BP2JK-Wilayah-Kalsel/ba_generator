@@ -1853,6 +1853,7 @@ async function selectMasterFolder() {
         });
 
         const data = await response.json();
+        console.log('Folder validation response:', data);
 
         if (data.success) {
             masterFolderData = data;
