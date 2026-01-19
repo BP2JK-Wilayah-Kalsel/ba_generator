@@ -23,7 +23,7 @@ def create_app(config_object='config.DefaultConfig'):
     # Use package-local `templates/` inside the `app` package and keep repo-level
     # `static/` directory for static assets.
     static_dir = os.path.join(os.getcwd(), 'static')
-    app = Flask(__name__, instance_relative_config=False, static_folder=static_dir)
+    app = Flask(__name__, instance_relative_config=False,  template_folder="templates", static_folder=static_dir)
     app.config.from_object(config_object)
     # register blueprints (use lightweight routes during incremental refactor)
     from .simple_routes import bp as main_bp

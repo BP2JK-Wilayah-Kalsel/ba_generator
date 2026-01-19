@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, render_template
 
 bp = Blueprint('ui', __name__)
@@ -15,7 +16,23 @@ def ba_pokja_konsultan():
 
 @bp.route('/ba-timlak-konsultan')
 def ba_timlak_konsultan():
-    return render_template('ba_timlak_konsultan.html')
+    current_year = datetime.now().year
+    return render_template('ba_timlak_konsultan.html', current_year=current_year)
+
+
+@bp.route('/ba-reviu-paket-tender-jkk')
+def ba_reviu_paket_tender_jkk():
+    return render_template('ba_reviu_paket_tender_jkk.html')
+
+
+@bp.route('/ba-reviu-paket-tender-pk')
+def ba_reviu_paket_tender_pk():
+    return render_template('ba_reviu_paket_tender_pk.html')
+
+
+@bp.route('/ba-reviu-paket-ro-jkk')
+def ba_reviu_paket_ro_jkk():
+    return render_template('ba_reviu_paket_ro_jkk.html')
 
 
 @bp.route('/persiapan-pembuktian')
