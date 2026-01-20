@@ -26,7 +26,7 @@
     </div>
 
     <!-- Save/Load Controls -->
-    <div class="form-section mb-3">
+    <!-- <div class="form-section mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0 text-primary"><i class="fas fa-database me-2"></i>Data Management</h5>
             <div class="btn-group" role="group">
@@ -59,10 +59,10 @@
                 </select>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Master Folder Section -->
-    <div class="form-section mb-4">
+    <!-- <div class="form-section mb-4">
         <h4 class="text-primary"><i class="fas fa-folder me-2"></i>Master Folder Template</h4>
         <div class="row">
             <div class="col-md-8">
@@ -93,38 +93,17 @@
             <div class="row" id="documentGrid">
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Main Form -->
     <div class="main-form">
         <form id="baForm" enctype="multipart/form-data">
 
-            <!-- Informasi Dasar -->
+            <!-- Data Paket -->
             <div class="form-section">
-                <h4><i class="fas fa-info-circle"></i> Informasi Dasar</h4>
+                <h4><i class="fas fa-info-circle"></i> Data Paket (RUP dan Dokumen Pemilihan)</h4>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nomor SK POKJA</label>
-                        <input type="text" class="form-control" id="nomor_sk_pokja" name="nomor_sk_pokja" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tanggal SK POKJA</label>
-                        <input type="date" class="form-control" id="tanggal_sk_pokja" name="tanggal_sk_pokja" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nomor SK Timlak</label>
-                        <input type="text" class="form-control" id="nomor_sk_timlak" name="nomor_sk_timlak" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tanggal SK Timlak</label>
-                        <input type="date" class="form-control" id="tanggal_sk_timlak" name="tanggal_sk_timlak"
-                            required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Kode POKJA</label>
-                        <input type="text" class="form-control" id="kode_pokja" name="kode_pokja" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label class="form-label">Tahun Anggaran</label>
                         <select class="form-control" id="tahun_anggaran" name="tahun_anggaran" required>
                             {% for year in range(current_year - 1, current_year + 2) %}
@@ -146,15 +125,7 @@
                         <label class="form-label">Balai</label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="balai" name="balai">
-                            <!-- <button type="button" class="btn btn-outline-danger" id="balai_delete_btn"
-                                onclick="toggleBalaiDelete()" title="Hapus baris Balai dari dokumen">
-                                <i class="fas fa-trash-alt"></i>
-                            </button> -->
                         </div>
-                        <input type="hidden" id="balai_delete_flag" name="balai_delete_flag" value="false">
-                        <small class="text-muted" id="balai_delete_hint" style="display:none;">
-                            <i class="fas fa-info-circle"></i> Baris yang mengandung "Balai" akan dihapus dari dokumen
-                        </small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Satuan Kerja</label>
@@ -183,8 +154,11 @@
                             <option value="">-- Pilih Metode Pengadaan --</option>
                             <option value="Tender – Prakualifikasi – Dua File – Sistem Harga Terendah Ambang
 Batas – Kontrak Harga Satuan">Tender</option>
-                            <option value="Metode Seleksi – Prakualifikasi – Dua File – Kualitas dan Biaya  –Kontrak Waktu Penugasan">Seleksi</option>
-                            <option value="Penunjukan Langsung – Satu File – Kontrak Waktu Penugasan">Penunjukan Langsung</option>
+                            <option
+                                value="Metode Seleksi – Prakualifikasi – Dua File – Kualitas dan Biaya  –Kontrak Waktu Penugasan">
+                                Seleksi</option>
+                            <option value="Penunjukan Langsung – Satu File – Kontrak Waktu Penugasan">Penunjukan
+                                Langsung</option>
                             <option value="Pengadaan Langsung">Pengadaan Langsung</option>
                         </select>
                     </div>
@@ -227,6 +201,55 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                     name="terbilang_hps" readonly>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nomor dan Tanggal Undangan Rapat -->
+            <div class="form-section">
+                <h4><i class="fas fa-calendar-alt"></i> Nomor dan Tanggal Undangan Rapat Pokja</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Nomor Undangan Rapat</label>
+                        <input type="text" class="form-control" id="nomor_undangan_rapat" name="nomor_undangan_rapat"
+                            readonly style="background-color: #f8f9fa; cursor: not-allowed;"
+                            placeholder="Default: {kode_klasifikasi}/{sifat_surat}/PB0301-Bp2jk17/POKJA-{kode_pokja}/2026/01/Bp2jk17/POKJA-{kode_pokja}/{tahun}/01">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i> Nomor otomatis ter-generate berdasarkan Kode Pokja dan
+                            Tahun Anggaran
+                        </small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Tanggal Undangan Rapat <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="tanggal_undangan_rapat"
+                            name="tanggal_undangan_rapat">
+                        <small class="text-muted">
+                            <i class="fas fa-calendar"></i> Pilih tanggal undangan rapat
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Paket -->
+            <div class="form-section">
+                <h4><i class="fas fa-info-circle"></i>SK Pokja dan Timlak (SICAKEPAN)</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nomor SK POKJA</label>
+                        <input type="text" class="form-control" id="nomor_sk_pokja" name="nomor_sk_pokja" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tanggal SK POKJA</label>
+                        <input type="date" class="form-control" id="tanggal_sk_pokja" name="tanggal_sk_pokja" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nomor SK Timlak</label>
+                        <input type="text" class="form-control" id="nomor_sk_timlak" name="nomor_sk_timlak" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tanggal SK Timlak</label>
+                        <input type="date" class="form-control" id="tanggal_sk_timlak" name="tanggal_sk_timlak"
+                            required>
                     </div>
                 </div>
             </div>
@@ -358,30 +381,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                 </div>
             </div>
 
-            <!-- Nomor dan Tanggal Undangan Rapat -->
-            <div class="form-section">
-                <h4><i class="fas fa-calendar-alt"></i> Nomor dan Tanggal Undangan Rapat</h4>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="form-label">Nomor Undangan Rapat</label>
-                        <input type="text" class="form-control" id="nomor_undangan_rapat" name="nomor_undangan_rapat"
-                            readonly style="background-color: #f8f9fa; cursor: not-allowed;"
-                            placeholder="Default: {kode_klasifikasi}/R/Bp2jk17/POKJA-{kode_pokja}/{tahun}/01">
-                        <small class="text-muted">
-                            <i class="fas fa-info-circle"></i> Nomor otomatis ter-generate berdasarkan Kode Pokja dan
-                            Tahun Anggaran
-                        </small>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Tanggal Undangan Rapat <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="tanggal_undangan_rapat"
-                            name="tanggal_undangan_rapat">
-                        <small class="text-muted">
-                            <i class="fas fa-calendar"></i> Pilih tanggal undangan rapat
-                        </small>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- Daftar Dokumen TIMLAK -->
             <div class="form-section">
@@ -389,18 +389,17 @@ Batas – Kontrak Harga Satuan">Tender</option>
                 <div class="mb-2">
                     <small class="text-muted">
                         <i class="fas fa-info-circle me-1"></i>
-                        Centang dokumen yang ingin diproses. Pilih folder master terlebih dahulu untuk melihat dokumen
-                        yang tersedia.
+                        Centang dokumen yang ingin diproses.
                     </small>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th style="width: 50px;">
+                                <!-- <th style="width: 50px;">
                                     <input type="checkbox" class="form-check-input" id="selectAllDocs"
                                         onchange="toggleAllDocuments(this.checked)" checked title="Pilih/Hapus semua">
-                                </th>
+                                </th> -->
                                 <th>No</th>
                                 <th>Jenis BA</th>
                                 <th>Nomor Surat</th>
@@ -408,8 +407,8 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="document_table">
-                            <!-- TIMLAK-DH: Daftar Hadir -->
+                        <!-- <tbody id="document_table">
+                           
                             <tr data-doc="DH">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="DH" checked
@@ -429,7 +428,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                         onclick="toggleDocumentRow('DH')">Delete</button>
                                 </td>
                             </tr>
-                            <!-- TIMLAK-01: BA Reviu Persiapan Pengadaan -->
+                           
                             <tr data-doc="01">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="01" checked
@@ -454,7 +453,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                         onclick="toggleDocumentRow('01')">Delete</button>
                                 </td>
                             </tr>
-                            <!-- TIMLAK-02: Memo Dinas BA Reviu Persiapan Pengadaan -->
+                           
                             <tr data-doc="02">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="02" checked
@@ -484,7 +483,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                         onclick="toggleDocumentRow('02')">Delete</button>
                                 </td>
                             </tr>
-                            <!-- TIMLAK-03: Surat Penetapan BA Persiapan Pengadaan PPK -->
+                          
                             <tr data-doc="03">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="03" checked
@@ -509,7 +508,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                         onclick="toggleDocumentRow('03')">Delete</button>
                                 </td>
                             </tr>
-                            <!-- TIMLAK-04: BA Reviu Dokumen Kualifikasi -->
+                          
                             <tr data-doc="04">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="04" checked
@@ -534,7 +533,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                         onclick="toggleDocumentRow('04')">Delete</button>
                                 </td>
                             </tr>
-                            <!-- TIMLAK-05: BA Reviu Dokumen Seleksi -->
+                           
                             <tr data-doc="05">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="05" checked
@@ -559,7 +558,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                         onclick="toggleDocumentRow('05')">Delete</button>
                                 </td>
                             </tr>
-                            <!-- TIMLAK-06: Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan -->
+                           
                             <tr data-doc="06">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="06" checked
@@ -589,7 +588,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                         onclick="toggleDocumentRow('06')">Delete</button>
                                 </td>
                             </tr>
-                            <!-- TIMLAK-07: Nota Dinas Penetapan Dokumen Pemilihan -->
+                          
                             <tr data-doc="07">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="07" checked
@@ -619,7 +618,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                         onclick="toggleDocumentRow('07')">Delete</button>
                                 </td>
                             </tr>
-                            <!-- TIMLAK-08: BA Penetapan Dokumen Pemilihan -->
+                            
                             <tr data-doc="08">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="08" checked
@@ -645,7 +644,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                                         onclick="toggleDocumentRow('08')">Delete</button>
                                 </td>
                             </tr>
-                        </tbody>
+                        </tbody> -->
                     </table>
                 </div>
             </div>
@@ -820,5 +819,5 @@ Batas – Kontrak Harga Satuan">Tender</option>
 
 {% block scripts %}
 {{ super() }}
-<script src="{{ url_for('static', filename='js/ba_timlak_konsultan.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ba_timlak_konsultan2.js') }}"></script>
 {% endblock %}
