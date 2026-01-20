@@ -62,7 +62,7 @@
     </div>
 
     <!-- Master Folder Section -->
-    <!-- <div class="form-section mb-4">
+    <div class="form-section mb-4">
         <h4 class="text-primary"><i class="fas fa-folder me-2"></i>Master Folder Template</h4>
         <div class="row">
             <div class="col-md-8">
@@ -93,7 +93,7 @@
             <div class="row" id="documentGrid">
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Main Form -->
     <div class="main-form">
@@ -193,6 +193,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                         <select class="form-control" id="sumber_dana" name="sumber_dana" required>
                             <option value="">-- Pilih Sumber Dana --</option>
                             <option value="APBN">APBN</option>
+                            <option value="Loan">Loan</option>
                         </select>
                     </div>
                     <div class="row">
@@ -365,7 +366,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                         <label class="form-label">Nomor Undangan Rapat</label>
                         <input type="text" class="form-control" id="nomor_undangan_rapat" name="nomor_undangan_rapat"
                             readonly style="background-color: #f8f9fa; cursor: not-allowed;"
-                            placeholder="Default: PB0301-Bp2jk17/POKJA-{kode_pokja}/{tahun}/01">
+                            placeholder="Default: {kode_klasifikasi}/R/Bp2jk17/POKJA-{kode_pokja}/{tahun}/01">
                         <small class="text-muted">
                             <i class="fas fa-info-circle"></i> Nomor otomatis ter-generate berdasarkan Kode Pokja dan
                             Tahun Anggaran
