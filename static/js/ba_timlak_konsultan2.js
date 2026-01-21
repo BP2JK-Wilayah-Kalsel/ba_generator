@@ -12,16 +12,19 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('DOMContentLoaded - Initializing BA TIMLAK app...');
     // Load members from CSV
     loadMembersFromCSV();
+    
+    // Load Balai Data
+    loadBalaiData();
 
     // Auto-fill default values
-    updateDefaultValues();
+    // updateDefaultValues();
     console.log('DOMContentLoaded - Initialization complete');
 
     // Add event listeners
-    document.getElementById('kode_pokja').addEventListener('input', updateDefaultValues);
-    document.getElementById('tahun_anggaran').addEventListener('input', updateDefaultValues);
-    const tglSk = document.getElementById('tanggal_sk_pokja');
-    if (tglSk) tglSk.addEventListener('change', updateDefaultValues);
+    // document.getElementById('kode_pokja').addEventListener('input', updateDefaultValues);
+    // document.getElementById('tahun_anggaran').addEventListener('input', updateDefaultValues);
+    // const tglSk = document.getElementById('tanggal_sk_pokja');
+    // if (tglSk) tglSk.addEventListener('change', updateDefaultValues);
 });
 
 // Global variables for members
@@ -100,31 +103,60 @@ async function loadMembersFromCSV() {
     }
 }
 
-// Update default values
-function updateDefaultValues() {
-    const kodePokja = document.getElementById('kode_pokja').value;
-    // Ambil tahun dari tanggal_sk_pokja jika ada, jika tidak pakai tahun berjalan
-    let tahun = '';
-    const tglSkEl = document.getElementById('tanggal_sk_pokja');
-    if (tglSkEl && tglSkEl.value) {
-        const d = new Date(tglSkEl.value);
-        if (!isNaN(d.getTime())) tahun = d.getFullYear().toString();
-    }
-    if (!tahun) tahun = new Date().getFullYear().toString();
-
-    // Update TIMLAK document table placeholders
-    if (kodePokja && tahun) {
-        // Update TIMLAK documents
-        const timlakDocs = ['DH', '01', '02', '03', '04', '05', '06', '07', '08'];
-        timlakDocs.forEach(num => {
-            const input = document.querySelector(`input[name="nomor_timlak_${num}"]`);
-            if (input && input.placeholder) {
-                // Keep existing placeholder pattern
-                input.placeholder = input.placeholder.replace(/{kode_pokja}/g, kodePokja).replace(/{tahun}/g, tahun);
-            }
-        });
+// Load Balai Data from JSON
+async function loadBalaiData() {
+    try {
+        const response = await fetch('/static/template_response/daftar_association.json');
+        if (!response.ok) {
+            throw new Error('Failed to load Balai data');
+        }
+        const result = await response.json();
+        
+        const datalist = document.getElementById('balaiOptions');
+        if (!datalist) return;
+        
+        // Clear existing options
+        datalist.innerHTML = '';
+        
+        if (result.success && result.data && result.data.documents) {
+            result.data.documents.forEach(doc => {
+                const option = document.createElement('option');
+                option.value = doc.name;
+                datalist.appendChild(option);
+            });
+            console.log(`✅ Balai data loaded: ${result.data.documents.length} items`);
+        }
+    } catch (error) {
+        console.error('❌ Error loading Balai data:', error);
     }
 }
+
+
+// Update default values
+// function updateDefaultValues() {
+//     const kodePokja = document.getElementById('kode_pokja').value;
+//     // Ambil tahun dari tanggal_sk_pokja jika ada, jika tidak pakai tahun berjalan
+//     let tahun = '';
+//     const tglSkEl = document.getElementById('tanggal_sk_pokja');
+//     if (tglSkEl && tglSkEl.value) {
+//         const d = new Date(tglSkEl.value);
+//         if (!isNaN(d.getTime())) tahun = d.getFullYear().toString();
+//     }
+//     if (!tahun) tahun = new Date().getFullYear().toString();
+
+//     // Update TIMLAK document table placeholders
+//     if (kodePokja && tahun) {
+//         // Update TIMLAK documents
+//         const timlakDocs = ['DH', '01', '02', '03', '04', '05', '06', '07', '08'];
+//         timlakDocs.forEach(num => {
+//             const input = document.querySelector(`input[name="nomor_timlak_${num}"]`);
+//             if (input && input.placeholder) {
+//                 // Keep existing placeholder pattern
+//                 input.placeholder = input.placeholder.replace(/{kode_pokja}/g, kodePokja).replace(/{tahun}/g, tahun);
+//             }
+//         });
+//     }
+// }
 
 // Initialize POKJA selectors with CSV members
 function initializePokjaSelectors() {
