@@ -15,22 +15,26 @@ def preview_document():
         data = request.json
         doc_code = data.get('doc_code', '')
         keywords = data.get('keywords', {})
-        master_folder = data.get('master_folder', '')
+        master_folder = data.get('masterFolderPath', '')
+        logger.info(f"Received request for doc_code: {doc_code}, master_folder: {master_folder}")
 
-        if not doc_code or not master_folder:
+        if not doc_code:
             return jsonify({'success': False, 'error': 'Missing doc_code or master_folder'}), 400
 
         # Normalize doc_code
         normalized_code = doc_code.replace('_', '-')
 
         special_files = {
-            'DH': ['!Daftar Hadir.docx', 'Daftar Hadir.docx', '!DH.docx'],
-            '22-lhp': ['22-Format----------LHP.docx', '22-LHP.docx', '22-Format-LHP.docx'],
-            '22_lhp': ['22-Format----------LHP.docx', '22-LHP.docx', '22-Format-LHP.docx']
+            'dh': ['!Daftar Hadir.docx', 'Daftar Hadir.docx', '!DH.docx'],
+            'dhp1': ['!Daftar Hadir Prareviu 1.docx', 'Daftar Hadir Prareviu 1.docx', '!DHP1.docx'],
+            'dhp2': ['!Daftar Hadir Prareviu 2.docx', 'Daftar Hadir Prareviu 2.docx', '!DHP2.docx'],
         }
 
         try:
-            all_files = os.listdir(master_folder)
+            # Use absolute path or correct relative path
+            base_folder = os.path.join(os.getcwd(), 'Master Folder', master_folder)
+            all_files = os.listdir(base_folder)
+            logger.info(f"Files found in master folder: {all_files}")
         except Exception as e:
             logger.exception('Cannot access master folder')
             return jsonify({'success': False, 'error': f'Cannot access master folder: {str(e)}'}), 500
@@ -43,7 +47,7 @@ def preview_document():
             special_names = special_files.get(doc_code_lower) or special_files.get(normalized_lower)
             for special_name in special_names:
                 if special_name in all_files:
-                    doc_path = os.path.join(master_folder, special_name)
+                    doc_path = os.path.join(base_folder, special_name)
                     break
 
         if not doc_path:
@@ -51,11 +55,11 @@ def preview_document():
                 if not filename.lower().endswith('.docx'):
                     continue
                 if filename.startswith(doc_code) or filename.startswith(normalized_code):
-                    doc_path = os.path.join(master_folder, filename)
+                    doc_path = os.path.join(base_folder, filename)
                     break
 
         if not doc_path:
-            error_msg = f'Dokumen tidak ditemukan untuk code: {doc_code}\nMaster folder: {master_folder}'
+            error_msg = f'Dokumen tidak ditemukan untuk code: {doc_code}'
             return jsonify({'success': False, 'error': error_msg}), 404
 
         with open(doc_path, 'rb') as docx_file:

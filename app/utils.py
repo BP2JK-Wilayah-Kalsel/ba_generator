@@ -17,28 +17,17 @@ MONTH_NAMES = [
 # Document type mapping untuk nomor urut surat (shared constant)
 DOCUMENT_TYPES = {
     '00': 'Cover',
+    'DHP1': '!Daftar Hadir Prareviu 1',
+    'DHP2': '!Daftar Hadir Prareviu 2',
+    'DH' : '!Daftar Hadir',
+    '01': 'BA Reviu Persiapan Pengadaan',
+    '02': 'Memorandum BA Reviu Persiapan Pengadaan',
+    '03': 'Surat Penetapan BA Persiapan Pengadaan PPK',
+    '04': 'BA Reviu Dokumen Kualifikasi',
+    '05': 'BA Reviu Dokumen Seleksi',
     '06': 'Berita Acara Pemberian Penjelasan Kualifikasi',
-    '10': 'Berita Acara Hasil Evaluasi Kualifikasi',
-    '11': 'Berita Acara Penetapan Daftar Pendek',
-    '12': 'Pengumuman Daftar Pendek',
-    '13': 'Berita Acara Jawab Sanggah PrakualIFIKASI',
-    '14': 'Berita Acara Pemberian Penjelasan Seleksi',
-    '17': 'Berita Acara Hasil Evaluasi Administrasi Dan Teknis',
-    '19': 'Berita Acara Hasil Evaluasi Biaya',
-    '20': 'Berita Acara Kombinasi Teknis Dan Biaya',
-    '21': 'Surat Klarifikasi Personel',
-    '22': 'Berita Acara Klarifikasi Penetapan Pemenang',
-    '22-LHP': 'Berita Acara Hasil Penelitian',
-    '24': 'Berita Acara Penetapan Pemenang',
-    '25': 'Berita Acara Pengumuman Pemenang',
-    '26': 'Berita Acara Jawab Sanggah Seleksi',
-    '27': 'Berita Acara Klarifikasi Dan Negosiasi Teknis Dan Biaya',
-    '27-2': 'Daftar Hadir Klarifikasi Dan Negosiasi',
-    '28': 'Berita Acara Hasil Pemilihan',
-    '29': 'Surat Penyampaian BAHP',
-    '96': 'Surat pernyataan Klarifikasi personil dan paket 1 dan 2',
-    '97': 'Berita Acara Seleksi Ulang',
-    '99': 'TTD Pokja',
+    '07': 'Memorandum Penetapan Dokumen Pemilihan',
+    '08': 'BA Penetapan Dokumen Pemilihan'
 }
 
 
@@ -199,20 +188,21 @@ PROCESSED_FILES_DIR = DefaultConfig.PROCESSED_FILES_DIR
 
 
 def clean_old_processed_files() -> None:
-    """Remove files older than one hour from processed results directory."""
+    """Clear all files from processed results directory to ensure clean state."""
     try:
         os.makedirs(PROCESSED_FILES_DIR, exist_ok=True)
-        current_time = time.time()
-        one_hour = 3600
         for filename in os.listdir(PROCESSED_FILES_DIR):
             filepath = os.path.join(PROCESSED_FILES_DIR, filename)
-            if os.path.isfile(filepath):
-                file_age = current_time - os.path.getmtime(filepath)
-                if file_age > one_hour:
-                    try:
-                        os.remove(filepath)
-                    except Exception:
-                        pass
+            try:
+                if os.path.isfile(filepath) or os.path.islink(filepath):
+                    os.unlink(filepath)
+                elif os.path.isdir(filepath):
+                    import shutil
+                    shutil.rmtree(filepath)
+            except Exception as e:
+                print(f'Failed to delete {filepath}. Reason: {e}')
+    except Exception as e:
+        print(f'Error clearing processed files directory: {e}')
     except Exception:
         pass
 

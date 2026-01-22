@@ -152,17 +152,13 @@ def process_paragraph_keywords(paragraph, keywords: Dict[str, Any], keyword_deta
     return total_replacements_in_paragraph + hyperlink_replacements
 
 
-def process_docx_comprehensive(file_path, keywords, output_path, deleted_documents=None, keywords_to_delete_rows=None):
+def process_docx_comprehensive(file_path, keywords, output_path):
     """Process DOCX file with comprehensive keyword replacement and row deletion support"""
     try:
         doc = Document(file_path)
         total_replacements = 0
         log_entries = []
         keyword_details = {}  # Track details for each keyword
-        
-        # Ensure keywords_to_delete_rows is a list
-        if keywords_to_delete_rows is None:
-            keywords_to_delete_rows = []
         
         # Process main document paragraphs
         for paragraph in doc.paragraphs:
@@ -194,21 +190,6 @@ def process_docx_comprehensive(file_path, keywords, output_path, deleted_documen
                     if cell_text == 'delete':
                         row_should_delete = True
                         break
-                    
-                    # Check if cell contains reference to deleted documents
-                    if deleted_documents:
-                        for deleted_doc in deleted_documents:
-                            if deleted_doc in cell_text:
-                                row_should_delete = True
-                                break
-                    
-                    # NEW: Check if cell contains keywords that should trigger row deletion
-                    if keywords_to_delete_rows:
-                        for keyword_to_delete in keywords_to_delete_rows:
-                            # Check if placeholder exists in this cell
-                            if f"{{{keyword_to_delete}}}" in cell.text:
-                                row_should_delete = True
-                                break
                     
                     if row_should_delete:
                         break

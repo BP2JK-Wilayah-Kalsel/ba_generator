@@ -1,6 +1,5 @@
 import os
 import json
-import re
 import zipfile
 from datetime import datetime
 import logging
@@ -17,56 +16,20 @@ PROCESSED_FILES_DIR = DefaultConfig.PROCESSED_FILES_DIR
 @bp.route('/download_results')
 def download_results():
     try:
-        kode_pokja = request.args.get('kode_pokja', '').strip()
-        nama_paket = request.args.get('nama_paket', '').strip()
-
-        # Load metadata if params are missing
-        if not (kode_pokja or nama_paket):
-            metadata_path = os.path.join(PROCESSED_FILES_DIR, 'zip_metadata.json')
-            if os.path.exists(metadata_path):
-                try:
-                    with open(metadata_path, 'r') as f:
-                        meta = json.load(f)
-                        if not kode_pokja:
-                            kode_pokja = meta.get('kode_pokja', '').strip()
-                        if not nama_paket:
-                            nama_paket = meta.get('nama_paket', '').strip()
-                except Exception as e:
-                    logger.error(f"Failed to read zip metadata: {e}")
-
-        folder_name = "Hasil Reviu"
-        
-        # Sanitize for folder name
-        safe_kode = re.sub(r'[\\/*?:"<>|]', '_', kode_pokja)
-        safe_paket = re.sub(r'[\\/*?:"<>|]', '_', nama_paket)
-        
-        if safe_kode and safe_paket:
-            folder_name = f"{safe_kode} ({safe_paket})"
-        elif safe_paket:
-            folder_name = safe_paket
-        elif safe_kode:
-            folder_name = safe_kode
-
-        zip_filename = f"BA_Timlak_Generated_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
+        zip_filename = f"BA_Generated_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
         zip_path = os.path.join(PROCESSED_FILES_DIR, zip_filename)
-        
         with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            # Create empty folder structure
-            subfolders = ["01", "02", "03", "04", "05. Reviu"]
-            for sf in subfolders:
-                zip_info = zipfile.ZipInfo(f"{folder_name}/{sf}/")
-                zipf.writestr(zip_info, '')
-
             for root, dirs, files in os.walk(PROCESSED_FILES_DIR):
                 for file in files:
                     if file.endswith('.docx'):
                         file_path = os.path.join(root, file)
-                        arcname = f"{folder_name}/05. Reviu/{file}"
+                        arcname = file
                         zipf.write(file_path, arcname)
         return send_file(zip_path, as_attachment=True, download_name=zip_filename)
     except Exception as e:
         logger.exception('Failed to create ZIP')
         return jsonify({'error': str(e)}), 500
+
 
 @bp.route('/download_file/<path:filename>')
 def download_file(filename):
@@ -92,149 +55,64 @@ def process_comprehensive():
         clean_old_processed_files()
 
         form_data = request.form.to_dict()
-        # Get folder name instead of full data
-        master_folder_name = form_data.get('masterFolderPath')
+        master_folder_json = form_data.get('master_folder_data')
         uploaded_files = request.files.getlist('template_files')
 
         keywords_json = form_data.get('keywords', '{}')
+        deleted_docs_json = form_data.get('deleted_documents', '[]')
+        keywords_to_delete_rows_json = form_data.get('keywords_to_delete_rows', '[]')
         selected_docs_json = form_data.get('selected_documents', '[]')
 
         try:
             keywords = json.loads(keywords_json)
+            deleted_documents = json.loads(deleted_docs_json)
+            keywords_to_delete_rows = json.loads(keywords_to_delete_rows_json)
             selected_documents = json.loads(selected_docs_json)
-        except Exception as e:
-            logger.error(f"Error parsing JSON: {e}")
+        except Exception:
             keywords = generate_comprehensive_keywords(form_data)
+            deleted_documents = []
+            keywords_to_delete_rows = []
             selected_documents = []
-
-        # Save metadata for zip generation
-        try:
-            metadata = {
-                'kode_pokja': keywords.get('kode_pokja', ''),
-                'nama_paket': keywords.get('nama_paket', '')
-            }
-            with open(os.path.join(PROCESSED_FILES_DIR, 'zip_metadata.json'), 'w') as f:
-                json.dump(metadata, f)
-        except Exception as e:
-            logger.error(f"Failed to save zip metadata: {e}")
 
         processed_files = []
         failed_files = []
 
         # Process master folder if provided
-        if master_folder_name:
+        if master_folder_json:
             try:
-                # Construct path to master folder
-                base_folder = os.path.join(os.getcwd(), 'Master Folder', master_folder_name)
-                # logger.info(f"Files found in master folder: {base_folder}")
-                # Check if folder exists
-                if not os.path.exists(base_folder):
-                    return jsonify({'success': False, 'message': f'Master folder not found: {master_folder_name}'})
-                
-                # Load documents from folder
-                available_docs = []
-                for filename in os.listdir(base_folder):
-                    if filename.endswith('.docx') and not filename.startswith('~$'):
-                        # Determine document ID/type based on filename pattern
-                        doc_id = ''
-                        doc_type = ''
-                        
-                        # Match with DOCUMENT_TYPES patterns
-                        # Sort keys by length descending to match longer prefixes first (e.g. '22-LHP' before '22')
-                        sorted_keys = sorted(DOCUMENT_TYPES.keys(), key=len, reverse=True)
-                        
-                        # Special handling for Daftar Hadir files
-                        if filename == '!Daftar Hadir Prareviu 1.docx':
-                            doc_id = 'DHP1'
-                            doc_type = 'Daftar Hadir Prareviu 1'
-                        elif filename == '!Daftar Hadir Prareviu 2.docx':
-                            doc_id = 'DHP2'
-                            doc_type = 'Daftar Hadir Prareviu 2'
-                        elif filename == '!Daftar Hadir.docx':
-                            doc_id = 'DH'
-                            doc_type = 'Daftar Hadir'
-                        else:
-                            for dt_key in sorted_keys:
-                                dt_name = DOCUMENT_TYPES[dt_key]
-                                if filename.startswith(dt_key):
-                                    doc_id = dt_key
-                                    doc_type = dt_name
-                                    break
-                        
-                        # If no specific match, use filename as ID
-                        if not doc_id:
-                            doc_id = filename
-                            doc_type = 'Dokumen Pendukung'
-                            
-                        available_docs.append({
-                            'id': doc_id,
-                            'name': filename,
-                            'path': os.path.join(base_folder, filename),
-                            'type': doc_type,
-                            'available': True
-                        })
+                master_folder_data = json.loads(master_folder_json)
+                available_docs = [doc for doc in master_folder_data.get('documents', []) if doc.get('available')]
 
-                logger.debug('Total available docs in %s: %s', master_folder_name, len(available_docs))
+                logger.debug('Total available docs: %s', len(available_docs))
+                logger.debug('Available doc IDs: %s', [doc.get('id') for doc in available_docs])
                 logger.debug('Selected documents (from frontend): %s', selected_documents)
 
                 # Filter by selected documents if provided
-                if selected_documents and len(selected_documents) > 0:
-                    logger.debug(f"Filtering available_docs with selected_documents: {selected_documents}")
-                    
+                if selected_documents:
                     def matches_selection(doc_id, selected_codes):
-                        # Clean up doc_id if needed to match selection format
-                        # The selection usually comes as simple codes (e.g., 'A', 'B') or full IDs
-                        
-                        # Debug info for matching
-                        # logger.debug(f"Matching doc_id='{doc_id}' against codes={selected_codes}")
-                        
-                        # Try exact match first
-                        if doc_id in selected_codes:
-                            return True
-                            
-                        # Try prefix matching for known types
                         if doc_id.startswith('format_'):
                             code = doc_id[7:]
-                            if code in selected_codes:
-                                return True
+                            return code in selected_codes
                         elif doc_id.startswith('timlak_'):
                             code = doc_id[7:]
-                            if code in selected_codes:
-                                return True
-                            
+                            return code in selected_codes
                         return False
 
-                    # Log available docs before filtering
-                    logger.debug(f"Available docs before filter: {[d.get('id') for d in available_docs]}")
-                    
-                    filtered_docs = []
-                    for doc in available_docs:
-                        if matches_selection(doc.get('id', ''), selected_documents):
-                            filtered_docs.append(doc)
-                        else:
-                            # Optional: log what was excluded
-                            logger.debug(f"Excluded doc: {doc.get('id')}")
-                            pass
-                            
-                    available_docs = filtered_docs
+                    available_docs = [doc for doc in available_docs if matches_selection(doc.get('id', ''), selected_documents)]
 
                     logger.debug('After filtering by selection: %s', len(available_docs))
                     logger.debug('Docs to process: %s', [doc.get('id') for doc in available_docs])
-                else:
-                    logger.debug("No selected_documents provided or empty list, processing all available docs if any.")
 
                 if not available_docs:
                     return jsonify({'success': False, 'message': 'Tidak ada dokumen yang dipilih atau tersedia untuk diproses. Silakan pilih dokumen dengan mencentang checkbox di tabel.'})
 
-                logger.debug(f"Available docs after filter: {[d.get('id') for d in available_docs]}")
                 for doc in available_docs:
-                    logger.debug(f"Processing doc: {doc.get('id')}")
                     try:
                         source_path = doc.get('path')
                         output_filename = doc.get('name')
                         output_path = os.path.join(PROCESSED_FILES_DIR, output_filename)
 
-                        success, result = process_docx_comprehensive(source_path, keywords, output_path)
+                        success, result = process_docx_comprehensive(source_path, keywords, output_path, deleted_documents, keywords_to_delete_rows)
 
                         if success:
                             processed_files.append({'filename': output_filename, 'original_filename': doc.get('name'), 'document_type': doc.get('type'), 'replacements': result.get('total_replacements', 0), 'log_entries': result.get('log_entries', []), 'keyword_details': result.get('keyword_details', {})})
@@ -247,8 +125,29 @@ def process_comprehensive():
             except Exception as e:
                 return jsonify({'success': False, 'message': f'Error processing master folder: {str(e)}'})
 
+        # Process uploaded files (fallback for backward compatibility)
+        elif uploaded_files and any(f.filename != '' for f in uploaded_files):
+            for file in uploaded_files:
+                if file.filename == '':
+                    continue
+                if not file.filename.lower().endswith('.docx'):
+                    failed_files.append({'filename': file.filename, 'error': 'File bukan format .docx'})
+                    continue
+                try:
+                    temp_input = os.path.join(PROCESSED_FILES_DIR, f"temp_{file.filename}")
+                    file.save(temp_input)
+                    output_filename = file.filename
+                    output_path = os.path.join(PROCESSED_FILES_DIR, output_filename)
+                    success, result = process_docx_comprehensive(temp_input, keywords, output_path, deleted_documents, keywords_to_delete_rows)
+                    os.remove(temp_input)
+                    if success:
+                        processed_files.append({'filename': output_filename, 'original_filename': file.filename, 'replacements': result.get('total_replacements', 0), 'log_entries': result.get('log_entries', [])})
+                    else:
+                        failed_files.append({'filename': file.filename, 'error': result.get('error', 'Unknown error')})
+                except Exception as e:
+                    failed_files.append({'filename': file.filename, 'error': str(e)})
         else:
-            return jsonify({'success': False, 'message': 'Pilih master'})
+            return jsonify({'success': False, 'message': 'Pilih master folder atau upload file template'})
 
         return jsonify({'success': True, 'files': processed_files, 'failed_files': failed_files, 'keywords_used': keywords})
     except Exception as e:

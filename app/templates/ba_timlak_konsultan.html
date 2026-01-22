@@ -61,51 +61,97 @@
         </div>
     </div> -->
 
-    <!-- Master Folder Section -->
-    <!-- <div class="form-section mb-4">
-        <h4 class="text-primary"><i class="fas fa-folder me-2"></i>Master Folder Template</h4>
-        <div class="row">
-            <div class="col-md-8">
-                <label class="form-label">Pilih Master Folder</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="masterFolderPath"
-                        placeholder="Pilih folder yang berisi template dokumen BA..." readonly>
-                    <button type="button" class="btn btn-outline-primary" onclick="selectMasterFolder()">
-                        <i class="fas fa-folder-open me-1"></i>Browse & Validasi
-                    </button>
-                </div>
-                <small class="text-muted">
-                    <i class="fas fa-info-circle me-1"></i>
-                    Folder akan divalidasi otomatis setelah dipilih
-                </small>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Status Validasi</label>
-                <div class="d-flex align-items-center">
-                    <div id="validationStatus" class="badge bg-secondary me-2">Belum Divalidasi</div>
-                    <div id="documentCount" class="text-muted small">0/9 dokumen</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="documentList" class="mt-3" style="display: none;">
-            <h6 class="mb-3">Daftar Dokumen Template:</h6>
-            <div class="row" id="documentGrid">
-            </div>
-        </div>
-    </div> -->
-
     <!-- Main Form -->
     <div class="main-form">
         <form id="baForm" enctype="multipart/form-data">
+
+            <!-- Master Folder Section -->
+            <div class="form-section mb-4">
+                <h4 class="text-primary"><i class="fas fa-folder me-2"></i>Master Folder Template</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label">Pilih Master Folder</label>
+                        <div class="input-group">
+                            <select type="text" class="form-control" id="masterFolderPath" name="masterFolderPath"
+                                onchange="setDocumentLists(this.value)" >
+                                <option value="Master BA Timlak Konsultan">Template BA Timlak Konsultan</option>
+                                <option value="Master BA Timlak RO Konsultan">Template BA Timlak Repeat Order Konsultan
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- Data Paket -->
             <div class="form-section">
                 <h4><i class="fas fa-info-circle"></i> Data Paket (RUP dan Dokumen Pemilihan)</h4>
                 <div class="row">
                     <div class="col-md-12 mb-3">
+                        <label class="form-label">Nama Paket</label>
+                        <textarea class="form-control" id="nama_paket" name="nama_paket" ></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Balai</label>
+                        <div class="input-group">
+                            <input class="form-control" list="balaiOptions" id="balai" name="balai"
+                                placeholder="Pilih atau ketik Balai..." autocomplete="off">
+                            <datalist id="balaiOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_balai"
+                                title="Hapus Balai">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Satuan Kerja</label>
+                        <div class="input-group">
+                            <input class="form-control" list="satuanKerjaOptions" id="satuan_kerja" name="satuan_kerja"
+                                placeholder="Pilih atau ketik Satuan Kerja..." autocomplete="off"  disabled>
+                            <datalist id="satuanKerjaOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_satuan_kerja"
+                                title="Hapus Satuan Kerja">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">PPK</label>
+                        <input type="text" class="form-control" id="ppk" name="ppk" >
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nama PPK</label>
+                        <input type="text" class="form-control" id="nama_ppk" name="nama_ppk" >
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Jenis Pengadaan</label>
+                        <select class="form-control" id="jenis_pengadaan" name="jenis_pengadaan" >
+                            <option value="">-- Pilih Jenis Pengadaan --</option>
+                            <option value="Jasa Konsultansi Konstruksi">Jasa Konsultansi Konstruksi</option>
+                            <option value="Pekerjaan Konstruksi">Pekerjaan Konstruksi</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Metode Pemilihan</label>
+                        <input type="text" class="form-control" id="metode_pemilihan" name="metode_pemilihan" >
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Kode Klasifikasi</label>
+                        <div class="input-group">
+                            <input class="form-control" list="kodeKlasifikasiOptions" id="kode_klasifikasi"
+                                name="kode_klasifikasi" placeholder="Pilih atau ketik Kode Klasifikasi..."
+                                autocomplete="off"  disabled>
+                            <datalist id="kodeKlasifikasiOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_kode_klasifikasi"
+                                title="Hapus Kode Klasifikasi">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
                         <label class="form-label">Tahun Anggaran</label>
-                        <select class="form-control" id="tahun_anggaran" name="tahun_anggaran" required>
+                        <select class="form-control" id="tahun_anggaran" name="tahun_anggaran" >
                             {% for year in range(current_year - 1, current_year + 2) %}
                             <option value="{{ year }}" {% if year==current_year %}selected{% endif %}>{{ year
                                 }}</option>
@@ -115,60 +161,6 @@
                                 {{ year }} - {{ year + 1 }}
                             </option>
                             {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Nama Paket</label>
-                        <textarea class="form-control" id="nama_paket" name="nama_paket" required></textarea>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Balai</label>
-                        <div class="input-group">
-                            <input class="form-control" list="balaiOptions" id="balai" name="balai" placeholder="Pilih atau ketik Balai..." autocomplete="off">
-                            <datalist id="balaiOptions"></datalist>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Satuan Kerja</label>
-                        <input type="text" class="form-control" id="satuan_kerja" name="satuan_kerja" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">PPK</label>
-                        <input type="text" class="form-control" id="kegiatan" name="kegiatan" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nama PPK</label>
-                        <input type="text" class="form-control" id="nama_ppk" name="nama_ppk" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Jenis Pengadaan</label>
-                        <select class="form-control" id="jenis_pengadaan" name="jenis_pengadaan" required>
-                            <option value="">-- Pilih Jenis Pengadaan --</option>
-                            <option value="Jasa Konsultansi Konstruksi">Jasa Konsultansi Konstruksi</option>
-                            <option value="Pekerjaan Konstruksi">Pekerjaan Konstruksi</option>
-                            <option value="Barang/Jasa Lainnya">Barang/Jasa Lainnya</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Metode Pengadaan</label>
-                        <select class="form-control" id="metode_pengadaan" name="metode_pengadaan" required>
-                            <option value="">-- Pilih Metode Pengadaan --</option>
-                            <option value="Tender – Prakualifikasi – Dua File – Sistem Harga Terendah Ambang
-Batas – Kontrak Harga Satuan">Tender</option>
-                            <option
-                                value="Metode Seleksi – Prakualifikasi – Dua File – Kualitas dan Biaya  –Kontrak Waktu Penugasan">
-                                Seleksi</option>
-                            <option value="Penunjukan Langsung – Satu File – Kontrak Waktu Penugasan">Penunjukan
-                                Langsung</option>
-                            <option value="Pengadaan Langsung">Pengadaan Langsung</option>
-                        </select>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Sumber Dana</label>
-                        <select class="form-control" id="sumber_dana" name="sumber_dana" required>
-                            <option value="">-- Pilih Sumber Dana --</option>
-                            <option value="APBN">APBN</option>
-                            <option value="Loan">Loan</option>
                         </select>
                     </div>
                     <div class="row">
@@ -206,6 +198,118 @@ Batas – Kontrak Harga Satuan">Tender</option>
                 </div>
             </div>
 
+            <!-- Data Pokja -->
+            <div class="form-section">
+                <h4><i class="fas fa-info-circle"></i>Data Kelompok Kerja dan Tim Pelaksana (SICAKEPAN)</h4>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Kode Pokja</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="kode_pokja" name="kode_pokja"
+                                placeholder="Masukkan Kode Pokja..." >
+                            <button class="btn btn-primary" type="button" id="btn_fetch_pokja_data">
+                                <i class="fas fa-cloud-download-alt me-1"></i>Ambil Data
+                            </button>
+                        </div>
+                        <small class="text-muted">Klik tombol untuk mengambil data SK dan Anggota berdasarkan Kode
+                            Pokja.</small>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- POKJA Management Section -->
+            <div class="form-section">
+                <!-- POKJA Member Selection -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h5 class="mb-1 text-primary">
+                                <i class="fas fa-users me-2"></i>Data Pokja
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nomor SK Pokja</label>
+                            <input type="text" class="form-control" id="nomor_sk_pokja" name="nomor_sk_pokja" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tanggal SK Pokja <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="tanggal_sk_pokja" name="tanggal_sk_pokja"
+                                readonly>
+                        </div>
+                        <input type="text" id="ketua_pokja" name="ketua_pokja" hidden>
+                        <input type="text" id="email_ketua_pokja" name="email_ketua_pokja" hidden>
+                        <input type="text" id="sekre_pokja" name="sekre_pokja" hidden>
+                        <input type="text" id="anggota_pokja1" name="anggota_pokja1" hidden>
+                        <input type="text" id="anggota_pokja2" name="anggota_pokja2" hidden>
+                        <input type="text" id="anggota_pokja3" name="anggota_pokja3" hidden>
+                    </div>
+
+                    <!-- POKJA Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th width="5%" class="text-center">No</th>
+                                    <th width="37%">Nama Lengkap</th>
+                                    <th width="8%" class="text-center">Jabatan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pokja_members_table">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anggota TIMLAK Section -->
+            <div class="form-section">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h5 class="mb-1 text-primary">
+                                <i class="fas fa-users m-2"></i>Data Timlak
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nomor SK Timlak</label>
+                            <input type="text" class="form-control" id="nomor_sk_timlak" name="nomor_sk_timlak" readonly
+                                style="background-color: #e9ecef;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tanggal SK Timlak <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="tanggal_sk_timlak" name="tanggal_sk_timlak"
+                                readonly style="background-color: #e9ecef;">
+                        </div>
+                        <input type="text" id="ketua_timlak" name="ketua_timlak" hidden>
+                        <input type="text" id="sekre_timlak" name="sekre_timlak" hidden>
+                        <input type="text" id="anggota_timlak" name="anggota_timlak" hidden>
+                    </div>
+
+                    <!-- TIMLAK Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-success">
+                                <tr>
+                                    <th width="5%" class="text-center">No</th>
+                                    <th width="37%">Nama Lengkap</th>
+                                    <th width="8%" class="text-center">Role</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timlak_members_table">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- Nomor dan Tanggal Undangan Rapat -->
             <div class="form-section">
                 <h4><i class="fas fa-calendar-alt"></i> Nomor dan Tanggal Undangan Rapat Pokja</h4>
@@ -214,7 +318,7 @@ Batas – Kontrak Harga Satuan">Tender</option>
                         <label class="form-label">Nomor Undangan Rapat</label>
                         <input type="text" class="form-control" id="nomor_undangan_rapat" name="nomor_undangan_rapat"
                             readonly style="background-color: #f8f9fa; cursor: not-allowed;"
-                            placeholder="Default: {kode_klasifikasi}/{sifat_surat}/PB0301-Bp2jk17/POKJA-{kode_pokja}/2026/01/Bp2jk17/POKJA-{kode_pokja}/{tahun}/01">
+                            placeholder="{kode_klasifikasi}/{sifat_surat}/Bp2jk17/POKJA-{kode_pokja}/2026/01">
                         <small class="text-muted">
                             <i class="fas fa-info-circle"></i> Nomor otomatis ter-generate berdasarkan Kode Pokja dan
                             Tahun Anggaran
@@ -231,425 +335,6 @@ Batas – Kontrak Harga Satuan">Tender</option>
                 </div>
             </div>
 
-            <!-- Data Paket -->
-            <div class="form-section">
-                <h4><i class="fas fa-info-circle"></i>SK Pokja dan Timlak (SICAKEPAN)</h4>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nomor SK POKJA</label>
-                        <input type="text" class="form-control" id="nomor_sk_pokja" name="nomor_sk_pokja" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tanggal SK POKJA</label>
-                        <input type="date" class="form-control" id="tanggal_sk_pokja" name="tanggal_sk_pokja" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nomor SK Timlak</label>
-                        <input type="text" class="form-control" id="nomor_sk_timlak" name="nomor_sk_timlak" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tanggal SK Timlak</label>
-                        <input type="date" class="form-control" id="tanggal_sk_timlak" name="tanggal_sk_timlak"
-                            required>
-                    </div>
-                </div>
-            </div>
-
-            <!-- POKJA Management Section -->
-            <div class="form-section">
-                <!-- POKJA Member Selection -->
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <h5 class="mb-1 text-primary">
-                                <i class="fas fa-users me-2"></i>Anggota POKJA
-                            </h5>
-                            <small class="text-muted">Pilih anggota dari list default atau tambah manual</small>
-                        </div>
-                    </div>
-
-                    <!-- POKJA Roles Selection -->
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <label class="form-label"><strong>Ketua POKJA</strong></label>
-                            <select class="form-select" name="ketua_pokja" id="ketua_pokja" required>
-                                <option value="">-- Pilih Ketua --</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label"><strong>Sekretaris POKJA</strong></label>
-                            <select class="form-select" name="sekre_pokja" id="sekre_pokja" required>
-                                <option value="">-- Pilih Sekretaris --</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label"><strong>Anggota 3</strong></label>
-                            <select class="form-select" name="anggota3_select" id="anggota3_select">
-                                <option value="">-- Pilih Anggota 3 --</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-md-4 offset-md-8">
-                            <label class="form-label"><strong>Anggota 4</strong></label>
-                            <select class="form-select" name="anggota4_select" id="anggota4_select">
-                                <option value="">-- Pilih Anggota 4 --</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-4 offset-md-8">
-                            <label class="form-label"><strong>Anggota 5</strong></label>
-                            <select class="form-select" name="anggota5_select" id="anggota5_select">
-                                <option value="">-- Pilih Anggota 5 --</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- POKJA Table -->
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="table-primary">
-                                <tr>
-                                    <th width="5%" class="text-center">No</th>
-                                    <th width="8%" class="text-center">Role</th>
-                                    <th width="37%">Nama Lengkap</th>
-                                    <th width="25%">NIP</th>
-                                    <th width="20%">Email</th>
-                                    <th width="5%" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="pokja_members_table">
-                                <!-- Will be populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anggota TIMLAK Section -->
-            <div class="form-section">
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <h5 class="mb-1 text-success">
-                                <i class="fas fa-user-check me-2"></i>Anggota TIMLAK
-                            </h5>
-                            <small class="text-muted">Pilih 3 anggota TIMLAK dari list atau tambah manual</small>
-                        </div>
-                    </div>
-
-                    <!-- TIMLAK Roles Selection -->
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <label class="form-label"><strong>Ketua TIMLAK</strong></label>
-                            <select class="form-select" name="ketua_timlak" id="ketua_timlak" required>
-                                <option value="">-- Pilih Ketua TIMLAK --</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label"><strong>Sekretaris TIMLAK</strong></label>
-                            <select class="form-select" name="sekre_timlak" id="sekre_timlak" required>
-                                <option value="">-- Pilih Sekretaris TIMLAK --</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label"><strong>Anggota TIMLAK</strong></label>
-                            <select class="form-select" name="anggota_timlak" id="anggota_timlak" required>
-                                <option value="">-- Pilih Anggota TIMLAK --</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- TIMLAK Table -->
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="table-success">
-                                <tr>
-                                    <th width="5%" class="text-center">No</th>
-                                    <th width="8%" class="text-center">Role</th>
-                                    <th width="37%">Nama Lengkap</th>
-                                    <th width="25%">NIP</th>
-                                    <th width="20%">Email</th>
-                                    <th width="5%" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="timlak_members_table">
-                                <!-- Will be populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!-- Daftar Dokumen TIMLAK -->
-            <div class="form-section">
-                <h4><i class="fas fa-file-alt"></i> Daftar Dokumen TIMLAK</h4>
-                <div class="mb-2">
-                    <small class="text-muted">
-                        <i class="fas fa-info-circle me-1"></i>
-                        Centang dokumen yang ingin diproses.
-                    </small>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <!-- <th style="width: 50px;">
-                                    <input type="checkbox" class="form-check-input" id="selectAllDocs"
-                                        onchange="toggleAllDocuments(this.checked)" checked title="Pilih/Hapus semua">
-                                </th> -->
-                                <th>No</th>
-                                <th>Jenis BA</th>
-                                <th>Nomor Surat</th>
-                                <th>Format Tanggal</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <!-- <tbody id="document_table">
-                           
-                            <tr data-doc="DH">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="DH" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>DH</td>
-                                <td>!Daftar Hadir</td>
-                                <td><span class="text-muted"><i>Tidak ada nomor surat</i></span></td>
-                                <td><input type="date" class="form-control form-control-sm" name="format_tanggal_DH">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('DH')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="toggleDocumentRow('DH')">Delete</button>
-                                </td>
-                            </tr>
-                           
-                            <tr data-doc="01">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="01" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>01</td>
-                                <td>BA Reviu Persiapan Pengadaan</td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" name="nomor_timlak_01"
-                                        id="nomor_timlak_01" placeholder="PB0301-Bp2jk17/POKJA-{kode_pokja}/{tahun}/02"
-                                        oninput="updatePreviewNomor('01')">
-                                    <small class="text-muted d-block mt-1" id="preview_nomor_01"></small>
-                                </td>
-                                <td><input type="date" class="form-control form-control-sm" name="format_tanggal_01">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('01')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="toggleDocumentRow('01')">Delete</button>
-                                </td>
-                            </tr>
-                           
-                            <tr data-doc="02">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="02" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>02</td>
-                                <td>Memo Dinas BA Reviu Persiapan Pengadaan</td>
-                                <td>
-                                    <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control" name="nomor_timlak_02_prefix"
-                                            id="nomor_timlak_02_prefix" placeholder="1200" maxlength="4"
-                                            oninput="updateTemplateNomor('02', 'MD')" style="max-width: 80px;">
-                                        <span class="input-group-text"
-                                            style="background: #e2e8f0; font-size: 0.85rem;">/MD/Bp2jk17/{tahun}</span>
-                                    </div>
-                                    <input type="hidden" name="nomor_timlak_02" id="nomor_timlak_02">
-                                    <small class="text-primary d-block mt-1 fw-semibold" id="preview_nomor_02"></small>
-                                </td>
-                                <td><input type="date" class="form-control form-control-sm" name="format_tanggal_02">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('02')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="toggleDocumentRow('02')">Delete</button>
-                                </td>
-                            </tr>
-                          
-                            <tr data-doc="03">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="03" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>03</td>
-                                <td>Surat Penetapan BA Persiapan Pengadaan PPK</td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" name="nomor_timlak_03"
-                                        id="nomor_timlak_03" value="PB.01.01/Cb23.5/67"
-                                        oninput="updatePreviewNomor('03')">
-                                    <small class="text-muted d-block mt-1" id="preview_nomor_03"></small>
-                                </td>
-                                <td><input type="date" class="form-control form-control-sm" name="format_tanggal_03">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('03')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="toggleDocumentRow('03')">Delete</button>
-                                </td>
-                            </tr>
-                          
-                            <tr data-doc="04">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="04" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>04</td>
-                                <td>BA Reviu Dokumen Kualifikasi</td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" name="nomor_timlak_04"
-                                        id="nomor_timlak_04" placeholder="PB0301-Bp2jk17/TIMLAK-{kode_pokja}/{tahun}/01"
-                                        oninput="updatePreviewNomor('04')">
-                                    <small class="text-muted d-block mt-1" id="preview_nomor_04"></small>
-                                </td>
-                                <td><input type="date" class="form-control form-control-sm" name="format_tanggal_04">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('04')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="toggleDocumentRow('04')">Delete</button>
-                                </td>
-                            </tr>
-                           
-                            <tr data-doc="05">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="05" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>05</td>
-                                <td>BA Reviu Dokumen Seleksi</td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" name="nomor_timlak_05"
-                                        id="nomor_timlak_05" placeholder="PB0301-Bp2jk17/TIMLAK-{kode_pokja}/{tahun}/02"
-                                        oninput="updatePreviewNomor('05')">
-                                    <small class="text-muted d-block mt-1" id="preview_nomor_05"></small>
-                                </td>
-                                <td><input type="date" class="form-control form-control-sm" name="format_tanggal_05">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('05')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="toggleDocumentRow('05')">Delete</button>
-                                </td>
-                            </tr>
-                           
-                            <tr data-doc="06">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="06" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>06</td>
-                                <td>Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan</td>
-                                <td>
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-text"
-                                            style="background: #e2e8f0; font-size: 0.85rem;">PB0301-Bp2jk17/</span>
-                                        <input type="text" class="form-control" name="nomor_timlak_06_suffix"
-                                            id="nomor_timlak_06_suffix" placeholder="1201" maxlength="4"
-                                            oninput="updateTemplateNomor('06', 'SUFFIX')" style="max-width: 80px;">
-                                    </div>
-                                    <input type="hidden" name="nomor_timlak_06" id="nomor_timlak_06">
-                                    <small class="text-primary d-block mt-1 fw-semibold" id="preview_nomor_06"></small>
-                                </td>
-                                <td><input type="date" class="form-control form-control-sm" name="format_tanggal_06">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('06')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="toggleDocumentRow('06')">Delete</button>
-                                </td>
-                            </tr>
-                          
-                            <tr data-doc="07">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="07" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>07</td>
-                                <td>Nota Dinas Penetapan Dokumen Pemilihan</td>
-                                <td>
-                                    <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control" name="nomor_timlak_07_prefix"
-                                            id="nomor_timlak_07_prefix" placeholder="1202" maxlength="4"
-                                            oninput="updateTemplateNomor('07', 'ND')" style="max-width: 80px;">
-                                        <span class="input-group-text"
-                                            style="background: #e2e8f0; font-size: 0.85rem;">/ND/Bp2jk17/{tahun}</span>
-                                    </div>
-                                    <input type="hidden" name="nomor_timlak_07" id="nomor_timlak_07">
-                                    <small class="text-primary d-block mt-1 fw-semibold" id="preview_nomor_07"></small>
-                                </td>
-                                <td><input type="date" class="form-control form-control-sm" name="format_tanggal_07">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('07')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="toggleDocumentRow('07')">Delete</button>
-                                </td>
-                            </tr>
-                            
-                            <tr data-doc="08">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="08" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>08</td>
-                                <td>BA Penetapan Dokumen Pemilihan</td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" name="nomor_timlak_08"
-                                        id="nomor_timlak_08"
-                                        placeholder="PB0301-Bp2jk17/POKJA-{kode_pokja}/{tahun}/02.1"
-                                        oninput="updatePreviewNomor('08')">
-                                    <small class="text-muted d-block mt-1" id="preview_nomor_08"></small>
-                                </td>
-                                <td><input type="date" class="form-control form-control-sm" name="format_tanggal_08">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('08')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="toggleDocumentRow('08')">Delete</button>
-                                </td>
-                            </tr>
-                        </tbody> -->
-                    </table>
-                </div>
-            </div>
-
             <!-- Custom Keywords -->
             <div class="form-section">
                 <h4><i class="fas fa-code"></i> Variabel Custom</h4>
@@ -661,6 +346,279 @@ Batas – Kontrak Harga Satuan">Tender</option>
                         </button>
                     </div>
                     <div id="custom_variables"></div>
+                </div>
+            </div>
+
+            <!-- Daftar Dokumen TIMLAK -->
+            <div class="form-section">
+                <h4><i class="fas fa-file-alt"></i> Daftar Dokumen Timlak JKK</h4>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Tanggal Reviu <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="tanggal_dokumen" name="tanggal_dokumen">
+                    <small class="text-danger fst-italic">
+                        Selain tanggal Daftar Hadir Prareviu
+                    </small>
+
+                </div>
+                <div class="mb-2">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Centang dokumen yang ingin diproses.
+                    </small>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">
+                                    <input type="checkbox" class="form-check-input" id="selectAllDocs"
+                                        onchange="toggleAllDocuments(this.checked)" checked title="Pilih/Hapus semua">
+                                </th>
+                                <th>No</th>
+                                <th>Jenis Dokumen</th>
+                                <th>Nomor Surat</th>
+                                <th>Tanggal</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="document_table">
+
+                            <tr data-doc="DHP1">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="DHP1" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>DHP1</td>
+                                <td>!Daftar Hadir Prareviu 1</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><input type="date" class="form-control form-control-sm" name="tanggal_DHP1" >
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('DHP1')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="DHP2">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="DHP2" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>DHP2</td>
+                                <td>!Daftar Hadir Prareviu 2</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><input type="date" class="form-control form-control-sm" name="tanggal_DHP2">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('DHP2')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="DH">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="DH" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>DH</td>
+                                <td>!Daftar Hadir</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('DH')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="01">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="01" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>01</td>
+                                <td>BA Reviu Persiapan Pengadaan</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('01')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="02">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="02" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>02</td>
+                                <td>Memorandum BA Reviu Persiapan Pengadaan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_1">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('02')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="03">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="03" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>03</td>
+                                <td>Surat Penetapan BA Persiapan Pengadaan PPK</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('03')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="04">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="04" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>04</td>
+                                <td>BA Reviu Dokumen Kualifikasi</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('04')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="05">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="05" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>05</td>
+                                <td>BA Reviu Dokumen Seleksi</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('05')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="06">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="06" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>06</td>
+                                <td>Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_2">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('06')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="07">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="07" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>07</td>
+                                <td>Memorandum Penetapan Dokumen Pemilihan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_3">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('07')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="08">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="08" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>08</td>
+                                <td>BA Penetapan Dokumen Pemilihan</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('08')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -820,5 +778,6 @@ Batas – Kontrak Harga Satuan">Tender</option>
 
 {% block scripts %}
 {{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/ba_timlak_konsultan2.js') }}"></script>
 {% endblock %}
