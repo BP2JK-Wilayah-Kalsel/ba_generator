@@ -1,23 +1,22 @@
 {
   "success": true,
-  "message": "Daftar Unit Organisasi di Kementerian PU berhasil diambil",
+  "message": "Daftar Direktorat Teknis di Kementerian PU berhasil diambil",
   "data": {
     "lists": [
       {
         "id": "001",
-        "name": "Bina Marga",
-        "acronym": "DJBN"
+        "name": "Direktorat Sistem Dan Strategi Penyelenggaraan Jalan Dan Jembatan",
+        "unor_code": "001"
       },
       {
         "id": "002",
-        "name": "Sumber Daya Air",
-        "acronym": "Ditjen SDA"
+        "name": "Direktorat Bina Teknik Jalan Dan Jembatan",
+        "unor_code": "001"
       },
       {
         "id": "003",
-        "name": "Cipta Karya",
-        "acronym": "DJCK",
-        "unor_code": "003"
+        "name": "Direktorat Pembangunan Jalan",
+        "unor_code": "001"
       },
       {
         "id": "004",

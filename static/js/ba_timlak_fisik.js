@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('DOMContentLoaded - Initializing BA TIMLAK app...');
     // Load members from CSV
     loadMembersFromCSV();
+    // Load Unit Organisasi Data
+    loadUnitOrganizationData();
     // Load Balai Data
     loadBalaiData();
     // Load Work Unit Data
@@ -20,12 +22,30 @@ document.addEventListener('DOMContentLoaded', function () {
     loadClassificationCodeData();
 
     console.log('DOMContentLoaded - Initialization complete');
+    // Add event listeners
+    const unitOrganisasiInput = document.getElementById('unit_organisasi');
+    if (unitOrganisasiInput) {
+        unitOrganisasiInput.addEventListener('input', updateDirektoratTeknisOptions);
+        unitOrganisasiInput.addEventListener('change', updateDirektoratTeknisOptions);
+    }
 
     // Add event listeners
     const balaiInput = document.getElementById('balai');
     if (balaiInput) {
         balaiInput.addEventListener('input', updateSatuanKerjaOptions);
         balaiInput.addEventListener('change', updateSatuanKerjaOptions);
+    }
+
+    // Clear buttons
+    const clearUnitOrganisasiBtn = document.getElementById('clear_unit_organisasi');
+    if (clearUnitOrganisasiBtn) {
+        clearUnitOrganisasiBtn.addEventListener('click', function () {
+            const unitOrganisasiInput = document.getElementById('unit_organisasi');
+            if (unitOrganisasiInput) {
+                unitOrganisasiInput.value = '';
+                UpdateDirektoratTeknisOptions();
+            }
+        });
     }
 
     // Clear buttons
@@ -178,6 +198,8 @@ document.addEventListener('DOMContentLoaded', function () {
 // Global variables for members
 let pokjaMembers = [];
 let timlakMembers = [];
+let unitOrganisasiData = [];
+let direktorteknisData = [];
 let balaiData = [];
 let workUnitData = [];
 let kodeKlasifikasiData = []; // Store classification codes
@@ -241,6 +263,65 @@ async function loadMembersFromCSV() {
         // Fallback to empty lists if CSV fails
         pokjaMembers = [];
         timlakMembers = [];
+    }
+}
+
+// Load Unit Organization Data from JSON
+async function loadUnitOrganizationData() {
+    try {
+        const response = await fetch('/static/template_response/daftar_unor.json');
+        if (!response.ok) {
+            throw new Error('Failed to load Unit Organization data');
+        }
+        const result = await response.json();
+
+        const datalist = document.getElementById('unitOrganisasiOptions');
+        if (!datalist) return;
+
+        // Clear existing options
+        datalist.innerHTML = '';
+
+        if (result.success && result.data && result.data.lists) {
+            unitOrganisasiData = result.data.lists; // Store in global variable
+            unitOrganisasiData.forEach(doc => {
+                const option = document.createElement('option');
+                option.value = doc.name;
+                datalist.appendChild(option);
+            });
+            console.log(`✅ Unit Organisasi data loaded: ${unitOrganisasiData.length} items`);
+        }
+    } catch (error) {
+        console.error('❌ Error loading Unit Organisasi data:', error);
+    }
+}
+
+
+// Load Unit Organization Data from JSON
+async function loadDirektoratTeknis() {
+    try {
+        const response = await fetch('/static/template_response/daftar_technical_directorate.json');
+        if (!response.ok) {
+            throw new Error('Failed to load Technical Directorate data');
+        }
+        const result = await response.json();
+
+        const datalist = document.getElementById('direktoratTeknisOptions');
+        if (!datalist) return;
+
+        // Clear existing options
+        datalist.innerHTML = '';
+
+        if (result.success && result.data && result.data.lists) {
+            direktorteknisData = result.data.lists; // Store in global variable
+            direktorteknisData.forEach(doc => {
+                const option = document.createElement('option');
+                option.value = doc.name;
+                datalist.appendChild(option);
+            });
+            console.log(`✅ Direktorat Teknis data loaded: ${direktorteknisData.length} items`);
+        }
+    } catch (error) {
+        console.error('❌ Error loading Direktorat Teknis data:', error);
     }
 }
 
@@ -312,6 +393,42 @@ async function loadClassificationCodeData() {
         }
     } catch (error) {
         console.error('❌ Error loading Classification Code data:', error);
+    }
+}
+
+// Update Direktorat Teknis options based on selected Balai
+function updateDirektoratTeknisOptions() {
+    const unitOrganisasiInput = document.getElementById('unit_organisasi');
+    const direktorteknisInput = document.getElementById('direktorat_teknis');
+    const datalist = document.getElementById('direktoratTeknisOptions');
+
+    if (!unitOrganisasiInput || !direktorat_teknisInput || !datalist) return;
+
+    const selectedUnitOrganisasiName = unitOrganisasiInput.value;
+
+    // Find Unit Organisasi object
+    const selectedUnitOrganisasi = unitOrganisasiData.find(u => u.name === selectedUnitOrganisasiName);
+
+    // Clear existing options
+    datalist.innerHTML = '';
+
+    if (selectedUnitOrganisasi) {
+        // Filter Work Units by association_code (which matches Unit Organisasi ID)
+        const filteredUnits = workUnitData.filter(u => u.association_code === selectedUnitOrganisasi.id);
+
+        filteredUnits.forEach(unit => {
+            const option = document.createElement('option');
+            option.value = unit.name;
+            datalist.appendChild(option);
+        });
+
+        direktorteknisInput.disabled = false;
+        direktorteknisInput.placeholder = "Pilih atau ketik Direktorat Teknis...";
+        console.log(`Updated Direktorat Teknis options for ${selectedBalaiName}: ${filteredUnits.length} items`);
+    } else {
+        direktorteknisInput.disabled = true;
+        direktorteknisInput.value = '';
+        direktorteknisInput.placeholder = "Pilih Balai terlebih dahulu...";
     }
 }
 
