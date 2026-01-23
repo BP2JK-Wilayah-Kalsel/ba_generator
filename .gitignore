@@ -56,6 +56,7 @@ arsip/*.py
 # User data (keep template but not actual data)
 *.json
 !isian*.json
+!static/template_response/*.json
 
 # Backup files
 *.bak

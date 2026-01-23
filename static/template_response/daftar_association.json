@@ -1,0 +1,51 @@
+{
+  "success": true,
+  "message": "Daftar Balai Kemenpu di Provinsi Kalimantan Selatan berhasil diambil",
+  "data": {
+    "documents": [
+      {
+        "id": "001",
+        "name": "Balai Pelaksanaan Jalan Nasional Kalimantan Selatan",
+        "acronym": "BPJN Kalimantan Selatan",
+        "unor_code": "001"
+      },
+      {
+        "id": "002",
+        "name": "Balai Wilayah Sungai Kalimantan III",
+        "acronym": "BWS Kalimantan III",
+        "unor_code": "002"
+      },
+      {
+        "id": "003",
+        "name": "Balai Jasa Konstruksi Wilayah V Banjarmasin",
+        "acronym": "BJKW V Banjarmasin",
+        "unor_code": "003"
+      },
+      {
+        "id": "004",
+        "name": "Balai Pengembangan Kompetensi PU Wilayah VII Banjarmasin",
+        "acronym": "Bapekom VII Banjarmasin",
+        "unor_code": "004"
+      },
+      {
+        "id": "005",
+        "name": "Balai Teknik Rawa",
+        "acronym": "BTR",
+        "unor_code": "005"
+      },
+      {
+        "id": "006",
+        "name": "Balai Prasarana dan Permukiman Wilayah Kalimantan Selatan",
+        "acronym": "BPPW Wilayah Kalimantan Selatan",
+        "unor_code": "006"
+      },
+      {
+        "id": "007",
+        "name": "Balai Penataan Bangunan, Prasarana dan Kawasan Kalimantan Selatan",
+        "acronym": "BPBPK Kalimantan Selatan",
+        "unor_code": "007"
+      }
+    ],
+    "total": 7
+  }
+}
