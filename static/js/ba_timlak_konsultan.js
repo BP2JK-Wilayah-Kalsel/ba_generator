@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchPokjaBtn.addEventListener('click', function () {
             // Use kode_pokja as the input for Kode Pokja
             const kodePokja = document.getElementById('kode_pokja')?.value;
+            const masterFolderPath = document.getElementById('masterFolderPath')?.value;
             if (!kodePokja) {
                 alert('Silakan masukkan Kode Pokja terlebih dahulu');
                 return;
@@ -119,6 +120,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(data => {
                     console.log('API Response:', data);
+                    // Check if data is valid
+                    if (masterFolderPath === 'Master BA Timlak RO Konsultan' && data.data.anggota_pokja.length !== 3) {
+                        throw new Error('Data Pokja tidak valid. Harus 3 anggota Pokja untuk BA Timlak RO Konsultan.');
+                    } else if (masterFolderPath === 'Master BA Timlak Konsultan' && data.data.anggota_pokja.length !== 5) {
+                        throw new Error('Data Pokja tidak valid. Harus 5 anggota Pokja untuk BA Timlak Konsultan.');
+                    }
                     Swal.fire({
                         icon: 'success',
                         title: 'Data Berhasil Diambil!',
@@ -155,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     document.getElementById('tanggal_sk_timlak').value = formattedDateTimlak;
 
-                    updatePokjaTable(data.data.anggota_pokja);
+                    updatePokjaTable(data.data.anggota_pokja, masterFolderPath);
                     updateTimlakTable(data.data.anggota_timlak);
                     // TODO: Map data to form fields here based on response structure
                 })
@@ -163,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Error fetching data:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Gagal Mengambil Data',
+                        title: 'Gagal Mengambil Data.',
                         text: error.message
                     });
                 })
@@ -384,29 +391,45 @@ function updateKodeKlasifikasiOptions() {
         kodeKlasifikasiInput.value = '';
         kodeKlasifikasiInput.placeholder = "Pilih Jenis Pengadaan terlebih dahulu...";
     }
-}
+}1
 
 // Update POKJA table based on role selections
-function updatePokjaTable(data) {
+function updatePokjaTable(data, masterFolderPath) {
     const nipKetua = data[0].nip.replace(/\s+/g, '');
     const nipSekretaris = data[1].nip.replace(/\s+/g, '');
     const nipAnggota1 = data[2].nip.replace(/\s+/g, '');
-    const nipAnggota2 = data[3].nip.replace(/\s+/g, '');
-    const nipAnggota3 = data[4].nip.replace(/\s+/g, '');
+    let nipAnggota2 = '';
+    let nipAnggota3 = '';
+
+    // Only fetch Anggota 2 and 3 if NOT RO Konsultan
+    if (masterFolderPath !== 'Master BA Timlak RO Konsultan') {
+        nipAnggota2 = data[3].nip.replace(/\s+/g, '');
+        nipAnggota3 = data[4].nip.replace(/\s+/g, '');
+    }
 
     //nama anggota
     const namaKetua = pokjaMembers.find(m => m.nip === nipKetua)?.nama || '';
     const namaSekretaris = pokjaMembers.find(m => m.nip === nipSekretaris)?.nama || '';
     const namaAnggota1 = pokjaMembers.find(m => m.nip === nipAnggota1)?.nama || '';
-    const namaAnggota2 = pokjaMembers.find(m => m.nip === nipAnggota2)?.nama || '';
-    const namaAnggota3 = pokjaMembers.find(m => m.nip === nipAnggota3)?.nama || '';
+    
+    let namaAnggota2 = '';
+    let namaAnggota3 = '';
+
+    // Only fetch Anggota 2 and 3 if NOT RO Konsultan
+    if (masterFolderPath !== 'Master BA Timlak RO Konsultan') {
+        namaAnggota2 = pokjaMembers.find(m => m.nip === nipAnggota2)?.nama || '';
+        namaAnggota3 = pokjaMembers.find(m => m.nip === nipAnggota3)?.nama || '';
+    }
+
     const emailKetua = pokjaMembers.find(m => m.nip === nipKetua)?.email || '';
 
     document.getElementById('ketua_pokja').value = namaKetua;
     document.getElementById('sekre_pokja').value = namaSekretaris;
     document.getElementById('anggota_pokja1').value = namaAnggota1;
-    document.getElementById('anggota_pokja2').value = namaAnggota2;
-    document.getElementById('anggota_pokja3').value = namaAnggota3;
+    if (masterFolderPath !== 'Master BA Timlak RO Konsultan') {
+        document.getElementById('anggota_pokja2').value = namaAnggota2;
+        document.getElementById('anggota_pokja3').value = namaAnggota3;
+    }
     document.getElementById('email_ketua_pokja').value = emailKetua;
 
     const tableBody = document.getElementById('pokja_members_table');
@@ -428,14 +451,17 @@ function updatePokjaTable(data) {
         tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota1, nip: nipAnggota1 }, 'anggota3', JSON.stringify({ nama: namaAnggota1, nip: nipAnggota1 }));
     }
 
-    // Add Anggota 2
-    if (namaAnggota2) {
-        tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota2, nip: nipAnggota2 }, 'anggota4', JSON.stringify({ nama: namaAnggota2, nip: nipAnggota2 }));
-    }
+    // Check if we should include more members (Only for non-RO Konsultan)
+    if (masterFolderPath !== 'Master BA Timlak RO Konsultan') {
+        // Add Anggota 2
+        if (namaAnggota2) {
+            tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota2, nip: nipAnggota2 }, 'anggota4', JSON.stringify({ nama: namaAnggota2, nip: nipAnggota2 }));
+        }
 
-    // Add Anggota 3
-    if (namaAnggota3) {
-        tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota3, nip: nipAnggota3 }, 'anggota5', JSON.stringify({ nama: namaAnggota3, nip: nipAnggota3 }));
+        // Add Anggota 3
+        if (namaAnggota3) {
+            tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota3, nip: nipAnggota3 }, 'anggota5', JSON.stringify({ nama: namaAnggota3, nip: nipAnggota3 }));
+        }
     }
 
     if (tableHTML === '') {
@@ -1225,6 +1251,28 @@ function setDocumentLists(folderName) {
             }
         }
     });
+
+    // Reset POKJA and TIMLAK data
+    // Reset inputs
+    const idsToReset = [
+        'kode_pokja', 'nomor_sk_pokja', 'tanggal_sk_pokja',
+        'ketua_pokja', 'email_ketua_pokja', 'sekre_pokja',
+        'anggota_pokja1', 'anggota_pokja2', 'anggota_pokja3',
+        'nomor_sk_timlak', 'tanggal_sk_timlak',
+        'ketua_timlak', 'sekre_timlak', 'anggota_timlak'
+    ];
+    
+    idsToReset.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+
+    // Reset Tables
+    const pokjaTableBody = document.getElementById('pokja_members_table');
+    if (pokjaTableBody) pokjaTableBody.innerHTML = '';
+    
+    const timlakTableBody = document.getElementById('timlak_members_table');
+    if (timlakTableBody) timlakTableBody.innerHTML = '';
 }
 
 function toggleAllDocuments(checked) {
