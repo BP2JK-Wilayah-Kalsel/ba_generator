@@ -11,8 +11,14 @@
 <div class="container">
         <!-- Header -->
         <div class="header-section">
-            <h1>Sistem Automatisasi Dokumen</h1>
-            <p class="subtitle">BP2JK Wilayah Kalimantan Selatan</p>
+            <div class="d-flex align-items-center justify-content-between">
+                <img src="{{ url_for('static', filename='img/logo_bp2jk_kalsel.png') }}" alt="Logo BP2JK" style="height: 100px; width: auto;">
+                <div class="text-center flex-grow-1 mx-3">
+                    <h1>Sistem Automatisasi Dokumen</h1>
+                    <p class="subtitle mb-0">BP2JK Wilayah Kalimantan Selatan</p>
+                </div>
+                <img src="{{ url_for('static', filename='img/logo_kemenpu.png') }}" alt="Logo KemenPU" style="height: 100px; width: auto;">
+            </div>
         </div>
 
         <!-- Menu Grid -->
@@ -45,10 +51,6 @@
                                 <a href="/ba-reviu-paket-tender-pk" class="submenu-item">
                                     <i class="fas fa-file-signature"></i>
                                     <span>BA Reviu Paket Tender PK</span>
-                                </a>
-                                <a href="/ba-reviu-paket-ro-jkk" class="submenu-item">
-                                    <i class="fas fa-file-signature"></i>
-                                    <span>BA Reviu Paket RO JKK</span>
                                 </a>
                             </div>
                         </div>

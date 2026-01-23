@@ -20,8 +20,8 @@
 
     <!-- Header -->
     <div class="header">
-        <h1><i class="fas fa-file-alt"></i> Generator BA Reviu Tender JKK Timlak </h1>
-        <p>Sistem Otomatis Pembuatan Berita Acara Reviu Dokumen Tender Jasa Konsultan Konstruksi Tim Pelaksana dengan
+        <h1><i class="fas fa-file-alt"></i> Generator BA Reviu Tender PK Timlak </h1>
+        <p>Sistem Otomatis Pembuatan Berita Acara Reviu Dokumen Tender Pekerjaan Konstruksi Tim Pelaksana dengan
             Keyword Replacement - BP2JK Kalsel</p>
     </div>
 
@@ -73,25 +73,57 @@
                         <label class="form-label">Pilih Master Folder</label>
                         <div class="input-group">
                             <select type="text" class="form-control" id="masterFolderPath" name="masterFolderPath"
-                                onchange="setDocumentLists(this.value)" >
-                                <option value="Master BA Timlak Konsultan">Template BA Timlak Konsultan</option>
-                                <option value="Master BA Timlak RO Konsultan">Template BA Timlak Repeat Order Konsultan
+                                onchange="setDocumentLists(this.value)">
+                                <option value="Master BA Timlak Fisik">Template BA Timlak Fisik</option>
+                                <!-- <option value="Master BA Timlak RO Konsultan">Template BA Timlak Repeat Order Konsultan -->
                                 </option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
-
-
+            
             <!-- Data Paket -->
             <div class="form-section">
                 <h4><i class="fas fa-info-circle"></i> Data Paket (RUP dan Dokumen Pemilihan)</h4>
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label class="form-label">Nama Paket</label>
-                        <textarea class="form-control" id="nama_paket" name="nama_paket" ></textarea>
+                        <label class="form-label">Kode RUP</label>
+                        <input type="number" class="form-control" id="kode_rup" name="kode_rup">
                     </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Nama Paket</label>
+                        <textarea class="form-control" id="nama_paket" name="nama_paket"></textarea>
+                    </div>
+                    
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Unit Organisasi</label>
+                        <div class="input-group">
+                            <input class="form-control" list="unitOrganisasiOptions" id="unit_organisasi"
+                                name="unit_organisasi" placeholder="Pilih atau ketik Unit Organisasi..."
+                                autocomplete="off">
+                            <datalist id="unitOrganisasiOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_unit_organisasi"
+                                title="Hapus Unit Organisasi">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Direktorat Teknis</label>
+                        <div class="input-group">
+                            <input class="form-control" list="direktoratOptions" id="direktorat_teknis" name="direktorat_teknis"
+                                placeholder="Pilih atau ketik Direktorat Teknis..." autocomplete="off">
+                            <datalist id="direktoratOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_direktorat_teknis"
+                                title="Hapus Direktorat Teknis">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Balai</label>
                         <div class="input-group">
@@ -108,7 +140,7 @@
                         <label class="form-label">Satuan Kerja</label>
                         <div class="input-group">
                             <input class="form-control" list="satuanKerjaOptions" id="satuan_kerja" name="satuan_kerja"
-                                placeholder="Pilih atau ketik Satuan Kerja..." autocomplete="off"  disabled>
+                                placeholder="Pilih atau ketik Satuan Kerja..." autocomplete="off" disabled>
                             <datalist id="satuanKerjaOptions"></datalist>
                             <button class="btn btn-outline-secondary" type="button" id="clear_satuan_kerja"
                                 title="Hapus Satuan Kerja">
@@ -118,15 +150,15 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">PPK</label>
-                        <input type="text" class="form-control" id="ppk" name="ppk" >
+                        <input type="text" class="form-control" id="ppk" name="ppk">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Nama PPK</label>
-                        <input type="text" class="form-control" id="nama_ppk" name="nama_ppk" >
+                        <input type="text" class="form-control" id="nama_ppk" name="nama_ppk">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Jenis Pengadaan</label>
-                        <select class="form-control" id="jenis_pengadaan" name="jenis_pengadaan" >
+                        <select class="form-control" id="jenis_pengadaan" name="jenis_pengadaan">
                             <option value="">-- Pilih Jenis Pengadaan --</option>
                             <option value="Jasa Konsultansi Konstruksi">Jasa Konsultansi Konstruksi</option>
                             <option value="Pekerjaan Konstruksi">Pekerjaan Konstruksi</option>
@@ -134,14 +166,14 @@
                     </div>
                     <div class="col-md-8 mb-3">
                         <label class="form-label">Metode Pemilihan</label>
-                        <input type="text" class="form-control" id="metode_pemilihan" name="metode_pemilihan" >
+                        <input type="text" class="form-control" id="metode_pemilihan" name="metode_pemilihan">
                     </div>
                     <div class="col-md-12 mb-3">
                         <label class="form-label">Kode Klasifikasi</label>
                         <div class="input-group">
                             <input class="form-control" list="kodeKlasifikasiOptions" id="kode_klasifikasi"
                                 name="kode_klasifikasi" placeholder="Pilih atau ketik Kode Klasifikasi..."
-                                autocomplete="off"  disabled>
+                                autocomplete="off" disabled>
                             <datalist id="kodeKlasifikasiOptions"></datalist>
                             <button class="btn btn-outline-secondary" type="button" id="clear_kode_klasifikasi"
                                 title="Hapus Kode Klasifikasi">
@@ -151,7 +183,7 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <label class="form-label">Tahun Anggaran</label>
-                        <select class="form-control" id="tahun_anggaran" name="tahun_anggaran" >
+                        <select class="form-control" id="tahun_anggaran" name="tahun_anggaran">
                             {% for year in range(current_year - 1, current_year + 2) %}
                             <option value="{{ year }}" {% if year==current_year %}selected{% endif %}>{{ year
                                 }}</option>
@@ -194,6 +226,64 @@
                                     name="terbilang_hps" readonly>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Sumber Dana</label>
+                            <select class="form-control" id="sumber_dana" name="sumber_dana">
+                                <option value="APBN">APBN</option>
+                                <option value="Loan">Loan</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Persentase PPN (%)</label>
+                            <input type="number" class="form-control" id="persentase_ppn" name="persentase_ppn"
+                                value="11" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Jangka Waktu (Hari)</label>
+                            <input type="number" class="form-control" id="jangka_waktu" name="jangka_waktu">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Lokasi Pekerjaan</label>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="lokasiTable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Provinsi</th>
+                                            <th>Kabupaten/Kota</th>
+                                            <th>Kecamatan</th>
+                                            <th style="width: 50px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Rows will be added here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-success" onclick="addLokasiRow()">
+                                <i class="fas fa-plus me-1"></i>Tambah Lokasi
+                            </button>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Lingkup Pekerjaan</label>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="lingkupTable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Uraian Lingkup Pekerjaan</th>
+                                            <th style="width: 50px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Rows will be added here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-success" onclick="addLingkupRow()">
+                                <i class="fas fa-plus me-1"></i>Tambah Lingkup
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -206,7 +296,7 @@
                         <label class="form-label">Kode Pokja</label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="kode_pokja" name="kode_pokja"
-                                placeholder="Masukkan Kode Pokja..." >
+                                placeholder="Masukkan Kode Pokja...">
                             <button class="btn btn-primary" type="button" id="btn_fetch_pokja_data">
                                 <i class="fas fa-cloud-download-alt me-1"></i>Ambil Data
                             </button>
@@ -351,7 +441,7 @@
 
             <!-- Daftar Dokumen TIMLAK -->
             <div class="form-section">
-                <h4><i class="fas fa-file-alt"></i> Daftar Dokumen Timlak JKK</h4>
+                <h4><i class="fas fa-file-alt"></i> Daftar Dokumen Timlak PK</h4>
                 <div class="col-md-12 mb-3">
                     <label class="form-label">Tanggal Reviu <span class="text-danger">*</span></label>
                     <input type="date" class="form-control" id="tanggal_dokumen" name="tanggal_dokumen">
@@ -393,7 +483,7 @@
                                 <td><small class="text-default fst-italic">
                                         Tidak Ada
                                     </small></td>
-                                <td><input type="date" class="form-control form-control-sm" name="tanggal_DHP1" >
+                                <td><input type="date" class="form-control form-control-sm" name="tanggal_DHP1">
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-info btn-sm me-1"
@@ -779,5 +869,5 @@
 {% block scripts %}
 {{ super() }}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ url_for('static', filename='js/ba_timlak_konsultan.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ba_timlak_fisik.js') }}"></script>
 {% endblock %}

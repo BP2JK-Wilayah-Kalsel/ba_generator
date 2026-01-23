@@ -664,6 +664,50 @@ async function previewDocument(docCode) {
 }
 
 
+// Add Location Row
+function addLokasiRow() {
+    const tbody = document.querySelector('#lokasiTable tbody');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td><input type="text" class="form-control form-control-sm lokasi-provinsi" placeholder="Provinsi"></td>
+        <td><input type="text" class="form-control form-control-sm lokasi-kabupaten" placeholder="Kabupaten/Kota"></td>
+        <td><input type="text" class="form-control form-control-sm lokasi-kecamatan" placeholder="Kecamatan"></td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeLokasiRow(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    `;
+    tbody.appendChild(row);
+}
+
+// Remove Location Row
+function removeLokasiRow(btn) {
+    const row = btn.closest('tr');
+    row.remove();
+}
+
+// Add Lingkup Row
+function addLingkupRow() {
+    const tbody = document.querySelector('#lingkupTable tbody');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td><input type="text" class="form-control form-control-sm lingkup-input" placeholder="Uraian Lingkup Pekerjaan"></td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeLingkupRow(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    `;
+    tbody.appendChild(row);
+}
+
+// Remove Lingkup Row
+function removeLingkupRow(btn) {
+    const row = btn.closest('tr');
+    row.remove();
+}
+
 // Collect all keywords
 function collectAllKeywords(formData) {
     console.log('[DEBUG] Form Data:', Object.fromEntries(formData));
@@ -708,6 +752,52 @@ function collectAllKeywords(formData) {
     keywords.terbilang_pagu = terbilang(nilaiPagu, false) + ' rupiah';
     keywords.nilai_hps = formatCurrency(nilaiHps);
     keywords.terbilang_hps = terbilang(nilaiHps, false) + ' rupiah';
+    
+    keywords.metode_pemilihan_front = (formData.get('metode_pemilihan') || '').split(' ')[0];
+
+    // Lokasi dan Lingkup Pekerjaan
+    const lokasiRows = document.querySelectorAll('#lokasiTable tbody tr');
+    const lokasiList = [];
+    lokasiRows.forEach(row => {
+        const prov = row.querySelector('.lokasi-provinsi').value;
+        const kab = row.querySelector('.lokasi-kabupaten').value;
+        const kec = row.querySelector('.lokasi-kecamatan').value;
+        
+        let parts = [];
+        if (prov) parts.push(`Provinsi ${prov}`);
+        if (kab) parts.push(kab); // Assuming user types "Kabupaten X" or "Kota Y"
+        if (kec) parts.push(`Kecamatan ${kec}`);
+        
+        if (parts.length > 0) {
+            lokasiList.push(parts.join(', '));
+        }
+        
+        // Add structured data
+        if (prov || kab || kec) {
+            if (!keywords.list_lokasi_pekerjaan) keywords.list_lokasi_pekerjaan = [];
+            keywords.list_lokasi_pekerjaan.push({
+                provinsi: prov,
+                kabupaten: kab,
+                kecamatan: kec
+            });
+        }
+    });
+    // Join multiple locations with semicolons or newlines as needed
+    keywords.lokasi_pekerjaan = lokasiList.length > 0 ? lokasiList.join('; ') : '';
+    
+    // Lingkup Pekerjaan
+    const lingkupRows = document.querySelectorAll('#lingkupTable tbody tr');
+    const lingkupList = [];
+    lingkupRows.forEach(row => {
+        const val = row.querySelector('.lingkup-input').value;
+        if (val) {
+             lingkupList.push(val);
+        }
+    });
+    
+    keywords.lingkup_pekerjaan = lingkupList.length > 0 ? lingkupList.join('; ') : '';
+    keywords.list_lingkup = lingkupList; // Array of strings
+
     //Data Paket______________________________________________________________
 
     // Data Pokja dan Timlak______________________________________________________

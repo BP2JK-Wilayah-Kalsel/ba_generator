@@ -19,21 +19,10 @@ def ba_timlak_konsultan():
     current_year = datetime.now().year
     return render_template('ba_timlak_konsultan.html', current_year=current_year)
 
-
-@bp.route('/ba-reviu-paket-tender-jkk')
-def ba_reviu_paket_tender_jkk():
-    return render_template('ba_reviu_paket_tender_jkk.html')
-
-
 @bp.route('/ba-reviu-paket-tender-pk')
 def ba_reviu_paket_tender_pk():
-    return render_template('ba_reviu_paket_tender_pk.html')
-
-
-@bp.route('/ba-reviu-paket-ro-jkk')
-def ba_reviu_paket_ro_jkk():
-    return render_template('ba_reviu_paket_ro_jkk.html')
-
+    current_year = datetime.now().year
+    return render_template('ba_timlak_fisik.html', current_year=current_year)
 
 @bp.route('/persiapan-pembuktian')
 def persiapan_pembuktian():

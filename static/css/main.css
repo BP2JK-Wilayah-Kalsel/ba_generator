@@ -19,21 +19,55 @@
             padding: 2rem 0;
         }
 
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 40px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         .header-section {
             text-align: center;
             margin-bottom: 3rem;
             padding: 2.5rem 2rem;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 20px;
             box-shadow: var(--shadow-xl);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .header-section img {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        .header-section img:hover {
+            transform: scale(1.1) rotate(2deg);
         }
 
         .header-section h1 {
             color: var(--primary-color);
-            font-weight: 700;
+            font-weight: 800;
             font-size: 2.8rem;
             margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .header-section .subtitle {
@@ -52,6 +86,26 @@
         .menu-container {
             max-width: 1200px;
             margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(30, 64, 175, 0.3);
+            border-radius: 6px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(30, 64, 175, 0.5);
         }
 
         .menu-card {
@@ -288,6 +342,7 @@
             align-items: center;
             gap: 2rem;
             flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
         }
 
         .help-link {
@@ -295,23 +350,33 @@
             align-items: center;
             gap: 0.75rem;
             padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-color);
             text-decoration: none;
-            border-radius: 10px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgb(30 64 175 / 0.2);
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+            border: 2px solid transparent;
+            backdrop-filter: blur(5px);
         }
 
         .help-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgb(30 64 175 / 0.3);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: var(--shadow-xl);
+            background: var(--primary-color);
             color: white;
+            border-color: rgba(255,255,255,0.2);
         }
 
         .help-link.video {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            background: rgba(255, 255, 255, 0.9);
+            color: #dc2626;
+        }
+
+        .help-link.video:hover {
+            background: #dc2626;
+            color: white;
         }
 
         .help-link i {
@@ -323,7 +388,11 @@
             text-align: center;
             margin-top: 4rem;
             padding: 2rem;
-            color: #64748b;
+            color: #475569;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.3);
         }
 
         .footer-section p {

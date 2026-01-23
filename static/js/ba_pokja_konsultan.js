@@ -1114,7 +1114,7 @@ function updatePokjaSelectors() {
                 document.getElementById('loadingOverlay').style.display = 'none';
                 
                 if (data.success) {
-                    showResults(data);
+                    showResults(data, keywords);
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -1126,7 +1126,7 @@ function updatePokjaSelectors() {
         });
 
         // Show results
-        function showResults(data) {
+        function showResults(data, keywords) {
             let content = '<div class="results-content">';
             
             if (data.files && data.files.length > 0) {
@@ -1226,7 +1226,11 @@ function updatePokjaSelectors() {
             });
             
             content += '<div class="mt-3 text-center">';
-            content += '<a href="/download_results" class="btn btn-success btn-lg"><i class="fas fa-download me-2"></i> Download Semua Hasil</a>';
+            // Add query parameters for zip naming
+            const kodePokja = keywords && keywords.kode_pokja ? keywords.kode_pokja : '';
+            const namaPaket = keywords && keywords.nama_paket ? keywords.nama_paket : '';
+            const downloadUrl = `/download_results?kode_pokja=${encodeURIComponent(kodePokja)}&nama_paket=${encodeURIComponent(namaPaket)}`;
+            content += `<a href="${downloadUrl}" class="btn btn-success btn-lg"><i class="fas fa-download me-2"></i> Download Semua Hasil</a>`;
             content += '</div>';
             }
             

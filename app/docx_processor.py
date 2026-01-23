@@ -2,6 +2,8 @@ import re
 import logging
 from typing import Dict, Any, List, Optional, Tuple
 from docx import Document
+from docx.shared import Pt, Cm
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 from .utils import terbilang
 
@@ -152,10 +154,185 @@ def process_paragraph_keywords(paragraph, keywords: Dict[str, Any], keyword_deta
     return total_replacements_in_paragraph + hyperlink_replacements
 
 
+def process_location_expansion(doc, keywords):
+    """
+    Expand {lokasi_pekerjaan} placeholder in tables into multiple rows 
+    (Provinsi, Kabupaten, Kecamatan) based on list_lokasi_pekerjaan.
+    Label is placed in the placeholder column, Value in the next column.
+    Font is set to Arial 9pt.
+    """
+    if 'list_lokasi_pekerjaan' not in keywords or not keywords['list_lokasi_pekerjaan']:
+        return 0
+        
+    locations = keywords['list_lokasi_pekerjaan']
+    total_expanded = 0
+    
+    for table in doc.tables:
+        target_row_idx = -1
+        target_col_idx = -1
+        
+        # Find the row with {lokasi_pekerjaan}
+        for r_idx, row in enumerate(table.rows):
+            for c_idx, cell in enumerate(row.cells):
+                if '{lokasi_pekerjaan}' in cell.text:
+                    target_row_idx = r_idx
+                    target_col_idx = c_idx
+                    break
+            if target_row_idx != -1:
+                break
+        
+        if target_row_idx != -1:
+            target_row = table.rows[target_row_idx]
+            last_row = target_row
+            
+            for loc in locations:
+                # Define the 3 rows to add
+                rows_data = [
+                    ("Provinsi", loc.get('provinsi', '')),
+                    ("Kabupaten/Kota", loc.get('kabupaten', '')),
+                    ("Kecamatan", loc.get('kecamatan', ''))
+                ]
+                
+                for label, value in rows_data:
+                    new_row = table.add_row()
+                    
+                    # Logic: Label at target_col_idx, Value at target_col_idx + 1
+                    # Ensure we have enough columns
+                    if target_col_idx + 1 < len(new_row.cells):
+                        # Label Cell
+                        cell_label = new_row.cells[target_col_idx]
+                        cell_label.text = label
+                        for p in cell_label.paragraphs:
+                            p.paragraph_format.left_indent = Cm(0.6)  # Indent 0.5 cm
+                            for run in p.runs:
+                                run.font.name = 'Arial'
+                                run.font.size = Pt(9)
+                        
+                        # Value Cell
+                        cell_value = new_row.cells[target_col_idx + 1]
+                        cell_value.text = value
+                        for p in cell_value.paragraphs:
+                            for run in p.runs:
+                                run.font.name = 'Arial'
+                                run.font.size = Pt(9)
+                                
+                    elif target_col_idx < len(new_row.cells):
+                        # Fallback if next column doesn't exist: put everything in one cell
+                        cell = new_row.cells[target_col_idx]
+                        cell.text = f"{label}: {value}"
+                        for p in cell.paragraphs:
+                            for run in p.runs:
+                                run.font.name = 'Arial'
+                                run.font.size = Pt(9)
+                    
+                    # Merge columns 4 and 5 (indices 3 and 4) if they exist
+                    if len(new_row.cells) >= 5:
+                        new_row.cells[3].merge(new_row.cells[4])
+                        
+                    # Fill remaining columns with "-" centered (after the value column)
+                    start_fill_idx = target_col_idx + 2
+                    for i in range(start_fill_idx, len(new_row.cells)):
+                         cell = new_row.cells[i]
+                         cell.text = "-"
+                         for p in cell.paragraphs:
+                             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                             for run in p.runs:
+                                 run.font.name = 'Arial'
+                                 run.font.size = Pt(9)
+
+                    # Move new_row to correct position
+                    table._element.remove(new_row._element)
+                    last_row._element.addnext(new_row._element)
+                    last_row = new_row
+            
+            # Remove the original placeholder row
+            table._element.remove(target_row._element)
+            total_expanded += 1
+            
+    return total_expanded
+
+
+def process_lingkup_expansion(doc, keywords):
+    """
+    Expand {lingkup_pekerjaan} placeholder in tables into multiple rows 
+    based on list_lingkup.
+    Data is placed in the placeholder column.
+    Font is set to Arial 9pt.
+    """
+    if 'list_lingkup' not in keywords or not keywords['list_lingkup']:
+        return 0
+        
+    lingkup_list = keywords['list_lingkup']
+    total_expanded = 0
+    
+    for table in doc.tables:
+        target_row_idx = -1
+        target_col_idx = -1
+        
+        # Find the row with {lingkup_pekerjaan}
+        for r_idx, row in enumerate(table.rows):
+            for c_idx, cell in enumerate(row.cells):
+                if '{lingkup_pekerjaan}' in cell.text:
+                    target_row_idx = r_idx
+                    target_col_idx = c_idx
+                    break
+            if target_row_idx != -1:
+                break
+        
+        if target_row_idx != -1:
+            target_row = table.rows[target_row_idx]
+            last_row = target_row
+            
+            for item in lingkup_list:
+                new_row = table.add_row()
+                
+                # Logic: Value at target_col_idx
+                if target_col_idx < len(new_row.cells):
+                    cell_value = new_row.cells[target_col_idx]
+                    cell_value.text = item
+                    for p in cell_value.paragraphs:
+                        for run in p.runs:
+                            run.font.name = 'Arial'
+                            run.font.size = Pt(9)
+                
+                # Merge columns 4 and 5 (indices 3 and 4) if they exist
+                if len(new_row.cells) >= 5:
+                    new_row.cells[3].merge(new_row.cells[4])
+                
+                # Fill remaining columns with "-" centered (after the value column)
+                start_fill_idx = target_col_idx + 1
+                for i in range(start_fill_idx, len(new_row.cells)):
+                     cell = new_row.cells[i]
+                     cell.text = "-"
+                     for p in cell.paragraphs:
+                         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                         for run in p.runs:
+                             run.font.name = 'Arial'
+                             run.font.size = Pt(9)
+                
+                # Move new_row to correct position
+                table._element.remove(new_row._element)
+                last_row._element.addnext(new_row._element)
+                last_row = new_row
+            
+            # Remove the original placeholder row
+            table._element.remove(target_row._element)
+            total_expanded += 1
+            
+    return total_expanded
+
+
 def process_docx_comprehensive(file_path, keywords, output_path):
     """Process DOCX file with comprehensive keyword replacement and row deletion support"""
     try:
         doc = Document(file_path)
+        
+        # Pre-process dynamic location tables
+        process_location_expansion(doc, keywords)
+        
+        # Pre-process dynamic lingkup tables
+        process_lingkup_expansion(doc, keywords)
+        
         total_replacements = 0
         log_entries = []
         keyword_details = {}  # Track details for each keyword
