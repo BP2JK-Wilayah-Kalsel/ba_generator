@@ -2,7 +2,7 @@
   "success": true,
   "message": "Daftar Balai Kemenpu di Provinsi Kalimantan Selatan berhasil diambil",
   "data": {
-    "documents": [
+    "lists": [
       {
         "id": "001",
         "name": "Balai Pelaksanaan Jalan Nasional Kalimantan Selatan",

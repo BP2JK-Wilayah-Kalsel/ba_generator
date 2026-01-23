@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add event listeners
     const unitOrganisasiInput = document.getElementById('unit_organisasi');
     if (unitOrganisasiInput) {
-        unitOrganisasiInput.addEventListener('input', updateDirektoratTeknisOptions);
-        unitOrganisasiInput.addEventListener('change', updateDirektoratTeknisOptions);
+        unitOrganisasiInput.addEventListener('input', updateDirektoratTeknisBalaiOptions);
+        unitOrganisasiInput.addEventListener('change', updateDirektoratTeknisBalaiOptions);
     }
 
     // Add event listeners
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const unitOrganisasiInput = document.getElementById('unit_organisasi');
             if (unitOrganisasiInput) {
                 unitOrganisasiInput.value = '';
-                updateDirektoratTeknisOptions();
+                updateDirektoratTeknisBalaiOptions();
             }
         });
     }
@@ -340,8 +340,7 @@ async function loadBalaiData() {
 
         // Clear existing options
         datalist.innerHTML = '';
-
-        if (result.success && result.data && result.data.lists) {
+        if (result.success && result.data && result.data.lists) {   
             balaiData = result.data.lists; // Store in global variable
             balaiData.forEach(doc => {
                 const option = document.createElement('option');
@@ -398,12 +397,14 @@ async function loadClassificationCodeData() {
 }
 
 // Update Direktorat Teknis options based on selected Unit Organisasi
-function updateDirektoratTeknisOptions() {
+function updateDirektoratTeknisBalaiOptions() {
     const unitOrganisasiInput = document.getElementById('unit_organisasi');
     const direktorteknisInput = document.getElementById('direktorat_teknis');
-    const datalist = document.getElementById('direktoratTeknisOptions');
+    const balaiInput = document.getElementById('balai');
+    const direktoratTeknisDatalist = document.getElementById('direktoratTeknisOptions');
+    const balaiDatalist = document.getElementById('balaiOptions');
 
-    if (!unitOrganisasiInput || !direktorteknisInput || !datalist) return;
+    if (!unitOrganisasiInput || !direktorteknisInput || !balaiInput || !direktoratTeknisDatalist || !balaiDatalist) return;
 
     const selectedUnitOrganisasiName = unitOrganisasiInput.value || '';
 
@@ -413,7 +414,8 @@ function updateDirektoratTeknisOptions() {
     );
 
     // Clear existing options
-    datalist.innerHTML = '';
+    direktoratTeknisDatalist.innerHTML = '';
+    balaiDatalist.innerHTML = '';
 
     if (selectedUnitOrganisasi) {
         // Filter Direktorat Teknis by unor_code (which matches Unit Organisasi ID)
@@ -421,16 +423,33 @@ function updateDirektoratTeknisOptions() {
         filteredDirektoratTeknis.forEach(direktoratTeknis => {
             const option = document.createElement('option');
             option.value = direktoratTeknis.name;
-            datalist.appendChild(option);
+            direktoratTeknisDatalist.appendChild(option);
         });
+        console.log(balaiData)
+
+        // Filter Balai by unor_code (which matches Unit Organisasi ID)
+        const filteredBalai = balaiData.filter(u => u.unor_code === selectedUnitOrganisasi.id);
+        filteredBalai.forEach(balai => {
+            const option = document.createElement('option');
+            option.value = balai.name;
+            balaiDatalist.appendChild(option);
+        });
+        console.log(`Updated Direktorat Teknis options for ${selectedUnitOrganisasi.name}: ${filteredDirektoratTeknis.length} items`);
+        console.log(`Updated Balai options for ${selectedUnitOrganisasi.name}: ${filteredBalai.length} items`);
 
         direktorteknisInput.disabled = false;
         direktorteknisInput.placeholder = "Pilih atau ketik Direktorat Teknis...";
+        balaiInput.disabled = false;
+        balaiInput.placeholder = "Pilih atau ketik Balai...";
         console.log(`Updated Direktorat Teknis options for ${selectedUnitOrganisasi.name}: ${filteredDirektoratTeknis.length} items`);
+        console.log(`Updated Balai options for ${selectedUnitOrganisasi.name}: ${filteredBalai.length} items`);
     } else {
         direktorteknisInput.disabled = true;
         direktorteknisInput.value = '';
         direktorteknisInput.placeholder = "Pilih Unit Organisasi terlebih dahulu...";
+        balaiInput.disabled = true;
+        balaiInput.value = '';
+        balaiInput.placeholder = "Pilih Unit Organisasi terlebih dahulu...";
     }
 }
 
