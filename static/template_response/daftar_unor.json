@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "message": "Daftar Unit Organisasi di Kementerian PU berhasil diambil",
+  "data": {
+    "lists": [
+      {
+        "id": "001",
+        "name": "Direktorat Jenderal Bina Marga",
+        "acronym": "DJBN"
+      },
+      {
+        "id": "002",
+        "name": "Direktorat Jenderal Sumber Daya Air",
+        "acronym": "Ditjen SDA"
+      },
+      {
+        "id": "003",
+        "name": "Direktorat Jenderal Cipta Karya",
+        "acronym": "DJCK",
+        "unor_code": "003"
+      },
+      {
+        "id": "004",
+        "name": "Direktorat Jenderal Bina Konstruksi",
+        "acronym": "DJBK"
+      },
+      {
+        "id": "005",
+        "name": "Direktorat Jenderal Prasarana Strategis",
+        "acronym": "Ditjen PS"
+      },
+      {
+        "id": "006",
+        "name": "Badan Pengembangan Sumber Daya Manusia",
+        "acronym": "BPSDM"
+      }
+    ],
+    "total": 6
+  }
+}

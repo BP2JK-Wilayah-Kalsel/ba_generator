@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "message": "Daftar Satuan Kerja Kemenpu di Provinsi Kalimantan Selatan berhasil diambil",
+  "data": {
+    "lists": [
+      {
+        "id": "001",
+        "name": "Satuan Kerja PJN Wilayah I Provinsi Kalimantan Selatan",
+        "association_code": "001"
+      },
+      {
+        "id": "002",
+        "name": "Satuan Kerja PJN Wilayah II Provinsi Kalimantan Selatan",
+        "association_code": "001"
+      },
+      {
+        "id": "003",
+        "name": "Satuan Kerja P2JN Provinsi Kalimantan Selatan",
+        "association_code": "001"
+      }
+    ],
+    "total": 3
+  }
+}

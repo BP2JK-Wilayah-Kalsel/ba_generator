@@ -1,0 +1,69 @@
+{
+  "success": true,
+  "message": "Daftar dokumen timlak berhasil diambil",
+  "data": {
+    "documents": [
+      {
+        "id": "timlak_DHP",
+        "name": "!Daftar Hadir Prareviu.docx",
+        "type": "Daftar Hadir Prareviu",
+        "doc_num": "DHP"
+      },
+      {
+        "id": "timlak_DH",
+        "name": "!Daftar Hadir.docx",
+        "type": "Daftar Hadir",
+        "doc_num": "DH"
+      },
+      {
+        "id": "timlak_01",
+        "name": "01. BA Reviu Persiapan Pengadaan.docx",
+        "type": "BA Reviu Persiapan Pengadaan",
+        "doc_num": "01"
+      },
+      {
+        "id": "timlak_02",
+        "name": "02. Memorandum BA Reviu Persiapan Pengadaan.docx",
+        "type": "Memorandum BA Reviu Persiapan Pengadaan",
+        "doc_num": "02"
+      },
+      {
+        "id": "timlak_03",
+        "name": "03. Surat Penetapan BA Persiapan Pengadaan PPK.docx",
+        "type": "Surat Penetapan BA Persiapan Pengadaan PPK",
+        "doc_num": "03"
+      },
+      {
+        "id": "timlak_04",
+        "name": "04. BA Reviu Dokumen Kualifikasi.docx",
+        "type": "BA Reviu Dokumen Kualifikasi",
+        "doc_num": "04"
+      },
+      {
+        "id": "timlak_05",
+        "name": "05. BA Reviu Dokumen Seleksi.docx",
+        "type": "BA Reviu Dokumen Seleksi",
+        "doc_num": "05"
+      },
+      {
+        "id": "timlak_06",
+        "name": "06. Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan.docx",
+        "type": "Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan",
+        "doc_num": "06"
+      },
+      {
+        "id": "timlak_07",
+        "name": "07. Memorandum Penetapan Dokumen Pemilihan.docx",
+        "type": "Memorandum Penetapan Dokumen Pemilihan",
+        "doc_num": "07"
+      },
+      {
+        "id": "timlak_08",
+        "name": "08. BA Penetapan Dokumen Pemilihan.docx",
+        "type": "BA Penetapan Dokumen Pemilihan",
+        "doc_num": "08"
+      }
+    ],
+    "total": 9
+  }
+}

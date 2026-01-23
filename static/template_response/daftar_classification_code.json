@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "message": "Daftar PPK Kemenpu di Provinsi Kalimantan Selatan berhasil diambil",
+  "data": {
+    "lists": [
+      {
+        "id": "001",
+        "name": "PB0201 (Tender Pekerjaan Konstruksi)",
+        "value": "PB0201",
+        "security_level": "Rahasia",
+        "security_level_code": "R",
+        "procurement_type": "Pekerjaan Konstruksi"
+      },
+      {
+        "id": "002",
+        "name": "PB0204 (Penunjukan Langsung Pekerjaan Konstruksi)",
+        "value": "PB0204",
+        "security_level": "Rahasia",
+        "security_level_code": "R",
+        "procurement_type": "Pekerjaan Konstruksi"
+      },
+      {
+        "id": "003",
+        "name": "PB0301 (Tender Jasa Konsultansi Konstruksi)",
+        "value": "PB0301",
+        "security_level": "Rahasia",
+        "security_level_code": "R",
+        "procurement_type": "Jasa Konsultansi Konstruksi"
+      },
+      {
+        "id": "004",
+        "name": "PB0303 (Penunjukan Langsung Jasa Konsultansi Konstruksi)",
+        "value": "PB0303",
+        "security_level": "Rahasia",
+        "security_level_code": "R",
+        "procurement_type": "Jasa Konsultansi Konstruksi"
+      }
+    ],
+    "total": 4
+  }
+}

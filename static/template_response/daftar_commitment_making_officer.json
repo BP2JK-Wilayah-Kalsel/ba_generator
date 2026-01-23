@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "message": "Daftar PPK Kemenpu di Provinsi Kalimantan Selatan berhasil diambil",
+  "data": {
+    "lists": [
+      {
+        "id": "001",
+        "name": "PPK Perencanaan",
+        "cmo": "Andi Supriatna",
+        "work_unit_code": "003"
+      },
+      {
+        "id": "002",
+        "name": "PPK Pengawasan",
+        "cmo": "Budi Santoso",
+        "work_unit_code": "003"
+      }
+    ],
+    "total": 2
+  }
+}
