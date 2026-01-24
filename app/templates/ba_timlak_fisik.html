@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Data Paket -->
             <div class="form-section">
                 <h4><i class="fas fa-info-circle"></i> Data Paket (RUP dan Dokumen Pemilihan)</h4>
@@ -95,7 +95,7 @@
                         <label class="form-label">Nama Paket</label>
                         <textarea class="form-control" id="nama_paket" name="nama_paket"></textarea>
                     </div>
-                    
+
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Unit Organisasi</label>
@@ -114,8 +114,9 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Direktorat Teknis</label>
                         <div class="input-group">
-                            <input class="form-control" list="direktoratTeknisOptions" id="direktorat_teknis" name="direktorat_teknis"
-                                placeholder="Pilih atau ketik Direktorat Teknis..." autocomplete="off" disabled>
+                            <input class="form-control" list="direktoratTeknisOptions" id="direktorat_teknis"
+                                name="direktorat_teknis" placeholder="Pilih atau ketik Direktorat Teknis..."
+                                autocomplete="off" disabled>
                             <datalist id="direktoratTeknisOptions"></datalist>
                             <button class="btn btn-outline-secondary" type="button" id="clear_direktorat_teknis"
                                 title="Hapus Direktorat Teknis">
@@ -156,7 +157,11 @@
                         <label class="form-label">Nama PPK (Tanpa Gelar)</label>
                         <input type="text" class="form-control" id="nama_ppk" name="nama_ppk">
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Gelar PPK</label>
+                        <input type="text" class="form-control" id="gelar_ppk" name="gelar_ppk">
+                    </div>
+                    <div class="col-md-6 mb-3">
                         <label class="form-label">Jenis Pengadaan</label>
                         <select class="form-control" id="jenis_pengadaan" name="jenis_pengadaan">
                             <option value="">-- Pilih Jenis Pengadaan --</option>
@@ -164,11 +169,12 @@
                             <option value="Pekerjaan Konstruksi">Pekerjaan Konstruksi</option>
                         </select>
                     </div>
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label class="form-label">Metode Pemilihan</label>
-                        <textarea type="text" class="form-control" id="metode_pemilihan" name="metode_pemilihan"></textarea>
+                        <textarea type="text" class="form-control" id="metode_pemilihan"
+                            name="metode_pemilihan"></textarea>
                     </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label class="form-label">Kode Klasifikasi</label>
                         <div class="input-group">
                             <input class="form-control" list="kodeKlasifikasiOptions" id="kode_klasifikasi"
@@ -239,7 +245,7 @@
                             <input type="number" class="form-control" id="persentase_ppn" name="persentase_ppn"
                                 value="11" required>
                         </div>
-                        
+
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Jangka Waktu (Hari)</label>
                             <input type="number" class="form-control" id="jangka_waktu" name="jangka_waktu">
@@ -404,7 +410,7 @@
             <div class="form-section">
                 <h4><i class="fas fa-calendar-alt"></i> Nomor dan Tanggal Undangan Rapat Pokja</h4>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label class="form-label">Nomor Undangan Rapat</label>
                         <input type="text" class="form-control" id="nomor_undangan_rapat" name="nomor_undangan_rapat"
                             readonly style="background-color: #f8f9fa; cursor: not-allowed;"
@@ -412,14 +418,6 @@
                         <small class="text-muted">
                             <i class="fas fa-info-circle"></i> Nomor otomatis ter-generate berdasarkan Kode Pokja dan
                             Tahun Anggaran
-                        </small>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Tanggal Undangan Rapat <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="tanggal_undangan_rapat"
-                            name="tanggal_undangan_rapat">
-                        <small class="text-muted">
-                            <i class="fas fa-calendar"></i> Pilih tanggal undangan rapat
                         </small>
                     </div>
                 </div>
@@ -513,6 +511,26 @@
                                 </td>
                             </tr>
 
+                            <tr data-doc="DHS">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="DHS" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>DHS</td>
+                                <td>!Daftar Hadir SIPASTI</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><input type="date" class="form-control form-control-sm" name="tanggal_DHS">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('DHS')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
                             <tr data-doc="DH">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="DH" checked
@@ -541,7 +559,7 @@
                                         title="Pilih dokumen ini">
                                 </td>
                                 <td>01</td>
-                                <td>BA Reviu Persiapan Pengadaan</td>
+                                <td>BA Reviu HPS melalui SIPASTI</td>
                                 <td><small class="text-default fst-italic">
                                         Tidak Ada
                                     </small></td>
@@ -563,7 +581,7 @@
                                         title="Pilih dokumen ini">
                                 </td>
                                 <td>02</td>
-                                <td>Memorandum BA Reviu Persiapan Pengadaan</td>
+                                <td>Memorandum BA Reviu Persiapan Pengadaan (Tidak Lengkap)</td>
                                 <td><input type="number" class="form-control form-control-sm" name="nomor_surat_1">
                                 </td>
                                 <td><small class="text-danger fst-italic">
@@ -584,10 +602,9 @@
                                         title="Pilih dokumen ini">
                                 </td>
                                 <td>03</td>
-                                <td>Surat Penetapan BA Persiapan Pengadaan PPK</td>
-                                <td><small class="text-default fst-italic">
-                                        Tidak Ada
-                                    </small></td>
+                                <td>Memorandum BA Reviu Persiapan Pengadaan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_1">
+                                </td>
                                 <td><small class="text-danger fst-italic">
                                         Diatur diatas
                                     </small>
@@ -606,7 +623,7 @@
                                         title="Pilih dokumen ini">
                                 </td>
                                 <td>04</td>
-                                <td>BA Reviu Dokumen Kualifikasi</td>
+                                <td>BA Reviu Persiapan Pengadaan dan Nota Dinas</td>
                                 <td><small class="text-default fst-italic">
                                         Tidak Ada
                                     </small></td>
@@ -628,7 +645,7 @@
                                         title="Pilih dokumen ini">
                                 </td>
                                 <td>05</td>
-                                <td>BA Reviu Dokumen Seleksi</td>
+                                <td>Surat Penetapan BA Persiapan Pengadaan PPK</td>
                                 <td><small class="text-default fst-italic">
                                         Tidak Ada
                                     </small></td>
@@ -650,9 +667,10 @@
                                         title="Pilih dokumen ini">
                                 </td>
                                 <td>06</td>
-                                <td>Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan</td>
-                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_2">
-                                </td>
+                                <td>BA Hasil Reviu Dokumen Pemilihan</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
                                 <td><small class="text-danger fst-italic">
                                         Diatur diatas
                                     </small>
@@ -671,8 +689,8 @@
                                         title="Pilih dokumen ini">
                                 </td>
                                 <td>07</td>
-                                <td>Memorandum Penetapan Dokumen Pemilihan</td>
-                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_3">
+                                <td>Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_2">
                                 </td>
                                 <td><small class="text-danger fst-italic">
                                         Diatur diatas
@@ -692,6 +710,27 @@
                                         title="Pilih dokumen ini">
                                 </td>
                                 <td>08</td>
+                                <td>Memorandum Penetapan Dokumen Pemilihan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_3">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('08')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="09">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="09" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>09</td>
                                 <td>BA Penetapan Dokumen Pemilihan</td>
                                 <td><small class="text-default fst-italic">
                                         Tidak Ada
@@ -702,7 +741,50 @@
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('08')" title="Preview dokumen">
+                                        onclick="previewDocument('09')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="z03">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="z03" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>z03</td>
+                                <td>Memorandum BA Reviu Persiapan Pengadaan (Tidak Sesuai)</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_1">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('z03')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="z05">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="z05" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>z05</td>
+                                <td>Surat Penetapan BA Persiapan Pengadaan PPK</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('z05')" title="Preview dokumen">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </td>

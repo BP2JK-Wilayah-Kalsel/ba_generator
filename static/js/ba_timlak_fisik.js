@@ -806,18 +806,139 @@ async function previewDocument(docCode) {
 function addLokasiRow() {
     const tbody = document.querySelector('#lokasiTable tbody');
     const row = document.createElement('tr');
+    
+    // Generate unique ID for datalist
+    const uniqueId = 'list_kabupaten_' + Date.now();
+    const uniqueIdKec = 'list_kecamatan_' + Date.now();
+    
+    row.className = 'align-middle'; // Center content vertically
+
     row.innerHTML = `
-        <td><input type="text" class="form-control form-control-sm lokasi-provinsi" placeholder="Provinsi"></td>
-        <td><input type="text" class="form-control form-control-sm lokasi-kabupaten" placeholder="Kabupaten/Kota"></td>
-        <td><input type="text" class="form-control form-control-sm lokasi-kecamatan" placeholder="Kecamatan"></td>
         <td>
-            <button type="button" class="btn btn-danger btn-sm" onclick="removeLokasiRow(this)">
-                <i class="fas fa-trash"></i>
+            <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-light text-secondary"><i class="fas fa-map"></i></span>
+                <input type="text" class="form-control bg-light fw-bold text-secondary lokasi-provinsi" placeholder="Provinsi" value="Kalimantan Selatan" readonly>
+            </div>
+        </td>
+        <td>
+            <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white text-primary"><i class="fas fa-city"></i></span>
+                <input class="form-control lokasi-kabupaten" list="${uniqueId}" placeholder="Pilih Kabupaten/Kota..." autocomplete="off" onchange="handleKabupatenChange(this, '${uniqueIdKec}')">
+                <datalist id="${uniqueId}"></datalist>
+                <button class="btn btn-outline-secondary" type="button" onclick="clearKabupaten(this, '${uniqueIdKec}')" title="Reset">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </td>
+        <td>
+             <div class="input-group input-group-sm shadow-sm">
+                <span class="input-group-text bg-white text-danger"><i class="fas fa-map-marker-alt"></i></span>
+                <input class="form-control lokasi-kecamatan" list="${uniqueIdKec}" placeholder="Pilih Kecamatan..." autocomplete="off" disabled>
+                <datalist id="${uniqueIdKec}"></datalist>
+                <button class="btn btn-outline-secondary" type="button" onclick="clearKecamatan(this)" title="Reset">
+                    <i class="fas fa-times"></i>
+                </button>
+             </div>
+        </td>
+        <td class="text-center">
+            <button type="button" class="btn btn-outline-danger btn-sm shadow-sm rounded-circle" onclick="removeLokasiRow(this)" title="Hapus Baris">
+                <i class="fas fa-trash-alt"></i>
             </button>
         </td>
     `;
     tbody.appendChild(row);
+    
+    // Populate the new datalist
+    const datalist = row.querySelector(`#${uniqueId}`);
+    if (window.kabupatenData && datalist) {
+        window.kabupatenData.forEach(kab => {
+            const option = document.createElement('option');
+            option.value = kab.name;
+            datalist.appendChild(option);
+        });
+    }
 }
+
+// Clear Kabupaten Selection
+function clearKabupaten(btn, targetDatalistId) {
+    const inputGroup = btn.closest('.input-group');
+    const input = inputGroup.querySelector('input');
+    input.value = '';
+    // Reset dependent Kecamatan field
+    handleKabupatenChange(input, targetDatalistId);
+}
+
+// Clear Kecamatan Selection
+function clearKecamatan(btn) {
+    const inputGroup = btn.closest('.input-group');
+    const input = inputGroup.querySelector('input');
+    input.value = '';
+}
+
+// Handle Kabupaten Change
+async function handleKabupatenChange(input, targetDatalistId) {
+    const row = input.closest('tr');
+    const kecamatanInput = row.querySelector('.lokasi-kecamatan');
+    const kecamatanDatalist = document.getElementById(targetDatalistId);
+    
+    // Reset Kecamatan
+    kecamatanInput.value = '';
+    kecamatanInput.disabled = true;
+    kecamatanDatalist.innerHTML = '';
+    
+    const selectedName = input.value;
+    const selectedKab = window.kabupatenData.find(k => k.name === selectedName);
+    
+    if (selectedKab) {
+        kecamatanInput.disabled = false;
+        kecamatanInput.placeholder = "Loading...";
+        
+        try {
+            // Fetch district data from API via local proxy to avoid CORS
+            const response = await fetch(`/api/proxy/wilayah/districts/${selectedKab.code}.json`);
+            if (!response.ok) throw new Error('Failed to load districts');
+            
+            const result = await response.json();
+            if (result.data) {
+                result.data.forEach(dist => {
+                    const option = document.createElement('option');
+                    option.value = dist.name;
+                    kecamatanDatalist.appendChild(option);
+                });
+                kecamatanInput.placeholder = "Pilih atau ketik Kecamatan...";
+            }
+        } catch (error) {
+            console.error('Error loading districts:', error);
+            kecamatanInput.placeholder = "Error memuat data";
+        }
+    }
+}
+
+// Load Kabupaten Data
+async function loadKabupatenData() {
+    try {
+        // Fetch via local proxy to avoid CORS
+        const response = await fetch('/api/proxy/wilayah/regencies/63.json');
+        if (!response.ok) {
+            throw new Error('Failed to load Kabupaten data');
+        }
+        const result = await response.json();
+        
+        if (result.data) {
+            window.kabupatenData = result.data;
+            console.log(`✅ Kabupaten data loaded: ${result.data.length} items`);
+        }
+    } catch (error) {
+        console.error('❌ Error loading Kabupaten data:', error);
+        window.kabupatenData = []; // Fallback empty array
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    loadKabupatenData();
+});
+
 
 // Remove Location Row
 function removeLokasiRow(btn) {
@@ -871,16 +992,36 @@ function collectAllKeywords(formData) {
         keywords.hari_DHP2 = '';
     }
 
+    //Data DHS
+    const tglDHS = formData.get('tanggal_DHS');
+    keywords.tanggal_DHS = formatDateIndonesian(tglDHS || '');
+    if (tglDHS) {
+        const dateObj = new Date(tglDHS);
+        keywords.hari_DHS = dayNames[dateObj.getDay()];
+    } else {
+        keywords.hari_DHS = '';
+    }
+
     //Data Paket______________________________________________________________
+    keywords.kode_rup = formData.get('kode_rup') || '';
     keywords.nama_paket = formData.get('nama_paket') || '';
     keywords.balai = formData.get('balai') || '';
     keywords.satuan_kerja = formData.get('satuan_kerja') || '';
     keywords.ppk = formData.get('ppk') || '';
+    // Remove the first word from ppk (e.g. "PPK 1.1" -> "1.1")
+    keywords.ppk_back = (formData.get('ppk') || '').split(' ').slice(1).join(' ');
     keywords.nama_ppk = formData.get('nama_ppk') || '';
     keywords.jenis_pengadaan = formData.get('jenis_pengadaan') || '';
     keywords.metode_pemilihan = formData.get('metode_pemilihan') || '';
     keywords.tahun_anggaran = formData.get('tahun_anggaran') || '';
     keywords.kode_klasifikasi = formData.get('kode_klasifikasi') || '';
+    keywords.sumber_dana = formData.get('sumber_dana') || '';
+    keywords.jangka_waktu = formData.get('jangka_waktu') || '';
+    keywords.persentase_ppn = formData.get('persentase_ppn') || '';
+    keywords.unit_organisasi = formData.get('unit_organisasi') || '';
+    keywords.direktorat_teknis = formData.get('direktorat_teknis') || '';
+    keywords.gelar_ppk = formData.get('gelar_ppk') || '';
+
     // Uppercase versions for all text fields
     keywords.satuan_kerja_upper = keywords.satuan_kerja.toUpperCase();
     // Data Nilai Pagu dan HPS
@@ -955,7 +1096,6 @@ function collectAllKeywords(formData) {
     }
     // Nomor dan Tanggal Undangan Rapat
     keywords['nomor_undangan_rapat'] = formData.get('nomor_undangan_rapat') || '';
-    keywords['tanggal_undangan_rapat'] = formatDateIndonesian(formData.get('tanggal_undangan_rapat') || '');
 
     // Handle pokja data
     keywords['ketua_pokja'] = formData.get('ketua_pokja') || '';
@@ -1154,7 +1294,6 @@ function previewKeywords() {
     const dataPaket = {};
     const pokjaInfo = {};
     const timlakInfo = {};
-    const documentInfo = {};
     const customVars = {};
 
     Object.entries(keywords).forEach(([key, value]) => {
@@ -1174,8 +1313,8 @@ function previewKeywords() {
         else if (key.startsWith('nilai_') || key.startsWith('terbilang_') ||
             key === 'tahun_anggaran' || key === 'nama_paket' || key === 'kode_pokja' ||
             key === 'balai' || key === 'satuan_kerja' || key === 'ppk' ||
-            key === 'jenis_pengadaan' || key === 'metode_pemilihan' || key === 'nama_ppk'
-
+            key === 'jenis_pengadaan' || key === 'metode_pemilihan' || key === 'nama_ppk' ||
+            key === 'kode_rup' || key === 'lokasi_pekerjaan' || key === 'lingkup_pekerjaan'
         ) {
             dataPaket[key] = value;
         }

@@ -6,7 +6,6 @@ from datetime import datetime
 import logging
 from flask import Blueprint, jsonify, request, send_file, send_from_directory
 from config import DefaultConfig
-from .utils import DOCUMENT_TYPES
 
 logger = logging.getLogger(__name__)
 bp = Blueprint('processing', __name__)
@@ -83,12 +82,6 @@ def download_file(filename):
         logger.exception('Failed to send file')
         return jsonify({'error': str(e)}), 500
 
-
-@bp.route('/api/document_types')
-def get_document_types():
-    return jsonify({'document_types': DOCUMENT_TYPES})
-
-
 @bp.route('/process_comprehensive', methods=['POST'])
 def process_comprehensive():
     try:
@@ -101,10 +94,15 @@ def process_comprehensive():
         form_data = request.form.to_dict()
         # Get folder name instead of full data
         master_folder_name = form_data.get('masterFolderPath')
-        uploaded_files = request.files.getlist('template_files')
 
         keywords_json = form_data.get('keywords', '{}')
         selected_docs_json = form_data.get('selected_documents', '[]')
+        
+        # Determine document types based on folder name
+        if master_folder_name and 'Fisik' in master_folder_name:
+             from .utils import DOCUMENT_TYPES_FISIK as CURRENT_DOCUMENT_TYPES
+        else:
+             from .utils import DOCUMENT_TYPES as CURRENT_DOCUMENT_TYPES
 
         try:
             keywords = json.loads(keywords_json)
@@ -148,8 +146,8 @@ def process_comprehensive():
                         
                         # Match with DOCUMENT_TYPES patterns
                         # Sort keys by length descending to match longer prefixes first (e.g. '22-LHP' before '22')
-                        sorted_keys = sorted(DOCUMENT_TYPES.keys(), key=len, reverse=True)
-                        
+                        sorted_keys = sorted(CURRENT_DOCUMENT_TYPES.keys(), key=len, reverse=True)
+                        logger.debug('Available document types: %s', sorted_keys)
                         # Special handling for Daftar Hadir files
                         if filename == '!Daftar Hadir Prareviu 1.docx':
                             doc_id = 'DHP1'
@@ -157,12 +155,15 @@ def process_comprehensive():
                         elif filename == '!Daftar Hadir Prareviu 2.docx':
                             doc_id = 'DHP2'
                             doc_type = 'Daftar Hadir Prareviu 2'
+                        elif filename == '!Daftar Hadir SIPASTI.docx':
+                            doc_id = 'DHS'
+                            doc_type = 'Daftar Hadir SIPASTI'
                         elif filename == '!Daftar Hadir.docx':
                             doc_id = 'DH'
                             doc_type = 'Daftar Hadir'
                         else:
                             for dt_key in sorted_keys:
-                                dt_name = DOCUMENT_TYPES[dt_key]
+                                dt_name = CURRENT_DOCUMENT_TYPES[dt_key]
                                 if filename.startswith(dt_key):
                                     doc_id = dt_key
                                     doc_type = dt_name
@@ -181,7 +182,21 @@ def process_comprehensive():
                             'available': True
                         })
 
+                # Sort available_docs based on the order of keys in CURRENT_DOCUMENT_TYPES
+                doc_order = list(CURRENT_DOCUMENT_TYPES.keys())
+                
+                def get_sort_key(doc):
+                    doc_id = doc['id']
+                    try:
+                        return doc_order.index(doc_id)
+                    except ValueError:
+                        # Put unknown docs at the end, sorted alphabetically by ID
+                        return 9999 + (1 if doc_id > '' else 0)
+
+                available_docs.sort(key=get_sort_key)
+
                 logger.debug('Total available docs in %s: %s', master_folder_name, len(available_docs))
+                logger.debug('Available docs sorted: %s', [d['id'] for d in available_docs])
                 logger.debug('Selected documents (from frontend): %s', selected_documents)
 
                 # Filter by selected documents if provided
@@ -263,53 +278,53 @@ def process_comprehensive():
         return jsonify({'success': False, 'message': str(e)})
 
 
-@bp.route('/process_keywords', methods=['POST'])
-def process_keywords():
-    try:
-        import shutil
-        from app.docx_processor import process_docx_keywords
-        from .utils import generate_keywords_from_form
+# @bp.route('/process_keywords', methods=['POST'])
+# def process_keywords():
+#     try:
+#         import shutil
+#         from app.docx_processor import process_docx_keywords
+#         from .utils import generate_keywords_from_form
 
-        shutil.rmtree(PROCESSED_FILES_DIR, ignore_errors=True)
-        os.makedirs(PROCESSED_FILES_DIR, exist_ok=True)
+#         shutil.rmtree(PROCESSED_FILES_DIR, ignore_errors=True)
+#         os.makedirs(PROCESSED_FILES_DIR, exist_ok=True)
 
-        form_data = request.form.to_dict()
-        uploaded_files = request.files.getlist('template_files')
-        if not uploaded_files or all(f.filename == '' for f in uploaded_files):
-            return jsonify({'success': False, 'message': 'Tidak ada file yang diupload'})
+#         form_data = request.form.to_dict()
+#         uploaded_files = request.files.getlist('template_files')
+#         if not uploaded_files or all(f.filename == '' for f in uploaded_files):
+#             return jsonify({'success': False, 'message': 'Tidak ada file yang diupload'})
 
-        keywords = generate_keywords_from_form(form_data)
-        processed_files = []
-        failed_files = []
+#         keywords = generate_keywords_from_form(form_data)
+#         processed_files = []
+#         failed_files = []
 
-        for file in uploaded_files:
-            if file.filename == '':
-                continue
-            if not file.filename.lower().endswith('.docx'):
-                failed_files.append({'filename': file.filename, 'error': 'File bukan format .docx'})
-                continue
-            try:
-                temp_input = os.path.join(PROCESSED_FILES_DIR, f"temp_{file.filename}")
-                file.save(temp_input)
-                output_filename = file.filename
-                if 'Format' in output_filename:
-                    doc_type = form_data.get('document_type', '')
-                    if doc_type and doc_type in DOCUMENT_TYPES:
-                        output_filename = output_filename.replace('Format', f'{doc_type}-{form_data.get("kode_pokja", "")} -')
-                output_path = os.path.join(PROCESSED_FILES_DIR, output_filename)
-                success, result = process_docx_keywords(temp_input, keywords, output_path)
-                os.remove(temp_input)
-                if success:
-                    processed_files.append({'filename': output_filename, 'original_filename': file.filename, 'replacements': result['total_replacements'], 'log_entries': result['log_entries']})
-                else:
-                    failed_files.append({'filename': file.filename, 'error': result.get('error', 'Unknown error')})
-            except Exception as e:
-                failed_files.append({'filename': file.filename, 'error': str(e)})
+#         for file in uploaded_files:
+#             if file.filename == '':
+#                 continue
+#             if not file.filename.lower().endswith('.docx'):
+#                 failed_files.append({'filename': file.filename, 'error': 'File bukan format .docx'})
+#                 continue
+#             try:
+#                 temp_input = os.path.join(PROCESSED_FILES_DIR, f"temp_{file.filename}")
+#                 file.save(temp_input)
+#                 output_filename = file.filename
+#                 if 'Format' in output_filename:
+#                     doc_type = form_data.get('document_type', '')
+#                     if doc_type and doc_type in DOCUMENT_TYPES:
+#                         output_filename = output_filename.replace('Format', f'{doc_type}-{form_data.get("kode_pokja", "")} -')
+#                 output_path = os.path.join(PROCESSED_FILES_DIR, output_filename)
+#                 success, result = process_docx_keywords(temp_input, keywords, output_path)
+#                 os.remove(temp_input)
+#                 if success:
+#                     processed_files.append({'filename': output_filename, 'original_filename': file.filename, 'replacements': result['total_replacements'], 'log_entries': result['log_entries']})
+#                 else:
+#                     failed_files.append({'filename': file.filename, 'error': result.get('error', 'Unknown error')})
+#             except Exception as e:
+#                 failed_files.append({'filename': file.filename, 'error': str(e)})
 
-        return jsonify({'success': True, 'files': processed_files, 'failed_files': failed_files, 'keywords_used': keywords})
-    except Exception as e:
-        logger.exception('process_keywords failed')
-        return jsonify({'success': False, 'message': str(e)})
+#         return jsonify({'success': True, 'files': processed_files, 'failed_files': failed_files, 'keywords_used': keywords})
+#     except Exception as e:
+#         logger.exception('process_keywords failed')
+#         return jsonify({'success': False, 'message': str(e)})
 
 
 @bp.route('/api/save_defaults', methods=['POST'])

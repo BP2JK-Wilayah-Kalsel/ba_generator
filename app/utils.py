@@ -16,7 +16,6 @@ MONTH_NAMES = [
 
 # Document type mapping untuk nomor urut surat (shared constant)
 DOCUMENT_TYPES = {
-    '00': 'Cover',
     'DHP1': '!Daftar Hadir Prareviu 1',
     'DHP2': '!Daftar Hadir Prareviu 2',
     'DH' : '!Daftar Hadir',
@@ -28,6 +27,24 @@ DOCUMENT_TYPES = {
     '06': 'Berita Acara Pemberian Penjelasan Kualifikasi',
     '07': 'Memorandum Penetapan Dokumen Pemilihan',
     '08': 'BA Penetapan Dokumen Pemilihan'
+}
+
+DOCUMENT_TYPES_FISIK = {
+    'DHP1': '!Daftar Hadir Prareviu 1',
+    'DHP2': '!Daftar Hadir Prareviu 2',
+    'DHS': '!Daftar Hadir SIPASTI',
+    'DH' : '!Daftar Hadir',
+    '01': 'BA Reviu HPS melalui SIPASTI',
+    '02': 'Memorandum BA Reviu Persiapan Pengadaan (Tidak Lengkap)',
+    '03': 'Memorandum BA Reviu Persiapan Pengadaan',
+    '04': 'BA Reviu Persiapan Pengadaan dan Nota Dinas',
+    '05': 'Surat Penetapan BA Persiapan Pengadaan PPK',
+    '06': 'BA Hasil Reviu Dokumen Pemilihan',
+    '07': 'Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan',
+    '08': 'Memorandum Penetapan Dokumen Pemilihan',
+    '09': 'BA Penetapan Dokumen Pemilihan',
+    'z03': 'Memorandum BA Reviu Persiapan Pengadaan (Tidak Sesuai)',
+    'z05': 'Surat Penetapan BA Persiapan Pengadaan PPK',
 }
 
 

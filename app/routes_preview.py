@@ -28,6 +28,7 @@ def preview_document():
             'dh': ['!Daftar Hadir.docx', 'Daftar Hadir.docx', '!DH.docx'],
             'dhp1': ['!Daftar Hadir Prareviu 1.docx', 'Daftar Hadir Prareviu 1.docx', '!DHP1.docx'],
             'dhp2': ['!Daftar Hadir Prareviu 2.docx', 'Daftar Hadir Prareviu 2.docx', '!DHP2.docx'],
+            'dhs': ['!Daftar Hadir SIPASTI.docx', 'Daftar Hadir SIPASTI.docx', '!DHS.docx'],
         }
 
         try:
@@ -41,7 +42,9 @@ def preview_document():
 
         doc_path = None
         doc_code_lower = doc_code.lower()
+        logger.info(f"Normalized doc_code: {doc_code_lower}")
         normalized_lower = normalized_code.lower()
+        logger.info(f"Normalized doc_code: {special_files}")
 
         if doc_code_lower in special_files or normalized_lower in special_files:
             special_names = special_files.get(doc_code_lower) or special_files.get(normalized_lower)

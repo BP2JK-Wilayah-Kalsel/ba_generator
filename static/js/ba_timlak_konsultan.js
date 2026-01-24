@@ -753,7 +753,6 @@ function collectAllKeywords(formData) {
     }
     // Nomor dan Tanggal Undangan Rapat
     keywords['nomor_undangan_rapat'] = formData.get('nomor_undangan_rapat') || '';
-    keywords['tanggal_undangan_rapat'] = formatDateIndonesian(formData.get('tanggal_undangan_rapat') || '');
 
     // Handle pokja data
     keywords['ketua_pokja'] = formData.get('ketua_pokja') || '';

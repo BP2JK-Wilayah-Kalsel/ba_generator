@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, send_file
 import os
 import json
+import requests
 from datetime import datetime
 from typing import Any
 
@@ -12,6 +13,27 @@ bp = Blueprint('api', __name__)
 @bp.route('/api/document_types')
 def document_types() -> Any:
     return jsonify({'success': True, 'document_types': DOCUMENT_TYPES})
+
+
+@bp.route('/api/proxy/wilayah/<path:subpath>')
+def proxy_wilayah(subpath: str) -> Any:
+    """
+    Proxy requests to wilayah.id to avoid CORS issues in the browser.
+    Example: /api/proxy/wilayah/regencies/63.json -> https://wilayah.id/api/regencies/63.json
+    """
+    target_url = f"https://wilayah.id/api/{subpath}"
+    try:
+        # Forward the request to the external API
+        response = requests.get(target_url, timeout=10)
+        
+        # Check if the request was successful
+        if response.status_code != 200:
+            return jsonify({'error': f'Upstream API error: {response.status_code}'}), response.status_code
+            
+        # Return the JSON response
+        return jsonify(response.json())
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @bp.route('/api/save_defaults', methods=['POST'])
