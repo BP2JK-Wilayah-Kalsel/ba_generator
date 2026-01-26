@@ -1372,8 +1372,11 @@ function showResults(data, keywords) {
     let content = '<div class="results-content">';
 
     if (data.files && data.files.length > 0) {
+        content += '<div class="text-center mb-4">';
         content += '<h5>Dokumen berhasil diproses:</h5>';
-
+        content += '<a href="/download_results" class="btn btn-success btn-lg mb-3"><i class="fas fa-download me-2"></i> Download Semua Hasil</a>';
+        content += '</div>';
+        
         data.files.forEach(file => {
             content += `
                 <div class="card mb-3">
@@ -1512,7 +1515,6 @@ function showResults(data, keywords) {
         });
 
         content += '<div class="mt-3 text-center">';
-        content += '<a href="/download_results" class="btn btn-success btn-lg"><i class="fas fa-download me-2"></i> Download Semua Hasil</a>';
         content += '</div>';
     }
 

@@ -391,7 +391,7 @@ function updateKodeKlasifikasiOptions() {
         kodeKlasifikasiInput.value = '';
         kodeKlasifikasiInput.placeholder = "Pilih Jenis Pengadaan terlebih dahulu...";
     }
-}1
+} 1
 
 // Update POKJA table based on role selections
 function updatePokjaTable(data, masterFolderPath) {
@@ -411,7 +411,7 @@ function updatePokjaTable(data, masterFolderPath) {
     const namaKetua = pokjaMembers.find(m => m.nip === nipKetua)?.nama || '';
     const namaSekretaris = pokjaMembers.find(m => m.nip === nipSekretaris)?.nama || '';
     const namaAnggota1 = pokjaMembers.find(m => m.nip === nipAnggota1)?.nama || '';
-    
+
     let namaAnggota2 = '';
     let namaAnggota3 = '';
 
@@ -1030,7 +1030,10 @@ function showResults(data, keywords) {
     let content = '<div class="results-content">';
 
     if (data.files && data.files.length > 0) {
+        content += '<div class="text-center mb-4">';
         content += '<h5>Dokumen berhasil diproses:</h5>';
+        content += '<a href="/download_results" class="btn btn-success btn-lg mb-3"><i class="fas fa-download me-2"></i> Download Semua Hasil</a>';
+        content += '</div>';
 
         data.files.forEach(file => {
             content += `
@@ -1170,7 +1173,6 @@ function showResults(data, keywords) {
         });
 
         content += '<div class="mt-3 text-center">';
-        content += '<a href="/download_results" class="btn btn-success btn-lg"><i class="fas fa-download me-2"></i> Download Semua Hasil</a>';
         content += '</div>';
     }
 
@@ -1260,7 +1262,7 @@ function setDocumentLists(folderName) {
         'nomor_sk_timlak', 'tanggal_sk_timlak',
         'ketua_timlak', 'sekre_timlak', 'anggota_timlak'
     ];
-    
+
     idsToReset.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
@@ -1269,7 +1271,7 @@ function setDocumentLists(folderName) {
     // Reset Tables
     const pokjaTableBody = document.getElementById('pokja_members_table');
     if (pokjaTableBody) pokjaTableBody.innerHTML = '';
-    
+
     const timlakTableBody = document.getElementById('timlak_members_table');
     if (timlakTableBody) timlakTableBody.innerHTML = '';
 }
