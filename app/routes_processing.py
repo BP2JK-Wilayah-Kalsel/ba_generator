@@ -64,8 +64,13 @@ def download_results():
                 zipf.writestr(zip_info, '')
 
             for root, dirs, files in os.walk(PROCESSED_FILES_DIR):
+                logger.info(f"Scanning directory: {root} with {len(files)} files")
                 for file in files:
                     if file.endswith('.docx'):
+                        file_path = os.path.join(root, file)
+                        arcname = f"{folder_name}/05. Reviu/{file}"
+                        zipf.write(file_path, arcname)
+                    elif file == 'Lampiran SOP.pdf':
                         file_path = os.path.join(root, file)
                         arcname = f"{folder_name}/05. Reviu/{file}"
                         zipf.write(file_path, arcname)
@@ -131,7 +136,7 @@ def process_comprehensive():
             try:
                 # Construct path to master folder
                 base_folder = os.path.join(os.getcwd(), 'Master Folder', master_folder_name)
-                # logger.info(f"Files found in master folder: {base_folder}")
+                logger.info(f"Files found in master folder: {os.listdir(base_folder)}")
                 # Check if folder exists
                 if not os.path.exists(base_folder):
                     return jsonify({'success': False, 'message': f'Master folder not found: {master_folder_name}'})
@@ -139,7 +144,7 @@ def process_comprehensive():
                 # Load documents from folder
                 available_docs = []
                 for filename in os.listdir(base_folder):
-                    if filename.endswith('.docx') and not filename.startswith('~$'):
+                    if (filename.endswith('.docx') or filename == 'Lampiran SOP.pdf') and not filename.startswith('~$'):
                         # Determine document ID/type based on filename pattern
                         doc_id = ''
                         doc_type = ''
@@ -161,6 +166,9 @@ def process_comprehensive():
                         elif filename == '!Daftar Hadir.docx':
                             doc_id = 'DH'
                             doc_type = 'Daftar Hadir'
+                        elif filename == 'Lampiran SOP.pdf':
+                            doc_id = 'SOP'
+                            doc_type = 'Lampiran SOP'
                         else:
                             for dt_key in sorted_keys:
                                 dt_name = CURRENT_DOCUMENT_TYPES[dt_key]
@@ -233,6 +241,9 @@ def process_comprehensive():
                     for doc in available_docs:
                         if matches_selection(doc.get('id', ''), selected_documents):
                             filtered_docs.append(doc)
+                        elif doc.get('id') == 'SOP' and 'z03' in selected_documents:
+                             # Include SOP only if z03 is selected
+                             filtered_docs.append(doc)
                         else:
                             # Optional: log what was excluded
                             logger.debug(f"Excluded doc: {doc.get('id')}")
@@ -256,12 +267,19 @@ def process_comprehensive():
                         output_filename = doc.get('name')
                         output_path = os.path.join(PROCESSED_FILES_DIR, output_filename)
 
-                        success, result = process_docx_comprehensive(source_path, keywords, output_path)
-
-                        if success:
-                            processed_files.append({'filename': output_filename, 'original_filename': doc.get('name'), 'document_type': doc.get('type'), 'replacements': result.get('total_replacements', 0), 'log_entries': result.get('log_entries', []), 'keyword_details': result.get('keyword_details', {})})
+                        if output_filename.endswith('.pdf'):
+                            import shutil
+                            shutil.copy2(source_path, output_path)
+                            processed_files.append({'filename': output_filename, 'original_filename': doc.get('name'), 'document_type': doc.get('type'), 'replacements': 0, 'log_entries': [], 'keyword_details': {}})
                         else:
-                            failed_files.append({'filename': doc.get('name'), 'error': result.get('error', 'Unknown error')})
+                            if output_filename == 'Lampiran SOP.pdf':
+                                continue
+                            success, result = process_docx_comprehensive(source_path, keywords, output_path)
+
+                            if success:
+                                processed_files.append({'filename': output_filename, 'original_filename': doc.get('name'), 'document_type': doc.get('type'), 'replacements': result.get('total_replacements', 0), 'log_entries': result.get('log_entries', []), 'keyword_details': result.get('keyword_details', {})})
+                            else:
+                                failed_files.append({'filename': doc.get('name'), 'error': result.get('error', 'Unknown error')})
 
                     except Exception as e:
                         failed_files.append({'filename': doc.get('name', ''), 'error': str(e)})
