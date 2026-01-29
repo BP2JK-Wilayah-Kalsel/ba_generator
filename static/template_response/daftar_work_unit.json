@@ -17,6 +17,57 @@
         "id": "003",
         "name": "Satuan Kerja P2JN Provinsi Kalimantan Selatan",
         "association_code": "001"
+      },
+      {
+        "id": "004",
+        "name": "Satuan Kerja Perangkat Daerah - Tugas Pembantuan Dinas PUPR Provinsi Kalimantan Selatan",
+        "association_code": "001"
+      },
+      {
+        "id": "005",
+        "name": "Satuan Kerja Balai Wilayah Sungai Kalimantan III",
+        "association_code": "002"
+      },
+      {
+        "id": "006",
+        "name": "SNVT Pelaksanaan Jaringan Pemanfaatan Air Kalimantan III Provinsi Kalimantan Selatan",
+        "association_code": "002"
+      },
+      {
+        "id": "007",
+        "name": "SNVT Pelaksanaan Jaringan Sumber Air Kalimantan III Provinsi Kalimantan Selatan",
+        "association_code": "002"
+      },
+      {
+        "id": "008",
+        "name": "Satuan Kerja Operasi dan Pemeliharan Sumber Daya Air Kalimantan III",
+        "association_code": "002"
+      },
+      {
+        "id": "009",
+        "name": "Satuan Kerja Pembangunan Bendungan BWS Kalimantan III",
+        "association_code": "002"
+      },
+      {
+        "id": "010",
+        "name": "Balai Pengembangan Kompetensi PU Wilayah VII Banjarmasin",
+        "association_code": "004"
+      },
+      {
+        "id": "011",
+        "name": "Satuan Kerja Balai Teknik Rawa",
+        "association_code": "005"
+      },
+      {
+        "id": "012",
+        "name": "Satuan Kerja Pelaksanaan Cipta Karya Provinsi Kalimantan Selatan",
+        "association_code": "006"
+      },
+
+      {
+        "id": "013",
+        "name": "Satuan Kerja Balai Penataan Bangunan Prasarana dan Kawasan Kalimantan Selatan ",
+        "association_code": "006"
       }
     ],
     "total": 3

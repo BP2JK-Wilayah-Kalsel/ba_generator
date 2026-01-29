@@ -35,15 +35,9 @@
       },
       {
         "id": "006",
-        "name": "Balai Prasarana dan Permukiman Wilayah Kalimantan Selatan",
-        "acronym": "BPPW Wilayah Kalimantan Selatan",
-        "unor_code": "006"
-      },
-      {
-        "id": "007",
         "name": "Balai Penataan Bangunan, Prasarana dan Kawasan Kalimantan Selatan",
         "acronym": "BPBPK Kalimantan Selatan",
-        "unor_code": "007"
+        "unor_code": "006"
       }
     ],
     "total": 7

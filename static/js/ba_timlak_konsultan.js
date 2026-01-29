@@ -574,7 +574,7 @@ function updateNomorUndanganRapat() {
         const year = new Date().getFullYear();
 
         // Format: {kode_klasifikasi}/Und/Bp2jk17/POKJA-{kode_pokja}/{year}/{month}
-        nomorUndanganInput.value = `${kodeKlasifikasi}/R/Bp2jk17/POKJA-${kodePokja}/${year}/01`;
+        nomorUndanganInput.value = `${kodeKlasifikasi}/B/Bp2jk17/POKJA-${kodePokja}/${year}/01`;
     }
 }
 

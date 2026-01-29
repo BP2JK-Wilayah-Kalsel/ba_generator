@@ -52,8 +52,9 @@ def download_results():
         with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             # Create empty folder structure
             subfolders = [
-                "01. Berkas Usulan/01. Dokumen Persiapan Pengadaan",
-                "01. Berkas Usulan/02. Dokumen Pemilihan",
+                "01. Berkas Usulan/01. TNDE",
+                "01. Berkas Usulan/02. Dokumen Persiapan Pengadaan",
+                "01. Berkas Usulan/03. Dokumen Pemilihan",
                 "02. Checklist Pemeriksaan",
                 "03. SK",
                 "04. Undangan Reviu",
