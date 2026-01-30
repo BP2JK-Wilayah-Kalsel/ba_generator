@@ -73,9 +73,12 @@ datas = [
     ('static', 'static'),
     
     # Master BA folders (dari Master Folder)
-    ('Master Folder/Master BA Pokja Konsultan', 'Master Folder/Master BA Pokja Konsultan'),
-    ('Master Folder/Master BA Timlak Konsultan', 'Master Folder/Master BA Timlak Konsultan'),
-    ('Master Folder/Master Pembuktian', 'Master Folder/Master Pembuktian'),
+    # Dipindahkan ke copy manual di build script agar ada di root folder (bukan _internal)
+    # ('Master Folder/Master BA Pokja Konsultan', 'Master Folder/Master BA Pokja Konsultan'),
+    # ('Master Folder/Master BA Timlak Fisik', 'Master Folder/Master BA Timlak Fisik'),
+    # ('Master Folder/Master BA Timlak Konsultan', 'Master Folder/Master BA Timlak Konsultan'),
+    # ('Master Folder/Master BA Timlak RO Konsultan', 'Master Folder/Master BA Timlak RO Konsultan'),
+    # ('Master Folder/Master Pembuktian', 'Master Folder/Master Pembuktian'),
 ]
 
 a = Analysis(

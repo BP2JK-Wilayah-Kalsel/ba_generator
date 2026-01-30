@@ -17,12 +17,25 @@ def _set_locale():
             pass
 
 
+import sys
+
 def create_app(config_object='config.DefaultConfig'):
     setup_logging()
     _set_locale()
+    
+    # Determine correct static folder path
+    if getattr(sys, 'frozen', False):
+        # Running as PyInstaller bundle
+        # In onedir mode with _internal, sys._MEIPASS points to _internal
+        base_dir = sys._MEIPASS
+    else:
+        # Running from source
+        base_dir = os.getcwd()
+        
+    static_dir = os.path.join(base_dir, 'static')
+    
     # Use package-local `templates/` inside the `app` package and keep repo-level
     # `static/` directory for static assets.
-    static_dir = os.path.join(os.getcwd(), 'static')
     app = Flask(__name__, instance_relative_config=False,  template_folder="templates", static_folder=static_dir)
     app.config.from_object(config_object)
     # register blueprints (use lightweight routes during incremental refactor)

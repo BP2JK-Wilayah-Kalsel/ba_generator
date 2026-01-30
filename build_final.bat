@@ -71,8 +71,14 @@ if not exist "dist\BA Generator\processed_results" mkdir "dist\BA Generator\proc
 echo      Folder processed_results dibuat.
 echo.
 
+REM Copy Master Folder Template
+echo [5.5/6] Menyalin Master Folder Template...
+xcopy "Master Folder" "dist\BA Generator\Master Folder\" /E /I /H /Y
+echo      Master Folder berhasil disalin.
+echo.
+
 REM Copy README dan file pendukung
-echo [5/6] Menyalin dokumentasi...
+echo [6/6] Menyalin dokumentasi...
 if exist README_FINAL.md copy README_FINAL.md "dist\BA Generator\README.md"
 if exist CARA_PENGGUNAAN.txt copy CARA_PENGGUNAAN.txt "dist\BA Generator\CARA_PENGGUNAAN.txt"
 if exist SYSTEM_REQUIREMENTS.txt copy SYSTEM_REQUIREMENTS.txt "dist\BA Generator\SYSTEM_REQUIREMENTS.txt"
