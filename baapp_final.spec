@@ -54,6 +54,7 @@ hiddenimports = [
     'beautifulsoup4',
     
     # Other dependencies
+    'mammoth',
     'zipfile',
     'datetime',
     'json',
