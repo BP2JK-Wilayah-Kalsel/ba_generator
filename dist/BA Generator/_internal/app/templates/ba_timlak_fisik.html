@@ -1,0 +1,933 @@
+{% extends 'base.html' %}
+
+{% block title %}Generator Berita Acara TIMLAK - BP2JK{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ba.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <p>DEBUG MODE: {{ config.DEBUG }}</p>
+
+    <!-- Back to Menu Button -->
+    <div class="mb-3">
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Kembali ke Menu
+        </a>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1><i class="fas fa-file-alt"></i> Generator BA Reviu Tender PK Timlak </h1>
+        <p>Sistem Otomatis Pembuatan Berita Acara Reviu Dokumen Tender Pekerjaan Konstruksi Tim Pelaksana dengan
+            Keyword Replacement - BP2JK Kalsel</p>
+    </div>
+
+    <!-- Save/Load Controls -->
+    <!-- <div class="form-section mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 text-primary"><i class="fas fa-database me-2"></i>Data Management</h5>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveToLocal()">
+                    <i class="fas fa-save me-1"></i>Save
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="loadFromLocal()">
+                    <i class="fas fa-upload me-1"></i>Load
+                </button>
+                <button type="button" class="btn btn-outline-success btn-sm" onclick="exportDefaults()">
+                    <i class="fas fa-download me-1"></i>Export
+                </button>
+                <label class="btn btn-outline-info btn-sm mb-0" style="cursor: pointer;">
+                    <i class="fas fa-file-import me-1"></i>Import
+                    <input type="file" id="importDefaultsInput" style="display:none" accept=".json"
+                        onchange="if(this.files[0]) importDefaultsFromFile(this.files[0])">
+                </label>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-8">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Save/Load: Simpan ke browser | Export/Import: File JSON untuk backup
+                </small>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select form-select-sm" id="savedDefaultsList" onchange="loadSelectedDefault()">
+                    <option value="">Pilih data tersimpan...</option>
+                </select>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Main Form -->
+    <div class="main-form">
+        <form id="baForm" enctype="multipart/form-data">
+
+            <!-- Master Folder Section -->
+            <div class="form-section mb-4">
+                <h4 class="text-primary"><i class="fas fa-folder me-2"></i>Master Folder Template</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label">Pilih Master Folder</label>
+                        <div class="input-group">
+                            <select type="text" class="form-control" id="masterFolderPath" name="masterFolderPath"
+                                onchange="setDocumentLists(this.value)">
+                                <option value="Master BA Timlak Fisik">Template BA Timlak Fisik</option>
+                                <!-- <option value="Master BA Timlak RO Konsultan">Template BA Timlak Repeat Order Konsultan -->
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Paket -->
+            <div class="form-section">
+                <h4><i class="fas fa-info-circle"></i> Data Paket (RUP dan Dokumen Pemilihan)</h4>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Kode RUP</label>
+                        <input type="number" class="form-control" id="kode_rup" name="kode_rup">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Nama Paket</label>
+                        <textarea class="form-control" id="nama_paket" name="nama_paket"></textarea>
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Unit Organisasi</label>
+                        <div class="input-group">
+                            <input class="form-control" list="unitOrganisasiOptions" id="unit_organisasi"
+                                name="unit_organisasi" placeholder="Pilih atau ketik Unit Organisasi..."
+                                autocomplete="off">
+                            <datalist id="unitOrganisasiOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_unit_organisasi"
+                                title="Hapus Unit Organisasi">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Direktorat Teknis</label>
+                        <div class="input-group">
+                            <input class="form-control" list="direktoratTeknisOptions" id="direktorat_teknis"
+                                name="direktorat_teknis" placeholder="Pilih atau ketik Direktorat Teknis..."
+                                autocomplete="off" disabled>
+                            <datalist id="direktoratTeknisOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_direktorat_teknis"
+                                title="Hapus Direktorat Teknis">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Balai</label>
+                        <div class="input-group">
+                            <input class="form-control" list="balaiOptions" id="balai" name="balai"
+                                placeholder="Pilih atau ketik Balai..." autocomplete="off" disabled>
+                            <datalist id="balaiOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_balai"
+                                title="Hapus Balai">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Satuan Kerja</label>
+                        <div class="input-group">
+                            <input class="form-control" list="satuanKerjaOptions" id="satuan_kerja" name="satuan_kerja"
+                                placeholder="Pilih atau ketik Satuan Kerja..." autocomplete="off" disabled>
+                            <datalist id="satuanKerjaOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_satuan_kerja"
+                                title="Hapus Satuan Kerja">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">PPK</label>
+                        <input type="text" class="form-control" id="ppk" name="ppk">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nama PPK (Tanpa Gelar)</label>
+                        <input type="text" class="form-control" id="nama_ppk" name="nama_ppk">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Gelar PPK</label>
+                        <input type="text" class="form-control" id="gelar_ppk" name="gelar_ppk">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Jenis Pengadaan</label>
+                        <select class="form-control" id="jenis_pengadaan" name="jenis_pengadaan">
+                            <option value="">-- Pilih Jenis Pengadaan --</option>
+                            <option value="Jasa Konsultansi Konstruksi">Jasa Konsultansi Konstruksi</option>
+                            <option value="Pekerjaan Konstruksi">Pekerjaan Konstruksi</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Metode Pemilihan</label>
+                        <textarea type="text" class="form-control" id="metode_pemilihan"
+                            name="metode_pemilihan"></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Kode Klasifikasi</label>
+                        <div class="input-group">
+                            <input class="form-control" list="kodeKlasifikasiOptions" id="kode_klasifikasi"
+                                name="kode_klasifikasi" placeholder="Pilih atau ketik Kode Klasifikasi..."
+                                autocomplete="off" disabled>
+                            <datalist id="kodeKlasifikasiOptions"></datalist>
+                            <button class="btn btn-outline-secondary" type="button" id="clear_kode_klasifikasi"
+                                title="Hapus Kode Klasifikasi">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Tahun Anggaran</label>
+                        <select class="form-control" id="tahun_anggaran" name="tahun_anggaran">
+                            {% for year in range(current_year - 1, current_year + 2) %}
+                            <option value="{{ year }}" {% if year==current_year %}selected{% endif %}>{{ year
+                                }}</option>
+                            {% endfor %}
+                            {% for year in range(current_year - 1, current_year + 1) %}
+                            <option value="{{ year }}-{{ year + 1 }}">
+                                {{ year }} - {{ year + 1 }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nilai Pagu (Rupiah)</label>
+                            <input type="number" class="form-control" id="nilai_pagu" name="nilai_pagu" placeholder="0"
+                                min="0" oninput="updateTerbilangPagu()">
+                            <small class="text-muted">Ketik angka saja (contoh: 1500000)</small>
+
+                            <!-- Terbilang Pagu -->
+                            <div class="mt-2">
+                                <label class="form-label small text-muted">
+                                    <i class="fas fa-spell-check me-1"></i>Terbilang:
+                                </label>
+                                <input type="text" class="form-control form-control-sm bg-light" id="terbilang_pagu"
+                                    name="terbilang_pagu" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nilai HPS (Rupiah)</label>
+                            <input type="number" class="form-control" id="nilai_hps" name="nilai_hps" placeholder="0"
+                                min="0" oninput="updateTerbilangHPS()">
+                            <small class="text-muted">Ketik angka saja (contoh: 1500000)</small>
+
+                            <!-- Terbilang HPS -->
+                            <div class="mt-2">
+                                <label class="form-label small text-muted">
+                                    <i class="fas fa-spell-check me-1"></i>Terbilang:
+                                </label>
+                                <input type="text" class="form-control form-control-sm bg-light" id="terbilang_hps"
+                                    name="terbilang_hps" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Sumber Dana</label>
+                            <select class="form-control" id="sumber_dana" name="sumber_dana">
+                                <option value="APBN">APBN</option>
+                                <option value="Loan">Loan</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Persentase PPN (%)</label>
+                            <input type="number" class="form-control" id="persentase_ppn" name="persentase_ppn"
+                                value="11" required>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Jangka Waktu (Hari)</label>
+                            <input type="number" class="form-control" id="jangka_waktu" name="jangka_waktu">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Lokasi Pekerjaan</label>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="lokasiTable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Provinsi</th>
+                                            <th>Kabupaten/Kota</th>
+                                            <th>Kecamatan</th>
+                                            <th style="width: 50px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Rows will be added here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-success" onclick="addLokasiRow()">
+                                <i class="fas fa-plus me-1"></i>Tambah Lokasi
+                            </button>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Lingkup Pekerjaan</label>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="lingkupTable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Uraian Lingkup Pekerjaan</th>
+                                            <th style="width: 50px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Rows will be added here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-success" onclick="addLingkupRow()">
+                                <i class="fas fa-plus me-1"></i>Tambah Lingkup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Pokja -->
+            <div class="form-section">
+                <h4><i class="fas fa-info-circle"></i>Data Kelompok Kerja dan Tim Pelaksana (SICAKEPAN)</h4>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Kode Pokja</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="kode_pokja" name="kode_pokja"
+                                placeholder="Masukkan Kode Pokja...">
+                            <button class="btn btn-primary" type="button" id="btn_fetch_pokja_data">
+                                <i class="fas fa-cloud-download-alt me-1"></i>Ambil Data
+                            </button>
+                        </div>
+                        <small class="text-muted">Klik tombol untuk mengambil data SK dan Anggota berdasarkan Kode
+                            Pokja.</small>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- POKJA Management Section -->
+            <div class="form-section">
+                <!-- POKJA Member Selection -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h5 class="mb-1 text-primary">
+                                <i class="fas fa-users me-2"></i>Data Pokja
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nomor SK Pokja</label>
+                            <input type="text" class="form-control" id="nomor_sk_pokja" name="nomor_sk_pokja" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tanggal SK Pokja <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="tanggal_sk_pokja" name="tanggal_sk_pokja"
+                                readonly>
+                        </div>
+                        <input type="text" id="ketua_pokja" name="ketua_pokja" hidden>
+                        <input type="text" id="email_ketua_pokja" name="email_ketua_pokja" hidden>
+                        <input type="text" id="sekre_pokja" name="sekre_pokja" hidden>
+                        <input type="text" id="anggota_pokja1" name="anggota_pokja1" hidden>
+                        <input type="text" id="anggota_pokja2" name="anggota_pokja2" hidden>
+                        <input type="text" id="anggota_pokja3" name="anggota_pokja3" hidden>
+                    </div>
+
+                    <!-- POKJA Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th width="5%" class="text-center">No</th>
+                                    <th width="37%">Nama Lengkap</th>
+                                    <th width="8%" class="text-center">Jabatan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pokja_members_table">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anggota TIMLAK Section -->
+            <div class="form-section">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h5 class="mb-1 text-primary">
+                                <i class="fas fa-users m-2"></i>Data Timlak
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nomor SK Timlak</label>
+                            <input type="text" class="form-control" id="nomor_sk_timlak" name="nomor_sk_timlak" readonly
+                                style="background-color: #e9ecef;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tanggal SK Timlak <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="tanggal_sk_timlak" name="tanggal_sk_timlak"
+                                readonly style="background-color: #e9ecef;">
+                        </div>
+                        <input type="text" id="ketua_timlak" name="ketua_timlak" hidden>
+                        <input type="text" id="sekre_timlak" name="sekre_timlak" hidden>
+                        <input type="text" id="anggota_timlak" name="anggota_timlak" hidden>
+                    </div>
+
+                    <!-- TIMLAK Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-success">
+                                <tr>
+                                    <th width="5%" class="text-center">No</th>
+                                    <th width="37%">Nama Lengkap</th>
+                                    <th width="8%" class="text-center">Role</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timlak_members_table">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nomor dan Tanggal Undangan Rapat -->
+            <div class="form-section">
+                <h4><i class="fas fa-calendar-alt"></i> Nomor dan Tanggal Undangan Rapat Pokja</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label">Nomor Undangan Rapat</label>
+                        <input type="text" class="form-control" id="nomor_undangan_rapat" name="nomor_undangan_rapat"
+                            readonly style="background-color: #f8f9fa; cursor: not-allowed;"
+                            placeholder="{kode_klasifikasi}/B/Bp2jk17/POKJA-{kode_pokja}/2026/01">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i> Nomor otomatis ter-generate berdasarkan Kode Pokja dan
+                            Tahun Anggaran
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Keywords -->
+            <div class="form-section">
+                <h4><i class="fas fa-code"></i> Variabel Custom</h4>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5>Tambah Variabel Custom</h5>
+                        <button type="button" class="btn btn-outline-primary" onclick="addCustomVariable()">
+                            <i class="fas fa-plus"></i> Tambah Variabel
+                        </button>
+                    </div>
+                    <div id="custom_variables"></div>
+                </div>
+            </div>
+
+            <!-- Daftar Dokumen TIMLAK -->
+            <div class="form-section">
+                <h4><i class="fas fa-file-alt"></i> Daftar Dokumen Timlak PK</h4>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Tanggal Reviu <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="tanggal_dokumen" name="tanggal_dokumen">
+                    <small class="text-danger fst-italic">
+                        Selain tanggal Daftar Hadir Prareviu
+                    </small>
+
+                </div>
+                <div class="mb-2">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Centang dokumen yang ingin diproses.
+                    </small>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">
+                                    <input type="checkbox" class="form-check-input" id="selectAllDocs"
+                                        onchange="toggleAllDocuments(this.checked)" checked title="Pilih/Hapus semua">
+                                </th>
+                                <th>No</th>
+                                <th>Jenis Dokumen</th>
+                                <th>Nomor Surat</th>
+                                <th>Tanggal</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="document_table">
+
+                            <tr data-doc="DHP1">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="DHP1" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>DHP1</td>
+                                <td>!Daftar Hadir Prareviu 1</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><input type="date" class="form-control form-control-sm" name="tanggal_DHP1">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('DHP1')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="DHP2">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="DHP2"
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>DHP2</td>
+                                <td>!Daftar Hadir Prareviu 2</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><input type="date" class="form-control form-control-sm" name="tanggal_DHP2">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('DHP2')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="DHS">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="DHS" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>DHS</td>
+                                <td>!Daftar Hadir SIPASTI</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><input type="date" class="form-control form-control-sm" name="tanggal_DHS">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('DHS')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="DH">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="DH" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>DH</td>
+                                <td>!Daftar Hadir</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('DH')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="01">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="01" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>01</td>
+                                <td>BA Reviu HPS melalui SIPASTI</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('01')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="02">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="02" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>02</td>
+                                <td>BA Reviu Persiapan Pengadaan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_1">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('02')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="03">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="03" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>03</td>
+                                <td>Memorandum BA Reviu Persiapan Pengadaan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_1">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('03')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="04">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="04" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>04</td>
+                                <td>Surat Penetapan BA Persiapan Pengadaan PPK</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('04')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="05">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="05" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>05</td>
+                                <td>BA Hasil Reviu Dokumen Pemilihan</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('05')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="06">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="06" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>06</td>
+                                <td>Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('06')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="07">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="07" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>07</td>
+                                <td>Memorandum Penetapan Dokumen Pemilihan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_2">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('07')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="08">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="08" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>08</td>
+                                <td>BA Penetapan Dokumen Pemilihan</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_3">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('08')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="z03">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="z03"
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>z03</td>
+                                <td>Memorandum BA Reviu Persiapan Pengadaan (Tidak Sesuai)</td>
+                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_1">
+                                </td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('z03')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="z05">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="z05"
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>z05</td>
+                                <td>Surat Penetapan BA Persiapan Pengadaan PPK (Tidak Sesuai)</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('z05')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Selected Documents -->
+            <div class="form-section" id="selectedDocumentsSection" style="display: none;">
+                <h4><i class="fas fa-file-alt"></i> Dokumen Terpilih</h4>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-info d-flex align-items-center">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <div>
+                                <strong>Master Folder:</strong> <span id="selectedFolderPath"></span><br>
+                                <small>Dokumen yang tersedia akan diproses berdasarkan template dari master
+                                    folder</small>
+                            </div>
+                        </div>
+                        <div id="selectedDocumentsList" class="mt-2">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-4">
+                <button type="button" class="btn btn-outline-primary me-3" onclick="previewKeywords()">
+                    <i class="fas fa-eye"></i> Preview Keywords
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-magic"></i> Generate Berita Acara Timlak
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h4 class="mt-3">Memproses Dokumen...</h4>
+        <p>Mohon tunggu, sedang mengganti keyword dalam dokumen</p>
+    </div>
+</div>
+
+<!-- Keywords Preview Modal -->
+<div class="modal fade" id="keywordsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Preview Keywords & Nilai</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="keywords_preview_content" class="keyword-preview"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Modal -->
+<div class="modal fade" id="resultsModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hasil Pemrosesan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="results_content"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load Defaults Modal -->
+<div class="modal fade" id="loadDefaultsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-list me-2"></i>Data Tersimpan
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalSavedDefaultsList" class="list-group">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-eye me-2"></i><span id="previewModalTitle">Preview Dokumen</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+                <!-- Disclaimer -->
+                <div class="alert alert-warning d-flex align-items-start mb-3">
+                    <i class="fas fa-info-circle me-2 mt-1"></i>
+                    <div>
+                        <strong>Catatan:</strong> Ini adalah preview isian placeholder saja.
+                        Tata letak, format tabel, dan styling dokumen final mungkin berbeda dari preview ini.
+                        Preview ini hanya untuk memastikan data sudah terisi dengan benar.
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div id="previewLoading" style="display: none; text-align: center; padding: 3rem;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Memuat preview dokumen...</p>
+                </div>
+
+                <!-- Preview content -->
+                <div id="previewContent"
+                    style="background: white; padding: 40px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                    <!-- HTML will be injected here -->
+                </div>
+
+                <!-- Warnings -->
+                <div id="previewWarnings" class="alert alert-warning mt-3" style="display: none;">
+                    <h6><i class="fas fa-exclamation-triangle"></i> Peringatan Konversi:</h6>
+                    <ul id="previewWarningsList"></ul>
+                </div>
+
+                <!-- Remaining placeholders -->
+                <div id="previewPlaceholders" class="alert alert-info mt-3" style="display: none;">
+                    <h6><i class="fas fa-tags"></i> Placeholder yang belum terisi:</h6>
+                    <div id="previewPlaceholdersList"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ url_for('static', filename='js/ba_timlak_fisik.js') }}"></script>
+{% endblock %}

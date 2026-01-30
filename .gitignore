@@ -5,7 +5,7 @@ __pycache__/
 *.so
 .Python
 *.egg-info/
-dist/
+# dist/
 build/
 *.egg
 
@@ -41,9 +41,9 @@ desktop.ini
 ~$*.doc
 
 # Build artifacts (exclude from repo)
-dist/
+# dist/
 build/
-*.exe
+# *.exe
 *.dll
 
 # Processed results

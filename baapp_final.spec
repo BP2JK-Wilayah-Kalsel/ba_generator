@@ -67,7 +67,7 @@ hiddenimports = [
 # Data files to include
 datas = [
     # Templates HTML
-    ('templates', 'templates'),
+    ('app/templates', 'app/templates'),
     
     # Static files (CSS, JS, CSV, etc)
     ('static', 'static'),
