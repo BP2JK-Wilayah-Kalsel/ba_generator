@@ -1,0 +1,47 @@
+============================================================================
+BA GENERATOR - Sistem Generator Berita Acara Terintegrasi
+============================================================================
+
+Version: 1.0.0
+Release Date: 02/02/2026
+
+PROGRAM AKTUALISASI LATSAR 2025
+
+Pengembang:
+  Muhammad Rayhan Kurniawan, S.Kom.
+  Kementerian Pekerjaan Umum
+
+Instansi:
+  Balai Pelaksana Pemilihan Jasa Konstruksi Wilayah Kalimantan Selatan
+  Kementerian Pekerjaan Umum
+
+Program:
+  Pelatihan Dasar CPNS (Latsar) 2025
+
+Deskripsi:
+  Aplikasi ini dikembangkan sebagai bagian dari Proyek Aktualisasi
+  Pelatihan Dasar CPNS. Aplikasi ini bertujuan untuk mengotomatisasi
+  pembuatan dokumen Berita Acara dalam proses pengadaan jasa konstruksi,
+  sehingga meningkatkan efisiensi dan akurasi dalam penyusunan dokumen.
+
+Fitur Utama:
+  - Generate dokumen BA Pokja Konsultan
+  - Generate dokumen BA Timlak Konsultan
+  - Generate dokumen Persiapan Pembuktian Kualifikasi
+  - Auto-fill data dari SPSE
+  - Sistem Save/Load data
+  - Auto-clean file lama
+  - Preview keywords sebelum generate
+  - Format tanggal otomatis Bahasa Indonesia
+  - Konversi angka ke terbilang otomatis
+
+Teknologi:
+  - Python 3.12
+  - Flask Web Framework
+  - python-docx (Word document processing)
+  - BeautifulSoup4 (SPSE web scraping)
+  - PyInstaller (Executable packaging)
+
+============================================================================
+Untuk bantuan dan troubleshooting, baca README.md
+============================================================================

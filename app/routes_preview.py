@@ -33,7 +33,12 @@ def preview_document():
 
         try:
             # Use absolute path or correct relative path
-            base_folder = os.path.join(os.getcwd(), 'Master Folder', master_folder)
+            from .utils import get_master_folder_path
+            base_folder = get_master_folder_path(master_folder)
+            
+            if not os.path.exists(base_folder):
+                return jsonify({'success': False, 'error': f'Master folder not found: {master_folder}'}), 404
+                
             all_files = os.listdir(base_folder)
             logger.info(f"Files found in master folder: {all_files}")
         except Exception as e:

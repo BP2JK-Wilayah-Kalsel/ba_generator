@@ -1,5 +1,6 @@
 import re
 from typing import Dict, Any, Optional, Tuple
+import sys
 
 from datetime import datetime
 import json
@@ -7,6 +8,45 @@ import os
 import time
 from config import DefaultConfig
 from typing import List
+
+def get_master_folder_path(folder_name_or_path: str) -> str:
+    """
+    Resolves the absolute path to a Master Folder.
+    Handles absolute paths, relative paths, and paths relative to the executable (frozen) or source.
+    """
+    if not folder_name_or_path:
+        return ""
+        
+    # If it's already an absolute path, assume it's correct
+    if os.path.isabs(folder_name_or_path):
+        return folder_name_or_path
+        
+    # Determine application root
+    if getattr(sys, 'frozen', False):
+        # Running as PyInstaller bundle
+        # The executable is in dist/BA Generator/BA Generator.exe
+        # Master Folder is in dist/BA Generator/Master Folder
+        app_root = os.path.dirname(sys.executable)
+    else:
+        # Running from source
+        # Usually cwd is the project root
+        app_root = os.getcwd()
+
+    # Clean up separators
+    clean_path = folder_name_or_path.replace('/', os.sep).replace('\\', os.sep)
+    
+    # Remove leading ./ or .\
+    if clean_path.startswith('.' + os.sep):
+        clean_path = clean_path[2:]
+        
+    # If the path starts with "Master Folder", don't prepend it again
+    if clean_path.startswith('Master Folder' + os.sep) or clean_path == 'Master Folder':
+        full_path = os.path.join(app_root, clean_path)
+    else:
+        # Otherwise, assume it's a subdirectory of "Master Folder"
+        full_path = os.path.join(app_root, 'Master Folder', clean_path)
+        
+    return full_path
 
 DAY_NAMES = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
 MONTH_NAMES = [

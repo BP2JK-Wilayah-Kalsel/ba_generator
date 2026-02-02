@@ -136,11 +136,14 @@ def process_comprehensive():
         if master_folder_name:
             try:
                 # Construct path to master folder
-                base_folder = os.path.join(os.getcwd(), 'Master Folder', master_folder_name)
-                logger.info(f"Files found in master folder: {os.listdir(base_folder)}")
+                from .utils import get_master_folder_path
+                base_folder = get_master_folder_path(master_folder_name)
+                
                 # Check if folder exists
                 if not os.path.exists(base_folder):
-                    return jsonify({'success': False, 'message': f'Master folder not found: {master_folder_name}'})
+                    return jsonify({'success': False, 'message': f'Master folder not found: {master_folder_name} (Path: {base_folder})'})
+
+                logger.info(f"Files found in master folder: {os.listdir(base_folder)}")
                 
                 # Load documents from folder
                 available_docs = []

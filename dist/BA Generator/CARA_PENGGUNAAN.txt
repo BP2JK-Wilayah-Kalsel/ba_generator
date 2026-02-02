@@ -1,0 +1,127 @@
+================================================================================
+CARA PENGGUNAAN BA GENERATOR
+================================================================================
+
+1.1 Cara Penggunaan
+
+--------------------------------------------------------------------------------
+1.1.1 Pilih Master Folder Template
+--------------------------------------------------------------------------------
+
+Sebelum memulai mengisi data, Anda harus memilih Master Folder yang berisi
+template dokumen:
+
+1. Klik tombol "Pilih Master Folder" di bagian atas halaman
+2. Pilih salah satu folder template yang tersedia:
+   - Master BA Pokja Konsultan: Untuk BA Pokja jenis Konsultan
+   - Master BA Timlak Konsultan: Untuk BA Timlak jenis Konsultan
+   - Master Pembuktian: Untuk dokumen Persiapan Pembuktian Kualifikasi
+3. Sistem akan memuat template dokumen dari folder yang dipilih
+4. Pastikan folder yang dipilih sudah berisi file template yang benar
+
+Catatan Penting:
+- Master folder wajib dipilih sebelum mengisi data
+- Jika folder belum dipilih, sistem akan menampilkan peringatan
+- Folder template biasanya berada di dalam folder _internal/
+
+--------------------------------------------------------------------------------
+1.1.2 Mengisi Data Dasar
+--------------------------------------------------------------------------------
+
+Setelah memilih Master Folder, Anda dapat mengisi data dengan 2 cara:
+
+=== CARA 1: AMBIL DATA OTOMATIS DARI SPSE (REKOMENDASI) ===
+
+1. Masukkan Kode Tender dari SPSE (contoh: 10094973000)
+2. Klik tombol "Ambil data SPSE" (ikon cloud) di samping field Kode Tender
+3. Sistem akan otomatis mengambil dan mengisi data berikut:
+   ✓ Nama Paket
+   ✓ Nilai Pagu (otomatis format Rupiah dan terbilang)
+   ✓ Nilai HPS (otomatis format Rupiah dan terbilang)
+   ✓ KLPD (K/L/PD/Instansi)
+   ✓ Jenis Pengadaan
+   ✓ Metode Pengadaan
+
+4. Anda hanya perlu melengkapi data yang tidak diambil dari SPSE:
+   - Informasi SK Pokja
+   - Unit Organisasi
+   - Balai (jika ada)
+   - Satker
+   - Kegiatan/PPK
+   - Sumber Dana
+
+Keuntungan menggunakan fitur Ambil Data SPSE:
+• Lebih cepat dan efisien
+• Mengurangi kesalahan input manual
+• Data langsung dari sumber resmi SPSE
+• Format nilai Rupiah otomatis benar
+
+=== CARA 2: INPUT MANUAL ===
+
+Jika data tidak tersedia di SPSE atau terjadi kesalahan, Anda dapat mengisi
+manual semua field:
+
+1. Informasi SK Pokja
+   • Nomor SK Pokja: Masukkan nomor SK Pokja
+     Contoh: 1197/KPTS/Bp2jk17/SK-PKJ/REG/TA.2025
+   
+   • Tanggal SK Pokja: Pilih tanggal dari kalender
+   
+   • Kode Pokja: Masukkan kode pokja
+     Contoh: 1.B.13
+   
+   • Tahun Anggaran: Masukkan tahun anggaran
+     Contoh: 2025 atau 2025-2026
+
+2. Informasi Paket Pekerjaan
+   • Kode Tender: Kode unik tender dari SPSE
+     Contoh: 10094973000
+   
+   • Nama Paket: Nama lengkap paket pekerjaan
+     Contoh: Pengawasan Teknis Rekonstruksi Jalan Simpang Lago - Sorek I
+   
+   • KLPD: Nama instansi K/L/PD
+     Contoh: Kementerian Pekerjaan Umum
+   
+   • Unit Organisasi: Nama unit organisasi
+     Contoh: Direktorat Jenderal Bina Marga
+   
+   • Balai: Nama balai pelaksana (opsional, bisa dihapus jika tidak ada)
+     Contoh: Balai Pelaksanaan Jalan Nasional XVII Riau
+   
+   • Satker: Nama satuan kerja
+     Contoh: PERENCANAAN DAN PENGAWASAN JALAN NASIONAL PROVINSI RIAU
+   
+   • Kegiatan/PPK: Nama kegiatan lengkap
+     Contoh: Pengawasan Jalan Nasional Provinsi Riau
+   
+   • Jenis Pengadaan: Pilih atau masukkan jenis pengadaan
+     Contoh: Jasa Konsultansi Badan Usaha Konstruksi
+   
+   • Metode Pengadaan: Pilih atau masukkan metode pengadaan
+     Contoh: Seleksi - Prakualifikasi Dua File - Kualitas dan Biaya
+   
+   • Sumber Dana: Masukkan sumber dana
+     Contoh: APBN Tahun Anggaran 2025-2026
+   
+   • Nilai Pagu: Masukkan angka saja (tanpa titik/koma)
+     Contoh: 5924917000
+     Sistem akan otomatis:
+     - Format ke Rupiah: Rp 5.924.917.000
+     - Konversi ke terbilang: lima miliar sembilan ratus dua puluh empat juta...
+   
+   • Nilai HPS: Masukkan angka saja (tanpa titik/koma)
+     Contoh: 5924917000
+     Sistem akan otomatis:
+     - Format ke Rupiah: Rp 5.924.917.000
+     - Konversi ke terbilang: lima miliar sembilan ratus dua puluh empat juta...
+
+CATATAN PENTING:
+================
+• Nilai Pagu dan HPS akan otomatis dikonversi ke format Rupiah
+• Terbilang akan otomatis dibuat dalam huruf kecil
+• Semua field dengan tanda (*) wajib diisi
+• Pastikan Kode Tender benar jika ingin menggunakan fitur Ambil Data SPSE
+• Jika tombol "Ambil data SPSE" gagal, periksa koneksi internet atau isi manual
+
+================================================================================

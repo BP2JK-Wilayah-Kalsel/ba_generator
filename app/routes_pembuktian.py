@@ -17,6 +17,10 @@ def validate_master_pembuktian():
         folder_path = data.get('folder_path', '')
         if not folder_path:
             return jsonify({'success': False, 'error': 'Folder path tidak boleh kosong'})
+            
+        from .utils import get_master_folder_path
+        folder_path = get_master_folder_path(folder_path)
+        
         if not os.path.exists(folder_path):
             return jsonify({'success': False, 'error': 'Folder tidak ditemukan'})
         required_files = [
@@ -43,6 +47,10 @@ def generate_pembuktian_folders():
         companies = data.get('companies', [])
         pengalaman = data.get('pengalaman', {})
         master_folder = data.get('master_folder', '')
+        
+        from .utils import get_master_folder_path
+        master_folder = get_master_folder_path(master_folder)
+        
         if not companies:
             return jsonify({'success': False, 'error': 'Tidak ada perusahaan yang diproses'}), 400
         if not master_folder or not os.path.exists(master_folder):
