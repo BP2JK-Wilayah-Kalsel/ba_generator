@@ -63,13 +63,17 @@
         "name": "Satuan Kerja Pelaksanaan Cipta Karya Provinsi Kalimantan Selatan",
         "association_code": "006"
       },
-
       {
         "id": "013",
         "name": "Satuan Kerja Balai Penataan Bangunan Prasarana dan Kawasan Kalimantan Selatan ",
         "association_code": "006"
+      },
+      {
+        "id": "014",
+        "name": "Satuan Kerja Balai Pelaksanaan Jalan Nasional Kalimantan Selatan",
+        "association_code": "001"
       }
     ],
-    "total": 3
+    "total": 14
   }
 }
