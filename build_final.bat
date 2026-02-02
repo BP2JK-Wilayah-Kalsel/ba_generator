@@ -154,16 +154,4 @@ echo   - CARA_PENGGUNAAN.txt        : Panduan penggunaan
 echo   - SYSTEM_REQUIREMENTS.txt    : Spesifikasi sistem minimum
 echo   - CREDITS.txt                : Informasi pengembang
 echo.
-echo Untuk menjalankan:
-echo   1. Buka folder: dist\BA Generator\
-echo   2. Double-click: BA Generator.exe
-echo   3. Browser akan terbuka otomatis
-echo.
-echo CATATAN: Baca SYSTEM_REQUIREMENTS.txt untuk spesifikasi minimum sistem
-echo.
-echo ============================================================================
-echo Program Aktualisasi Latsar 2025
-echo Muhammad Rayhan Kurniawan, S.Kom. - CPNS Kementerian Pekerjaan Umum
-echo ============================================================================
-echo.
 pause

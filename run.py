@@ -10,7 +10,7 @@ def main():
     server.serve(
         host=app.config.get('HOST', '127.0.0.1'),
         port=app.config.get('PORT', 5001),
-        debug=True
+        debug=False
     )
 
 if __name__ == "__main__":

@@ -82,7 +82,7 @@ datas = [
 ]
 
 a = Analysis(
-    ['run_app.py'],
+    ['run_build.py'],
     pathex=[],
     binaries=[],
     datas=datas,
@@ -114,16 +114,9 @@ exe = EXE(
     exclude_binaries=True,
     name='BA Generator',
     debug=False,
-    bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,  # Show console window - user dapat stop dengan CTRL+C atau close window
-    disable_windowed_traceback=False,
-    argv_emulation=False,
-    target_arch=None,
-    codesign_identity=None,
-    entitlements_file=None,
-    # icon='icon.ico'  # Uncomment jika ada file icon.ico
+    console=False,  # FINAL RELEASE (NO CONSOLE)
 )
 
 coll = COLLECT(
