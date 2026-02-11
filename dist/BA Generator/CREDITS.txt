@@ -3,7 +3,7 @@ BA GENERATOR - Sistem Generator Berita Acara Terintegrasi
 ============================================================================
 
 Version: 1.0.0
-Release Date: 05/02/2026
+Release Date: 11/02/2026
 
 PROGRAM AKTUALISASI LATSAR 2025
 
