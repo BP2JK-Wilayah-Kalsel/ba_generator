@@ -937,6 +937,146 @@ async function loadKabupatenData() {
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
     loadKabupatenData();
+    
+    // Add event listeners for document 03 and z03 toggle (Mutual Exclusion)
+    const row03 = document.querySelector('tr[data-doc="03"]');
+    const checkbox03 = row03 ? row03.querySelector('.doc-checkbox') : null;
+    const input03 = row03 ? row03.querySelector('input[name="nomor_surat_1"]') : null;
+
+    const rowz03 = document.querySelector('tr[data-doc="z03"]');
+    const checkboxz03 = rowz03 ? rowz03.querySelector('.doc-checkbox') : null;
+    const inputz03 = rowz03 ? rowz03.querySelector('input[name="nomor_surat_1"]') : null;
+    
+    if (checkbox03 && input03 && checkboxz03 && inputz03) {
+        
+        // Initial State Sync
+        if (checkboxz03.checked) {
+             input03.disabled = true;
+            //  checkbox03.checked = false;
+             inputz03.disabled = false;
+        } else if (checkbox03.checked) {
+             inputz03.disabled = true;
+            //  checkboxz03.checked = false;
+             input03.disabled = false;
+        }
+
+        // Listener for 03
+        checkbox03.addEventListener('change', function() {
+            if (this.checked) {
+                // 03 Selected -> Disable z03
+                input03.disabled = false;
+                
+                // checkboxz03.checked = false;
+                inputz03.disabled = true;
+                inputz03.value = ''; 
+            } else {
+                // 03 Unselected -> Enable z03
+                input03.disabled = true;
+                input03.value = '';
+                
+                // checkboxz03.checked = true;
+                inputz03.disabled = false;
+            }
+        });
+
+        // Listener for z03
+        checkboxz03.addEventListener('change', function() {
+            if (this.checked) {
+                // z03 Selected -> Disable 03
+                inputz03.disabled = false;
+                
+                checkbox03.checked = false;
+                input03.disabled = true;
+                input03.value = '';
+            } else {
+                // z03 Unselected -> Enable 03
+                inputz03.disabled = true;
+                inputz03.value = '';
+                
+                checkbox03.checked = true;
+                input03.disabled = false;
+            }
+        });
+    }
+
+    // SIRUP API Fetcher
+    const kodeRupInput = document.getElementById('kode_rup');
+    if (kodeRupInput) {
+        kodeRupInput.addEventListener('change', async function() {
+            const kodeRup = this.value.trim();
+            if (kodeRup && kodeRup.length > 5) {
+                try {
+                    // Show loading state
+                    const originalCursor = document.body.style.cursor;
+                    document.body.style.cursor = 'wait';
+                    
+                    const response = await fetch(`/api/sirup/detail/${kodeRup}`);
+                    const data = await response.json();
+                    
+                    if (data.success && data.html) {
+                        // Parse HTML
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(data.html, 'text/html');
+                        
+                        // Extract "Nama Paket" and "Total Pagu"
+                        // Look for label "Nama Paket" in table cells
+                        const tds = doc.querySelectorAll('td');
+                        let namaPaket = '';
+                        let nilaiPagu = '';
+                        
+                        for (let i = 0; i < tds.length; i++) {
+                            const text = tds[i].textContent.trim();
+                            if (text === 'Nama Paket' && tds[i+1]) {
+                                namaPaket = tds[i+1].textContent.trim();
+                            }
+                            
+                            if (text === 'Total Pagu' && tds[i+1]) {
+                                nilaiPagu = tds[i+1].textContent.trim();
+                            }
+
+                            if (namaPaket && nilaiPagu) break;
+                        }
+                        
+                        if (namaPaket) {
+                            const namaPaketInput = document.getElementById('nama_paket');
+                            if (namaPaketInput) {
+                                namaPaketInput.value = namaPaket;
+                                // Flash effect to indicate update
+                                namaPaketInput.style.backgroundColor = '#e8f0fe';
+                                setTimeout(() => {
+                                    namaPaketInput.style.backgroundColor = '';
+                                }, 1000);
+                            }
+                        }
+
+                        if (nilaiPagu) {
+                            const nilaiPaguInput = document.getElementById('nilai_pagu');
+                            if (nilaiPaguInput) {
+                                // Clean up the value: remove non-numeric characters (Rp, dots, etc)
+                                const cleanValue = nilaiPagu.replace(/[^0-9]/g, '');
+                                nilaiPaguInput.value = cleanValue;
+                                
+                                // Trigger update for "Terbilang"
+                                if (typeof updateTerbilangPagu === 'function') {
+                                    updateTerbilangPagu();
+                                }
+
+                                // Flash effect to indicate update
+                                nilaiPaguInput.style.backgroundColor = '#e8f0fe';
+                                setTimeout(() => {
+                                    nilaiPaguInput.style.backgroundColor = '';
+                                }, 1000);
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching SIRUP data:', error);
+                } finally {
+                    document.body.style.cursor = 'default';
+                }
+            }
+        });
+    }
 });
 
 

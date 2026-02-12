@@ -19,7 +19,7 @@
         "id": "003",
         "name": "Balai Jasa Konstruksi Wilayah V Banjarmasin",
         "acronym": "BJKW V Banjarmasin",
-        "unor_code": "003"
+        "unor_code": "004"
       },
       {
         "id": "004",
@@ -37,7 +37,7 @@
         "id": "006",
         "name": "Balai Penataan Bangunan, Prasarana dan Kawasan Kalimantan Selatan",
         "acronym": "BPBPK Kalimantan Selatan",
-        "unor_code": "006"
+        "unor_code": "003"
       }
     ],
     "total": 7

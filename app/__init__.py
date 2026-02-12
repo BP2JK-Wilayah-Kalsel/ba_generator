@@ -39,6 +39,11 @@ def create_app(config_object='config.DefaultConfig'):
     # `static/` directory for static assets.
     app = Flask(__name__, instance_relative_config=False,  template_folder="templates", static_folder=static_dir)
     app.config.from_object(config_object)
+    
+    # Force auto reload templates
+    app.jinja_env.auto_reload = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    
     # register blueprints (use lightweight routes during incremental refactor)
     from .simple_routes import bp as main_bp
     app.register_blueprint(main_bp)

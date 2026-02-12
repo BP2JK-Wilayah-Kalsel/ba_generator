@@ -83,7 +83,7 @@ DOCUMENT_TYPES_FISIK = {
     '07': 'Memorandum Penetapan Dokumen Pemilihan',
     '08': 'BA Penetapan Dokumen Pemilihan',
     'z03': 'Memorandum BA Reviu Persiapan Pengadaan (Tidak Sesuai)',
-    'z04': 'Surat Penetapan BA Persiapan Pengadaan PPK (Tidak Sesuai)',
+    'z04': 'Dokumen Penetapan BA Persiapan Pengadaan PPK (Tidak Sesuai)',
 }
 
 

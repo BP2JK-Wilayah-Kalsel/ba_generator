@@ -36,6 +36,48 @@ def proxy_wilayah(subpath: str) -> Any:
         return jsonify({'error': str(e)}), 500
 
 
+@bp.route('/api/sirup/detail/<kode_rup>')
+def get_sirup_detail(kode_rup: str) -> Any:
+    """
+    Proxy to SIRUP API to fetch package details.
+    Handles cookies automatically as requested.
+    """
+    try:
+        session = requests.Session()
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'
+        }
+        
+        # 1. Visit a main page to get cookies (e.g., a rekap page)
+        init_url = 'https://sirup.inaproc.id/sirup/rekap/penyedia/K73'
+        # We perform a HEAD or GET request to initialize session cookies
+        session.get(init_url, headers=headers, timeout=10)
+        
+        # 2. Request the detail
+        detail_url = f'https://sirup.inaproc.id/sirup/home/detailPaketPenyediaPublic2017/{kode_rup}'
+        
+        # Add headers similar to the user's curl request
+        headers['Referer'] = init_url
+        headers['X-Requested-With'] = 'XMLHttpRequest'
+        headers['Sec-Fetch-Dest'] = 'empty'
+        headers['Sec-Fetch-Mode'] = 'cors'
+        headers['Sec-Fetch-Site'] = 'same-origin'
+        
+        response = session.get(detail_url, headers=headers, timeout=15)
+        
+        if response.status_code != 200:
+             return jsonify({'success': False, 'message': f'Error fetching SIRUP: {response.status_code}'}), 400
+             
+        # Return the HTML content for client-side parsing
+        return jsonify({'success': True, 'html': response.text})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
+
 @bp.route('/api/save_defaults', methods=['POST'])
 def save_defaults() -> Any:
     data = request.get_json() or {}
