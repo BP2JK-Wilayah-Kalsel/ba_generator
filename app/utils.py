@@ -60,13 +60,13 @@ DOCUMENT_TYPES = {
     'DHP2': '!Daftar Hadir Prareviu 2',
     'DH' : '!Daftar Hadir',
     '01': 'BA Reviu Persiapan Pengadaan',
-    '02': 'Memorandum BA Reviu Persiapan Pengadaan',
-    '03': 'Surat Penetapan BA Persiapan Pengadaan PPK',
-    '04': 'BA Reviu Dokumen Kualifikasi',
-    '05': 'BA Reviu Dokumen Seleksi',
-    '06': 'Berita Acara Pemberian Penjelasan Kualifikasi',
-    '07': 'Memorandum Penetapan Dokumen Pemilihan',
-    '08': 'BA Penetapan Dokumen Pemilihan'
+    # '02': 'Memorandum BA Reviu Persiapan Pengadaan',
+    '02': 'Surat Penetapan BA Persiapan Pengadaan PPK',
+    '03': 'BA Reviu Dokumen Kualifikasi',
+    '04': 'BA Reviu Dokumen Seleksi',
+    # '06': 'Berita Acara Pemberian Penjelasan Kualifikasi',
+    # '07': 'Memorandum Penetapan Dokumen Pemilihan',
+    '05': 'BA Penetapan Dokumen Pemilihan'
 }
 
 DOCUMENT_TYPES_FISIK = {
