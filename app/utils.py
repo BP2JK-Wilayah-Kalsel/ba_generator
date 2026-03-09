@@ -66,7 +66,7 @@ DOCUMENT_TYPES = {
     '03': 'BA Reviu Dokumen Seleksi',
     # '06': 'Berita Acara Pemberian Penjelasan Kualifikasi',
     # '07': 'Memorandum Penetapan Dokumen Pemilihan',
-    '04': 'BA Penetapan Dokumen Pemilihan'
+    # '04': 'BA Penetapan Dokumen Pemilihan'
 }
 
 DOCUMENT_TYPES_FISIK = {
