@@ -72,6 +72,11 @@
         "id": "014",
         "name": "Satuan Kerja Balai Pelaksanaan Jalan Nasional Kalimantan Selatan",
         "association_code": "001"
+      },
+      {
+        "id": "015",
+        "name": "Satuan Kerja Perencanaan dan Pengawasan Jalan Nasional Kalimantan Selatan",
+        "association_code": "001"
       }
     ],
     "total": 14
