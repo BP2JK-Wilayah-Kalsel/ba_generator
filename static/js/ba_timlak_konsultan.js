@@ -180,6 +180,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         });
     }
+
+    const masterFolderInput = document.getElementById('masterFolderPath');
+    if (masterFolderInput) {
+        setDocumentLists(masterFolderInput.value);
+    }
 });
 
 // Global variables for members
@@ -1208,12 +1213,13 @@ function showResults(data, keywords) {
 function setDocumentLists(folderName) {
     console.log('Master folder changed to:', folderName);
 
-    // Documents to toggle: 04, 05, 06, 07, 08
-    const docsToToggle = ['04', '05', '06', '07', '08'];
+    // Documents that are only available for special template folders.
+    const docsToToggle = ['04', '05', '06', '07', '08', 'z02', 'z03'];
 
     // Determine state based on folder name
     // If RO (Repeat Order), these docs should be unchecked and disabled
     const isRO = folderName === 'Master BA Timlak RO Konsultan';
+    const isPL = folderName === 'Master BA Timlak PL Konsultan';
 
     docsToToggle.forEach(docValue => {
         // Find checkbox by value
@@ -1221,8 +1227,11 @@ function setDocumentLists(folderName) {
         if (checkbox) {
             const row = checkbox.closest('tr');
 
-            if (isRO) {
-                // For RO: Uncheck and Disable
+            const isPLDocument = docValue === 'z02' || docValue === 'z03';
+            const shouldDisable = isRO || (isPLDocument && !isPL);
+
+            if (shouldDisable) {
+                // Disable documents that do not belong to the selected template.
                 checkbox.checked = false;
                 checkbox.disabled = true;
 
@@ -1236,7 +1245,6 @@ function setDocumentLists(folderName) {
                     });
                 }
             } else {
-                // For Standard: Check and Enable
                 checkbox.checked = true;
                 checkbox.disabled = false;
 

@@ -70,14 +70,14 @@
                 <h4 class="text-primary"><i class="fas fa-folder me-2"></i>Master Folder Template</h4>
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="form-label">Pilih Master Folder</label>
+                        <label classs="form-label">Pilih Master Folder</label>
                         <div class="input-group">
                             <select type="text" class="form-control" id="masterFolderPath" name="masterFolderPath"
                                 onchange="setDocumentLists(this.value)" >
                                 <option value="Master BA Timlak Konsultan">Template BA Timlak Konsultan</option>
-                                <option value="Master BA Timlak Konsultan Non Konstruksi">Template BA Timlak Konsultan Non Konsatruksi</option>
-                                <option value="Master BA Timlak RO Konsultan">Template BA Timlak Repeat Order Konsultan
-                                </option>
+                                <option value="Master BA Timlak Konsultan Non Konstruksi">Template BA Timlak Konsultan Non Konstruksi</option>
+                                <option value="Master BA Timlak PL Konsultan">Template BA Timlak Penunjukkan Langsung Konsultan</option>
+                                <option value="Master BA Timlak RO Konsultan">Template BA Timlak Penunjukkan Langsung (Repeat Order) Konsultan</option>
                             </select>
                         </div>
                     </div>
@@ -455,6 +455,69 @@
                                 <td>
                                     <button type="button" class="btn btn-info btn-sm me-1"
                                         onclick="previewDocument('01')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="z02">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="z02"
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>z02</td>
+                                <td>Memorandum BA Reviu Persiapan Pengadaan</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small></td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('z02')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="z03">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="z03"
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>z03</td>
+                                <td>Surat Penetapan BA Persiapan Pengadaan PPK</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small></td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('z03')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr data-doc="04">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="04" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>04</td>
+                                <td>BA Reviu Dokumen Pemilihan</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small></td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('04')" title="Preview dokumen">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </td>
