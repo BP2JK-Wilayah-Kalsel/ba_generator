@@ -313,17 +313,11 @@
 
             <!-- Nomor dan Tanggal Undangan Rapat -->
             <div class="form-section">
-                <h4><i class="fas fa-calendar-alt"></i> Nomor dan Tanggal Undangan Rapat Pokja</h4>
+                <h4><i class="fas fa-calendar-alt"></i> Nomor dan Tanggal Undangan Reviu Pokja</h4>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12 mb-3">
                         <label class="form-label">Nomor Undangan Rapat</label>
-                        <input type="text" class="form-control" id="nomor_undangan_rapat" name="nomor_undangan_rapat"
-                            readonly style="background-color: #f8f9fa; cursor: not-allowed;"
-                            placeholder="{kode_klasifikasi}/B/Bp2jk17/POKJA-{kode_pokja}/2026/01">
-                        <small class="text-muted">
-                            <i class="fas fa-info-circle"></i> Nomor otomatis ter-generate berdasarkan Kode Pokja dan
-                            Tahun Anggaran
-                        </small>
+                        <input type="number" class="form-control" id="nomor_undangan_rapat" name="nomor_undangan_rapat">
                     </div>
                 </div>
             </div>
@@ -460,112 +454,6 @@
                                 </td>
                             </tr>
 
-                            <tr data-doc="z02">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="z02"
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>z02</td>
-                                <td>Memorandum BA Reviu Persiapan Pengadaan</td>
-                                <td><small class="text-default fst-italic">
-                                        Tidak Ada
-                                    </small></td>
-                                <td><small class="text-danger fst-italic">
-                                        Diatur diatas
-                                    </small></td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('z02')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr data-doc="z03">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="z03"
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>z03</td>
-                                <td>Surat Penetapan BA Persiapan Pengadaan PPK</td>
-                                <td><small class="text-default fst-italic">
-                                        Tidak Ada
-                                    </small></td>
-                                <td><small class="text-danger fst-italic">
-                                        Diatur diatas
-                                    </small></td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('z03')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr data-doc="04">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="04" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>04</td>
-                                <td>BA Reviu Dokumen Pemilihan</td>
-                                <td><small class="text-default fst-italic">
-                                        Tidak Ada
-                                    </small></td>
-                                <td><small class="text-danger fst-italic">
-                                        Diatur diatas
-                                    </small></td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('04')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <!-- <tr data-doc="02">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="02" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>02</td>
-                                <td>Memorandum BA Reviu Persiapan Pengadaan</td>
-                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_1">
-                                </td>
-                                <td><small class="text-danger fst-italic">
-                                        Diatur diatas
-                                    </small>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('02')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr> -->
-
-                            <!-- <tr data-doc="02">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="02" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>02</td>
-                                <td>Surat Penetapan BA Persiapan Pengadaan PPK</td>
-                                <td><small class="text-default fst-italic">
-                                        Tidak Ada
-                                    </small></td>
-                                <td><small class="text-danger fst-italic">
-                                        Diatur diatas
-                                    </small>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('02')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr> -->
-
                             <tr data-doc="02">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="02" checked
@@ -609,70 +497,46 @@
                                     </button>
                                 </td>
                             </tr>
-
-                            <!-- <tr data-doc="06">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="06" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>06</td>
-                                <td>Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan</td>
-                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_2">
-                                </td>
-                                <td><small class="text-danger fst-italic">
-                                        Diatur diatas
-                                    </small>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('06')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr data-doc="07">
-                                <td>
-                                    <input type="checkbox" class="form-check-input doc-checkbox" value="07" checked
-                                        title="Pilih dokumen ini">
-                                </td>
-                                <td>07</td>
-                                <td>Memorandum Penetapan Dokumen Pemilihan</td>
-                                <td><input type="number" class="form-control form-control-sm" name="nomor_surat_3">
-                                </td>
-                                <td><small class="text-danger fst-italic">
-                                        Diatur diatas
-                                    </small>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm me-1"
-                                        onclick="previewDocument('07')" title="Preview dokumen">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr> -->
-
-                            <!-- <tr data-doc="04">
+                            <tr data-doc="04">
                                 <td>
                                     <input type="checkbox" class="form-check-input doc-checkbox" value="04" checked
                                         title="Pilih dokumen ini">
                                 </td>
                                 <td>04</td>
-                                <td>BA Penetapan Dokumen Pemilihan</td>
+                                <td>BA Reviu Dokumen Pemilihan</td>
                                 <td><small class="text-default fst-italic">
                                         Tidak Ada
                                     </small></td>
                                 <td><small class="text-danger fst-italic">
                                         Diatur diatas
-                                    </small>
-                                </td>
+                                    </small></td>
                                 <td>
                                     <button type="button" class="btn btn-info btn-sm me-1"
                                         onclick="previewDocument('04')" title="Preview dokumen">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </td>
-                            </tr> -->
+                            </tr>
+                            <tr data-doc="05">
+                                <td>
+                                    <input type="checkbox" class="form-check-input doc-checkbox" value="05" checked
+                                        title="Pilih dokumen ini">
+                                </td>
+                                <td>05</td>
+                                <td>BA Reviu Dokumen Kualifikasi</td>
+                                <td><small class="text-default fst-italic">
+                                        Tidak Ada
+                                    </small></td>
+                                <td><small class="text-danger fst-italic">
+                                        Diatur diatas
+                                    </small></td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm me-1"
+                                        onclick="previewDocument('05')" title="Preview dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

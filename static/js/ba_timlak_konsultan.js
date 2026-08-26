@@ -121,10 +121,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(data => {
                     console.log('API Response:', data);
                     // Check if data is valid
-                    if (masterFolderPath === 'Master BA Timlak RO Konsultan' && data.data.anggota_pokja.length !== 3) {
-                        throw new Error('Data Pokja tidak valid. Harus 3 anggota Pokja untuk BA Timlak RO Konsultan.');
-                    } else if (masterFolderPath === 'Master BA Timlak Konsultan' && data.data.anggota_pokja.length !== 5) {
-                        throw new Error('Data Pokja tidak valid. Harus 5 anggota Pokja untuk BA Timlak Konsultan.');
+                    if (masterFolderPath === 'Master BA Timlak RO Konsultan' || masterFolderPath === 'Master BA Timlak PL Konsultan') {
+                        if (data.data.anggota_pokja.length !== 3) {
+                            throw new Error('Data Pokja tidak valid. Harus 3 anggota Pokja untuk BA Timlak RO/PL Konsultan.');
+                        }
+                    } else if (masterFolderPath === 'Master BA Timlak Konsultan' || masterFolderPath === 'Master BA Timlak Konsultan Non Konstruksi') {
+                        if (data.data.anggota_pokja.length !== 5) {
+                            throw new Error('Data Pokja tidak valid. Harus 5 anggota Pokja untuk BA Timlak Konsultan.');
+                        }
                     }
                     Swal.fire({
                         icon: 'success',
@@ -566,41 +570,6 @@ function createTimlakTableRow(no, role, member, roleKey, memberValue) {
                 </tr>
             `;
 }
-
-// Generate nomor undangan rapat otomatis
-function updateNomorUndanganRapat() {
-    const kodeKlasifikasiInput = document.getElementById('kode_klasifikasi');
-    const kodePokjaInput = document.getElementById('kode_pokja');
-    const nomorUndanganInput = document.getElementById('nomor_undangan_rapat');
-
-    if (kodeKlasifikasiInput && nomorUndanganInput) {
-        const kodeKlasifikasi = kodeKlasifikasiInput.value || '{kode_klasifikasi}';
-        const kodePokja = kodePokjaInput ? kodePokjaInput.value : '{kode_pokja}';
-        const year = new Date().getFullYear();
-
-        // Format: {kode_klasifikasi}/Und/Bp2jk17/POKJA-{kode_pokja}/{year}/{month}
-        nomorUndanganInput.value = `${kodeKlasifikasi}/B/Bp2jk17/POKJA-${kodePokja}/${year}/01`;
-    }
-}
-
-// Panggil saat kode_pokja atau kode_klasifikasi berubah
-document.addEventListener('DOMContentLoaded', function () {
-    const kodePokjaInput = document.getElementById('kode_pokja');
-    const kodeKlasifikasiInput = document.getElementById('kode_klasifikasi');
-
-    if (kodeKlasifikasiInput) {
-        kodeKlasifikasiInput.addEventListener('input', updateNomorUndanganRapat);
-        kodeKlasifikasiInput.addEventListener('change', updateNomorUndanganRapat);
-    }
-
-    if (kodePokjaInput) {
-        kodePokjaInput.addEventListener('input', updateNomorUndanganRapat);
-        kodePokjaInput.addEventListener('change', updateNomorUndanganRapat);
-    }
-
-    // Initial update
-    updateNomorUndanganRapat();
-});
 
 // Preview document with replaced keywords
 async function previewDocument(docCode) {
@@ -1211,53 +1180,39 @@ function showResults(data, keywords) {
 
 // Checkbox management functions
 function setDocumentLists(folderName) {
-    console.log('Master folder changed to:', folderName);
+     console.log('Master folder changed to:', folderName);
 
-    // Documents that are only available for special template folders.
-    const docsToToggle = ['04', '05', '06', '07', '08', 'z02', 'z03'];
-
-    // Determine state based on folder name
-    // If RO (Repeat Order), these docs should be unchecked and disabled
+    const isK = folderName === 'Master BA Timlak Konsultan';
+    const isKnK = folderName === 'Master BA Timlak Konsultan Non Konstruksi';
     const isRO = folderName === 'Master BA Timlak RO Konsultan';
     const isPL = folderName === 'Master BA Timlak PL Konsultan';
 
-    docsToToggle.forEach(docValue => {
-        // Find checkbox by value
-        const checkbox = document.querySelector(`.doc-checkbox[value="${docValue}"]`);
-        if (checkbox) {
-            const row = checkbox.closest('tr');
+    let documentsToUncheck = [];
 
-            const isPLDocument = docValue === 'z02' || docValue === 'z03';
-            const shouldDisable = isRO || (isPLDocument && !isPL);
+    if (isK || isKnK) {
+        documentsToUncheck = ['04', '05'];
+    } else if (isPL) {
+        documentsToUncheck = ['01', '02', '05'];
+    } else if (isRO) {
+        documentsToUncheck = ['01', '02', '04'];
+    }
 
-            if (shouldDisable) {
-                // Disable documents that do not belong to the selected template.
-                checkbox.checked = false;
-                checkbox.disabled = true;
+    document.querySelectorAll('.doc-checkbox').forEach(checkbox => {
+        const shouldDisable = documentsToUncheck.includes(checkbox.value);
+        const row = checkbox.closest('tr');
 
-                // Visually indicate disabled state
-                if (row) {
-                    row.style.opacity = '0.5';
-                    row.style.backgroundColor = '#e9ecef'; // Light gray
-                    // Disable other inputs in the row if any
-                    row.querySelectorAll('input:not(.doc-checkbox), select, button').forEach(el => {
-                        el.disabled = true;
-                    });
-                }
-            } else {
-                checkbox.checked = true;
-                checkbox.disabled = false;
+        checkbox.checked = !shouldDisable;
+        checkbox.disabled = shouldDisable;
 
-                // Restore visual state
-                if (row) {
-                    row.style.opacity = '1';
-                    row.style.backgroundColor = '';
-                    // Enable other inputs in the row
-                    row.querySelectorAll('input:not(.doc-checkbox), select, button').forEach(el => {
-                        el.disabled = false;
-                    });
-                }
-            }
+        if (row) {
+            row.style.opacity = shouldDisable ? '0.5' : '1';
+            row.style.backgroundColor = shouldDisable ? '#e9ecef' : '';
+
+            row.querySelectorAll(
+                'input:not(.doc-checkbox), select, button'
+            ).forEach(element => {
+                element.disabled = shouldDisable;
+            });
         }
     });
 
