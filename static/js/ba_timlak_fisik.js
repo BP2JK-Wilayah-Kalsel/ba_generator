@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadMembersFromCSV();
     // Load Unit Organisasi Data
     loadUnitOrganizationData();
-     // Load Direktorat Teknis Data
+    // Load Direktorat Teknis Data
     loadDirektoratTeknisData();
     // Load Balai Data
     loadBalaiData();
@@ -106,6 +106,8 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchPokjaBtn.addEventListener('click', function () {
             // Use kode_pokja as the input for Kode Pokja
             const kodePokja = document.getElementById('kode_pokja')?.value;
+            const masterFolderPath = document.getElementById('masterFolderPath')?.value;
+
             if (!kodePokja) {
                 alert('Silakan masukkan Kode Pokja terlebih dahulu');
                 return;
@@ -141,6 +143,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(data => {
                     console.log('API Response:', data);
+                    // Check if data is valid
+                    if (masterFolderPath === 'Master BA Timlak Fisik PL') {
+                        if (data.data.anggota_pokja.length !== 3) {
+                            throw new Error('Data Pokja tidak valid. Harus 3 anggota Pokja untuk BA Timlak RO/PL Fisik.');
+                        }
+                    } else if (masterFolderPath === 'Master BA Timlak Fisik') {
+                        if (data.data.anggota_pokja.length !== 5) {
+                            throw new Error('Data Pokja tidak valid. Harus 5 anggota Pokja untuk BA Timlak Fisik.');
+                        }
+                    }
                     Swal.fire({
                         icon: 'success',
                         title: 'Data Berhasil Diambil!',
@@ -177,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     document.getElementById('tanggal_sk_timlak').value = formattedDateTimlak;
 
-                    updatePokjaTable(data.data.anggota_pokja);
+                    updatePokjaTable(data.data.anggota_pokja, masterFolderPath);
                     updateTimlakTable(data.data.anggota_timlak);
                     // TODO: Map data to form fields here based on response structure
                 })
@@ -340,7 +352,7 @@ async function loadBalaiData() {
 
         // Clear existing options
         datalist.innerHTML = '';
-        if (result.success && result.data && result.data.lists) {   
+        if (result.success && result.data && result.data.lists) {
             balaiData = result.data.lists; // Store in global variable
             balaiData.forEach(doc => {
                 const option = document.createElement('option');
@@ -409,7 +421,7 @@ function updateDirektoratTeknisBalaiOptions() {
     const selectedUnitOrganisasiName = unitOrganisasiInput.value || '';
 
     // Find Unit Organisasi object (case-insensitive and trimmed match)
-    const selectedUnitOrganisasi = unitOrganisasiData.find(u => 
+    const selectedUnitOrganisasi = unitOrganisasiData.find(u =>
         u.name.trim().toLowerCase() === selectedUnitOrganisasiName.trim().toLowerCase()
     );
 
@@ -525,26 +537,42 @@ function updateKodeKlasifikasiOptions() {
 }
 
 // Update POKJA table based on role selections
-function updatePokjaTable(data) {
+function updatePokjaTable(data, masterFolderPath) {
     const nipKetua = data[0].nip.replace(/\s+/g, '');
     const nipSekretaris = data[1].nip.replace(/\s+/g, '');
     const nipAnggota1 = data[2].nip.replace(/\s+/g, '');
-    const nipAnggota2 = data[3].nip.replace(/\s+/g, '');
-    const nipAnggota3 = data[4].nip.replace(/\s+/g, '');
+    let nipAnggota2 = '';
+    let nipAnggota3 = '';
+
+    // Only fetch Anggota 2 and 3 if NOT Fisik PL
+    if (masterFolderPath !== 'Master BA Timlak Fisik PL') {
+        nipAnggota2 = data[3].nip.replace(/\s+/g, '');
+        nipAnggota3 = data[4].nip.replace(/\s+/g, '');
+    }
 
     //nama anggota
     const namaKetua = pokjaMembers.find(m => m.nip === nipKetua)?.nama || '';
     const namaSekretaris = pokjaMembers.find(m => m.nip === nipSekretaris)?.nama || '';
     const namaAnggota1 = pokjaMembers.find(m => m.nip === nipAnggota1)?.nama || '';
-    const namaAnggota2 = pokjaMembers.find(m => m.nip === nipAnggota2)?.nama || '';
-    const namaAnggota3 = pokjaMembers.find(m => m.nip === nipAnggota3)?.nama || '';
+
+    let namaAnggota2 = '';
+    let namaAnggota3 = '';
+
+    // Only fetch Anggota 2 and 3 if NOT Fisik PL
+    if (masterFolderPath !== 'Master BA Timlak Fisik PL') {
+        namaAnggota2 = pokjaMembers.find(m => m.nip === nipAnggota2)?.nama || '';
+        namaAnggota3 = pokjaMembers.find(m => m.nip === nipAnggota3)?.nama || '';
+    }
+
     const emailKetua = pokjaMembers.find(m => m.nip === nipKetua)?.email || '';
 
     document.getElementById('ketua_pokja').value = namaKetua;
     document.getElementById('sekre_pokja').value = namaSekretaris;
     document.getElementById('anggota_pokja1').value = namaAnggota1;
-    document.getElementById('anggota_pokja2').value = namaAnggota2;
-    document.getElementById('anggota_pokja3').value = namaAnggota3;
+    if (masterFolderPath !== 'Master BA Timlak Fisik PL') {
+        document.getElementById('anggota_pokja2').value = namaAnggota2;
+        document.getElementById('anggota_pokja3').value = namaAnggota3;
+    }
     document.getElementById('email_ketua_pokja').value = emailKetua;
 
     const tableBody = document.getElementById('pokja_members_table');
@@ -566,14 +594,17 @@ function updatePokjaTable(data) {
         tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota1, nip: nipAnggota1 }, 'anggota3', JSON.stringify({ nama: namaAnggota1, nip: nipAnggota1 }));
     }
 
-    // Add Anggota 2
-    if (namaAnggota2) {
-        tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota2, nip: nipAnggota2 }, 'anggota4', JSON.stringify({ nama: namaAnggota2, nip: nipAnggota2 }));
-    }
+    // Check if we should include more members (Only for non-RO Konsultan)
+    if (masterFolderPath !== 'Master BA Timlak Fisik PL') {
+        // Add Anggota 2
+        if (namaAnggota2) {
+            tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota2, nip: nipAnggota2 }, 'anggota4', JSON.stringify({ nama: namaAnggota2, nip: nipAnggota2 }));
+        }
 
-    // Add Anggota 3
-    if (namaAnggota3) {
-        tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota3, nip: nipAnggota3 }, 'anggota5', JSON.stringify({ nama: namaAnggota3, nip: nipAnggota3 }));
+        // Add Anggota 3
+        if (namaAnggota3) {
+            tableHTML += createPokjaTableRow(memberCount++, 'Anggota', { nama: namaAnggota3, nip: nipAnggota3 }, 'anggota5', JSON.stringify({ nama: namaAnggota3, nip: nipAnggota3 }));
+        }
     }
 
     if (tableHTML === '') {
@@ -806,11 +837,11 @@ async function previewDocument(docCode) {
 function addLokasiRow() {
     const tbody = document.querySelector('#lokasiTable tbody');
     const row = document.createElement('tr');
-    
+
     // Generate unique ID for datalist
     const uniqueId = 'list_kabupaten_' + Date.now();
     const uniqueIdKec = 'list_kecamatan_' + Date.now();
-    
+
     row.className = 'align-middle'; // Center content vertically
 
     row.innerHTML = `
@@ -847,7 +878,7 @@ function addLokasiRow() {
         </td>
     `;
     tbody.appendChild(row);
-    
+
     // Populate the new datalist
     const datalist = row.querySelector(`#${uniqueId}`);
     if (window.kabupatenData && datalist) {
@@ -880,24 +911,24 @@ async function handleKabupatenChange(input, targetDatalistId) {
     const row = input.closest('tr');
     const kecamatanInput = row.querySelector('.lokasi-kecamatan');
     const kecamatanDatalist = document.getElementById(targetDatalistId);
-    
+
     // Reset Kecamatan
     kecamatanInput.value = '';
     kecamatanInput.disabled = true;
     kecamatanDatalist.innerHTML = '';
-    
+
     const selectedName = input.value;
     const selectedKab = window.kabupatenData.find(k => k.name === selectedName);
-    
+
     if (selectedKab) {
         kecamatanInput.disabled = false;
         kecamatanInput.placeholder = "Loading...";
-        
+
         try {
             // Fetch district data from API via local proxy to avoid CORS
             const response = await fetch(`/api/proxy/wilayah/districts/${selectedKab.code}.json`);
             if (!response.ok) throw new Error('Failed to load districts');
-            
+
             const result = await response.json();
             if (result.data) {
                 result.data.forEach(dist => {
@@ -923,7 +954,7 @@ async function loadKabupatenData() {
             throw new Error('Failed to load Kabupaten data');
         }
         const result = await response.json();
-        
+
         if (result.data) {
             window.kabupatenData = result.data;
             console.log(`✅ Kabupaten data loaded: ${result.data.length} items`);
@@ -935,9 +966,9 @@ async function loadKabupatenData() {
 }
 
 // Initialize
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadKabupatenData();
-    
+
     // Add event listeners for document 03 and z03 toggle (Mutual Exclusion)
     const row03 = document.querySelector('tr[data-doc="03"]');
     const checkbox03 = row03 ? row03.querySelector('.doc-checkbox') : null;
@@ -946,45 +977,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const rowz03 = document.querySelector('tr[data-doc="z03"]');
     const checkboxz03 = rowz03 ? rowz03.querySelector('.doc-checkbox') : null;
     const inputz03 = rowz03 ? rowz03.querySelector('input[name="nomor_surat_1"]') : null;
-    
+
     if (checkbox03 && input03 && checkboxz03 && inputz03) {
-        
+
         // Initial State Sync
         if (checkboxz03.checked) {
-             input03.disabled = true;
+            input03.disabled = true;
             //  checkbox03.checked = false;
-             inputz03.disabled = false;
+            inputz03.disabled = false;
         } else if (checkbox03.checked) {
-             inputz03.disabled = true;
+            inputz03.disabled = true;
             //  checkboxz03.checked = false;
-             input03.disabled = false;
+            input03.disabled = false;
         }
 
         // Listener for 03
-        checkbox03.addEventListener('change', function() {
+        checkbox03.addEventListener('change', function () {
             if (this.checked) {
                 // 03 Selected -> Disable z03
                 input03.disabled = false;
-                
+
                 // checkboxz03.checked = false;
                 inputz03.disabled = true;
-                inputz03.value = ''; 
+                inputz03.value = '';
             } else {
                 // 03 Unselected -> Enable z03
                 input03.disabled = true;
                 input03.value = '';
-                
+
                 // checkboxz03.checked = true;
                 inputz03.disabled = false;
             }
         });
 
         // Listener for z03
-        checkboxz03.addEventListener('change', function() {
+        checkboxz03.addEventListener('change', function () {
             if (this.checked) {
                 // z03 Selected -> Disable 03
                 inputz03.disabled = false;
-                
+
                 checkbox03.checked = false;
                 input03.disabled = true;
                 input03.value = '';
@@ -992,7 +1023,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // z03 Unselected -> Enable 03
                 inputz03.disabled = true;
                 inputz03.value = '';
-                
+
                 checkbox03.checked = true;
                 input03.disabled = false;
             }
@@ -1002,41 +1033,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // SIRUP API Fetcher
     const kodeRupInput = document.getElementById('kode_rup');
     if (kodeRupInput) {
-        kodeRupInput.addEventListener('change', async function() {
+        kodeRupInput.addEventListener('change', async function () {
             const kodeRup = this.value.trim();
             if (kodeRup && kodeRup.length > 5) {
                 try {
                     // Show loading state
                     const originalCursor = document.body.style.cursor;
                     document.body.style.cursor = 'wait';
-                    
+
                     const response = await fetch(`/api/sirup/detail/${kodeRup}`);
                     const data = await response.json();
-                    
+
                     if (data.success && data.html) {
                         // Parse HTML
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(data.html, 'text/html');
-                        
+
                         // Extract "Nama Paket" and "Total Pagu"
                         // Look for label "Nama Paket" in table cells
                         const tds = doc.querySelectorAll('td');
                         let namaPaket = '';
                         let nilaiPagu = '';
-                        
+
                         for (let i = 0; i < tds.length; i++) {
                             const text = tds[i].textContent.trim();
-                            if (text === 'Nama Paket' && tds[i+1]) {
-                                namaPaket = tds[i+1].textContent.trim();
+                            if (text === 'Nama Paket' && tds[i + 1]) {
+                                namaPaket = tds[i + 1].textContent.trim();
                             }
-                            
-                            if (text === 'Total Pagu' && tds[i+1]) {
-                                nilaiPagu = tds[i+1].textContent.trim();
+
+                            if (text === 'Total Pagu' && tds[i + 1]) {
+                                nilaiPagu = tds[i + 1].textContent.trim();
                             }
 
                             if (namaPaket && nilaiPagu) break;
                         }
-                        
+
                         if (namaPaket) {
                             const namaPaketInput = document.getElementById('nama_paket');
                             if (namaPaketInput) {
@@ -1055,7 +1086,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 // Clean up the value: remove non-numeric characters (Rp, dots, etc)
                                 const cleanValue = nilaiPagu.replace(/[^0-9]/g, '');
                                 nilaiPaguInput.value = cleanValue;
-                                
+
                                 // Trigger update for "Terbilang"
                                 if (typeof updateTerbilangPagu === 'function') {
                                     updateTerbilangPagu();
@@ -1161,7 +1192,7 @@ function collectAllKeywords(formData) {
     keywords.terbilang_pagu = terbilang(nilaiPagu, false) + ' rupiah';
     keywords.nilai_hps = formatCurrency(nilaiHps);
     keywords.terbilang_hps = terbilang(nilaiHps, false) + ' rupiah';
-    
+
     keywords.metode_pemilihan_front = (formData.get('metode_pemilihan') || '').split(' ')[0];
 
     // Lokasi dan Lingkup Pekerjaan
@@ -1171,16 +1202,16 @@ function collectAllKeywords(formData) {
         const prov = row.querySelector('.lokasi-provinsi').value;
         const kab = row.querySelector('.lokasi-kabupaten').value;
         const kec = row.querySelector('.lokasi-kecamatan').value;
-        
+
         let parts = [];
         if (prov) parts.push(`Provinsi ${prov}`);
         if (kab) parts.push(kab); // Assuming user types "Kabupaten X" or "Kota Y"
         if (kec) parts.push(`Kecamatan ${kec}`);
-        
+
         if (parts.length > 0) {
             lokasiList.push(parts.join(', '));
         }
-        
+
         // Add structured data
         if (prov || kab || kec) {
             if (!keywords.list_lokasi_pekerjaan) keywords.list_lokasi_pekerjaan = [];
@@ -1193,17 +1224,17 @@ function collectAllKeywords(formData) {
     });
     // Join multiple locations with semicolons or newlines as needed
     keywords.lokasi_pekerjaan = lokasiList.length > 0 ? lokasiList.join('; ') : '';
-    
+
     // Lingkup Pekerjaan
     const lingkupRows = document.querySelectorAll('#lingkupTable tbody tr');
     const lingkupList = [];
     lingkupRows.forEach(row => {
         const val = row.querySelector('.lingkup-input').value;
         if (val) {
-             lingkupList.push(val);
+            lingkupList.push(val);
         }
     });
-    
+
     keywords.lingkup_pekerjaan = lingkupList.length > 0 ? lingkupList.join('; ') : '';
     keywords.list_lingkup = lingkupList; // Array of strings
 
@@ -1506,7 +1537,7 @@ function showResults(data, keywords) {
         content += '<h5>Dokumen berhasil diproses:</h5>';
         content += '<a href="/download_results" class="btn btn-success btn-lg mb-3"><i class="fas fa-download me-2"></i> Download Semua Hasil</a>';
         content += '</div>';
-        
+
         data.files.forEach(file => {
             content += `
                 <div class="card mb-3">
