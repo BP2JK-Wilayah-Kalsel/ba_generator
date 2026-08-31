@@ -57,7 +57,6 @@ MONTH_NAMES = [
 # Document type mapping untuk nomor urut surat (shared constant)
 DOCUMENT_TYPES = {
     'DHP1': '!Daftar Hadir Prareviu 1',
-    'DHP2': '!Daftar Hadir Prareviu 2',
     'DH' : '!Daftar Hadir',
     '01': 'BA Reviu Persiapan Pengadaan',
     '02': 'BA Reviu Dokumen Kualifikasi',
@@ -68,19 +67,18 @@ DOCUMENT_TYPES = {
 
 DOCUMENT_TYPES_FISIK = {
     'DHP1': '!Daftar Hadir Prareviu 1',
-    'DHP2': '!Daftar Hadir Prareviu 2',
     'DHS': '!Daftar Hadir SIPASTI',
     'DH' : '!Daftar Hadir',
     '01': 'BA Reviu HPS melalui SIPASTI',
-    '02': 'Memorandum BA Reviu Persiapan Pengadaan',
-    '03': 'BA Reviu Persiapan Pengadaan',
-    '04': 'Surat Penetapan BA Persiapan Pengadaan PPK',
-    '05': 'BA Hasil Reviu Dokumen Pemilihan',
-    '06': 'Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan',
-    '07': 'Memorandum Penetapan Dokumen Pemilihan',
-    '08': 'BA Penetapan Dokumen Pemilihan',
-    'z03': 'Memorandum BA Reviu Persiapan Pengadaan (Tidak Sesuai)',
-    'z04': 'Dokumen Penetapan BA Persiapan Pengadaan PPK (Tidak Sesuai)',
+    # '02': 'Memorandum BA Reviu Persiapan Pengadaan',
+    '02': 'BA Reviu Persiapan Pengadaan',
+    # '04': 'Surat Penetapan BA Persiapan Pengadaan PPK',
+    '03': 'BA Hasil Reviu Dokumen Pemilihan',
+    # '06': 'Catatan Pemeriksaan BA Hasil Reviu Dokumen Pemilihan',
+    # '07': 'Memorandum Penetapan Dokumen Pemilihan',
+    # '08': 'BA Penetapan Dokumen Pemilihan',
+    # 'z03': 'Memorandum BA Reviu Persiapan Pengadaan (Tidak Sesuai)',
+    # 'z04': 'Dokumen Penetapan BA Persiapan Pengadaan PPK (Tidak Sesuai)',
 }
 
 

@@ -679,16 +679,6 @@ function collectAllKeywords(formData) {
         keywords.hari_DHP1 = '';
     }
 
-    //Data DHP2
-    const tglDHP2 = formData.get('tanggal_DHP2');
-    keywords.tanggal_DHP2 = formatDateIndonesian(tglDHP2 || '');
-    if (tglDHP2) {
-        const dateObj = new Date(tglDHP2);
-        keywords.hari_DHP2 = dayNames[dateObj.getDay()];
-    } else {
-        keywords.hari_DHP2 = '';
-    }
-
     //Data Paket______________________________________________________________
     keywords.nama_paket = formData.get('nama_paket') || '';
     keywords.balai = formData.get('balai') || '';
