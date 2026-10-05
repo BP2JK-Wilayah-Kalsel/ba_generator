@@ -167,10 +167,8 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nilai Pagu (Rupiah)</label>
-                            <input type="number" class="form-control" id="nilai_pagu" name="nilai_pagu" placeholder="0"
-                                min="0" oninput="updateTerbilangPagu()">
+                            <input type="text" class="form-control" id="nilai_pagu" name="nilai_pagu" placeholder="0" inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTerbilangPagu()">
                             <small class="text-muted">Ketik angka saja (contoh: 1500000)</small>
-
                             <!-- Terbilang Pagu -->
                             <div class="mt-2">
                                 <label class="form-label small text-muted">
@@ -182,8 +180,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nilai HPS (Rupiah)</label>
-                            <input type="number" class="form-control" id="nilai_hps" name="nilai_hps" placeholder="0"
-                                min="0" oninput="updateTerbilangHPS()">
+                            <input type="text" class="form-control" id="nilai_hps" name="nilai_hps" placeholder="0" inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTerbilangHPS()">
                             <small class="text-muted">Ketik angka saja (contoh: 1500000)</small>
 
                             <!-- Terbilang HPS -->

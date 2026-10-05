@@ -762,7 +762,8 @@ function collectAllKeywords(formData) {
 
 // Update terbilang Pagu (lowercase)
 function updateTerbilangPagu() {
-    const amount = parseInt(document.getElementById('nilai_pagu').value) || 0;
+    // const amount = parseInt(document.getElementById('nilai_pagu').value) || 0;
+    let amount = document.getElementById('nilai_pagu').value.replace(/\D/g, '');
     if (amount > 0) {
         const terbilangText = terbilang(amount, false).trim() + ' Rupiah';
         document.getElementById('terbilang_pagu').value = terbilangText;
@@ -1184,7 +1185,7 @@ function setDocumentLists(folderName) {
     } else if (isPL) {
         documentsToUncheck = ['01', '02', '05'];
     } else if (isRO) {
-        documentsToUncheck = ['01', '02', '04'];
+        documentsToUncheck = ['DHP1', '02', '03', '04', '05'];
     }
 
     document.querySelectorAll('.doc-checkbox').forEach(checkbox => {
